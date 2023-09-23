@@ -30,7 +30,7 @@ class _RegisterViewState extends State<RegisterView> {
                 (p0) {
                   if(p0 == null || p0.isEmpty)
                   {
-                    return 'Usernme Tidak Boleh Kosong';
+                    return 'Username Tidak Boleh Kosong';
                   }
                   if(p0.toLowerCase() == 'anjing'){
                     return 'Tidak boleh menggunakan kata kasar';
@@ -100,13 +100,39 @@ class _RegisterViewState extends State<RegisterView> {
             ElevatedButton(
               onPressed: () {
                 if(_formKey.currentState!.validate()) {
+                  
                   // ScaffoldMessenger.of(context).showSnackBar{
                   // const SnackBar(content: Text('Processing Data))};
                   Map<String,dynamic> formData = {};
                   formData['username'] = usernameController.text;
                   formData['password'] = passwordController.text;
                   //* Navigator.push(context, MaterialPageRoute(builder: (BuildContext buildContext) => LoginView(data: formData ,)) );
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => LoginView(data: formData ,)) );
+
+                  //Navigator; //.push(context, MaterialPageRoute(builder: (_) => LoginView(data: formData ,)) );
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Konfirmasi Pendaftaran'),
+                        content: Text('Apakah Anda yakin ingin mendaftar?'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Ya'),
+                            onPressed: () {
+                              //*Push data jika memilih 'Ya'
+                              Navigator.push(context, MaterialPageRoute(builder: (_) => LoginView(data: formData)));
+                            },
+                          ),
+                          TextButton(
+                            child: Text('Batal'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
                  }
               },
               child: const Text('Register')) 
