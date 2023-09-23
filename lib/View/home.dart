@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guidedlayout2_1212/View/view_list.dart';
+import 'package:ugd_modul_2_kel1/View/view_list.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guidedlayout2_1212/View/login.dart';
+import 'package:ugd_modul_2_kel1/View/login.dart';
 
 void main() {
   runApp(const MainApp());
