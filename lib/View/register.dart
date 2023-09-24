@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ugd_modul_2_kel1/View/login.dart';
 import 'package:ugd_modul_2_kel1/component/form_component.dart';
 
@@ -15,6 +16,7 @@ class _RegisterViewState extends State<RegisterView> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
   TextEditingController notelpController = TextEditingController();
 
   bool passwordVisible = false;
@@ -102,6 +104,37 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                     ),
                   ),
+                ),
+
+                Padding(
+                padding: const EdgeInsets.only(left: 20, top: 10, right: 20),
+                child: SizedBox(
+                  width: 400,
+                  child: TextFormField(
+                    validator: (value){
+                      if (value == null || value.isEmpty) {
+                        return "Date tidak boleh kosong";
+                      }
+                      return null;
+                    },
+                    controller: dateController,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.calendar_today_outlined),
+                      labelText: "Select Date"
+                    ),
+                    onTap: () async{
+                      DateTime? pickeddate = await showDatePicker(
+                        context: context, 
+                        initialDate: DateTime.now(), 
+                        firstDate: DateTime(2000), 
+                        lastDate: DateTime(2101)
+                      );
+                      if(pickeddate != null){
+                        dateController.text = DateFormat('yyyy-mm-dd').format(pickeddate);
+                      }
+                    },
+                  ),
+                ),
                 ),
 
                 inputForm(((p0) {
