@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ugd_modul_2_kel1/View/grid.dart';
 import 'package:ugd_modul_2_kel1/View/view_list.dart';
 
 class HomeView extends StatefulWidget {
@@ -41,7 +42,7 @@ class _HomeViewState extends State<HomeView> {
   //* Menampung List Widget yang akan ditampilkan sesuai index yang dipilih
   static const List<Widget> _widgetOptions = <Widget>[
     //* index 0
-    Center(child: Image(image: NetworkImage('https://picsum.photos/200/300'))),
+    MyGrid(),
     //* index 1
     ListNamaView(), //* Jika Error di comment dulu aja
     //* index 2
