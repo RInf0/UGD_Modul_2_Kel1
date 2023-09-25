@@ -19,7 +19,7 @@ class _RegisterViewState extends State<RegisterView> {
   TextEditingController dateController = TextEditingController();
   TextEditingController notelpController = TextEditingController();
 
-  bool passwordVisible = false;
+  bool passwordVisible = true;
   bool? isChecked = false;
   bool _showErrorJenisKelamin = false;
   String selectedGender = '';

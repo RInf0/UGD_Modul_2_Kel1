@@ -17,7 +17,7 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
-  bool passwordVisible = false;
+  bool passwordVisible = true;
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
