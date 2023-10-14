@@ -1,4 +1,4 @@
-package com.example.guidedlayout2_1212
+package com.example.ugd_modul_2_kel1
 
 import io.flutter.embedding.android.FlutterActivity
 
