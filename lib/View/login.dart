@@ -4,6 +4,7 @@ import 'package:ugd_modul_2_kel1/View/home.dart';
 import 'package:ugd_modul_2_kel1/View/register.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 // import 'package:ugd_modul_2_kel1/component/form_component.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginView extends StatefulWidget {
   //* Variabel map data dibuat bersifat nullabl, karena ketika aplikasi dijalankan(dipanggil dari main, tdak ada yang dibawa)
@@ -15,6 +16,7 @@ class LoginView extends StatefulWidget {
   @override
   State<LoginView> createState() => _LoginViewState();
 }
+
 
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
@@ -118,7 +120,7 @@ class _LoginViewState extends State<LoginView> {
                   width: double.infinity,
                   child: ElevatedButton(
                       //* Fungsi yang dijalankan saat tombol ditekan
-                      onPressed: () {
+                      onPressed: () async {
                         //* Cek statenya sudah valid atau belum valid
                         if (_formKey.currentState!.validate()) {
                           //* Jika sudah valid, cek usernamedan password yang diinputkan pada form telah sesuai dengan data yang dibawah
@@ -131,10 +133,13 @@ class _LoginViewState extends State<LoginView> {
                             if (user['username'] == usernameController.text &&
                                 user['password'] == passwordController.text) {
                               userLoggedIn = user;
+                              
                             }
                           }
 
                           if (userLoggedIn != null) {
+                            final prefs = await SharedPreferences.getInstance();
+                            prefs.setString('username', userLoggedIn['username']);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ugd_modul_2_kel1/View/grid.dart';
 import 'package:ugd_modul_2_kel1/View/view_list.dart';
+import 'package:ugd_modul_2_kel1/View/profile.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -46,9 +47,7 @@ class _HomeViewState extends State<HomeView> {
     //* index 1
     ListNamaView(), //* Jika Error di comment dulu aja
     //* index 2
-    Center(
-      child: Text('Index 3: Profile'),
-    ),
+    Profile(),
   ];
 
   @override
