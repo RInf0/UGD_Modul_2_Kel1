@@ -133,17 +133,18 @@ class _LoginViewState extends State<LoginView> {
                             if (user['username'] == usernameController.text &&
                                 user['password'] == passwordController.text) {
                               userLoggedIn = user;
-                              
                             }
                           }
-
                           if (userLoggedIn != null) {
                             final prefs = await SharedPreferences.getInstance();
                             prefs.setString('username', userLoggedIn['username']);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => const HomeView()));
+                                    builder: (_) => const HomeView()
+                                )
+                            );
+                            
                           } else {
                             showDialog(
                               context: context,

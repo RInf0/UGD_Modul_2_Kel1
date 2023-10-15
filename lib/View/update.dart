@@ -70,7 +70,7 @@ class _UpdateViewState extends State<UpdateView> {
 
                   // Title
                   const Text(
-                    'Register',
+                    'Update',
                     style: TextStyle(
                         fontSize: 35,
                         color: Colors.green,

@@ -23,6 +23,7 @@ class _RegisterViewState extends State<RegisterView> {
   bool? isChecked = false;
   bool _showErrorJenisKelamin = false;
   String selectedGender = '';
+  bool isExist = false;
 
   setSelectedGender(String gender) {
     setState(() {
@@ -99,6 +100,9 @@ class _RegisterViewState extends State<RegisterView> {
                         if (!value.contains('@')) {
                           return 'Email harus menggunakan @';
                         }
+                        if (isExist) {
+                            return 'Email sudah digunakan';
+                        }
                         return null;
                       },
                       controller: emailController,
@@ -106,6 +110,12 @@ class _RegisterViewState extends State<RegisterView> {
                         labelText: "Email",
                         prefixIcon: Icon(Icons.email),
                       ),
+                      onChanged: (value) async {
+                        isExist = await isEmail(value);
+                        setState(() {
+                          isExist;
+                        });
+                      },
                     ),
                   ),
 
@@ -309,6 +319,11 @@ class _RegisterViewState extends State<RegisterView> {
                                     TextButton(
                                       child: const Text('Ya'),
                                       onPressed: () async {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(
+                                            content: Text('Register Berhasil'),
+                                          ),
+                                        );
                                         await addUser();
 
                                         //*Push data jika memilih 'Ya'
@@ -341,5 +356,9 @@ class _RegisterViewState extends State<RegisterView> {
         ),
       ),
     );
+  }
+  Future<bool> isEmail(String email) async {
+    final data = await SQLHelper.checkEmail(email);
+    return data.isNotEmpty;
   }
 }
