@@ -16,3 +16,8 @@ Membuat sebuah aplikasi Rumah Sakit sederhana yang berbasis Android. Project ini
 - Enhance Login Page :  toggle password visibility
 - Enhance Home Page : light/dark mode, apply expandable grid views
 
+### UGD MODUL 5 & 6
+
+- Enhance Register Page : more validations, unique email, register using sqflite, snackbar, ui improvement
+- Enhance Login Page :  login using sqflite, ui improvement
+- Enhance Home Page : ui improvement, grid icons, profile section & update profile, crud janji periksa, daftar periksa
