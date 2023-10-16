@@ -9,7 +9,7 @@ class MyGrid extends StatefulWidget {
 
 class _MyGridState extends State<MyGrid> {
   //number of childs used in the example
-  static const itemCount = 8;
+  static const itemCount = 4;
 
 //list of each bloc expandable state, that is changed to trigger the animation of the AnimatedContainer
   List<bool> expandableState = List.generate(itemCount, (index) => false);
@@ -29,7 +29,7 @@ class _MyGridState extends State<MyGrid> {
           padding: const EdgeInsets.all(10),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Colors.green,
               borderRadius: BorderRadius.circular(23),
             ),
             child: AnimatedContainer(
@@ -37,6 +37,13 @@ class _MyGridState extends State<MyGrid> {
               curve: Curves.easeOut,
               width: !isExpanded ? width * 0.4 : width * 0.85,
               height: !isExpanded ? width * 0.4 : width * 0.85,
+              child: Center(
+                child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Image.asset('image/icon/$index.png'),
+                ),
+              ),
             ),
           ),
         ),
@@ -47,14 +54,12 @@ class _MyGridState extends State<MyGrid> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Align(
-        child: SingleChildScrollView(
-          child: Wrap(
-            children: List.generate(itemCount, (index) {
-              return bloc(width, index);
-            }),
-          ),
+    return Align(
+      child: SingleChildScrollView(
+        child: Wrap(
+          children: List.generate(itemCount, (index) {
+            return bloc(width, index);
+          }),
         ),
       ),
     );

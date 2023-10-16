@@ -1,17 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:ugd_modul_2_kel1/View/login.dart';
+import 'package:ugd_modul_2_kel1/View/home.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
+import 'package:ugd_modul_2_kel1/View/profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+class UpdateView extends StatefulWidget {
+  const UpdateView({
+    super.key,
+    required this.id,
+    required this.username,
+    required this.password,
+    required this.email,
+    required this.tglLahir,
+    required this.noTelp,
+  });
+
+  final String? username, password, email, tglLahir, noTelp;
+  final int? id;
 
   @override
-  State<RegisterView> createState() => _RegisterViewState();
+  State<UpdateView> createState() => _UpdateViewState();
 }
 
-class _RegisterViewState extends State<RegisterView> {
+class _UpdateViewState extends State<UpdateView> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -21,9 +34,7 @@ class _RegisterViewState extends State<RegisterView> {
 
   bool passwordInvisible = true;
   bool? isChecked = false;
-  bool _showErrorJenisKelamin = false;
   String selectedGender = '';
-  bool isExist = false;
 
   setSelectedGender(String gender) {
     setState(() {
@@ -31,18 +42,43 @@ class _RegisterViewState extends State<RegisterView> {
     });
   }
 
-  Future<void> addUser() async {
-    await SQLHelper.addUser(
-      usernameController.text,
-      emailController.text,
-      passwordController.text,
-      tglLahirController.text,
-      noTelpController.text,
-    );
+  List<Map<String, dynamic>> userProfile = [];
+
+  void refresh() async {
+    final data = await SQLHelper.getUser();
+    final prefs = await SharedPreferences.getInstance();
+    final storedUsername = prefs.getString('username');
+
+    // Filter data user berdasarkan username yang tersimpan di SharedPreferences
+    final userData =
+        data.where((user) => user['username'] == storedUsername).toList();
+
+    setState(() {
+      userProfile = userData;
+
+      usernameController.text = userProfile[0]['username'];
+      emailController.text = userProfile[0]['email'];
+      passwordController.text = userProfile[0]['password'];
+      tglLahirController.text = userProfile[0]['tgl_lahir'];
+      noTelpController.text = userProfile[0]['no_telp'];
+    });
+  }
+
+  @override
+  void initState() {
+    refresh();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    // if(widget.id != null){
+    //   usernameController.text = widget.username!;
+    //   emailController.text = widget.email!;
+    //   passwordController.text = widget.password!;
+    //   tglLahirController.text = widget.tglLahir!;
+    //   noTelpController.text =widget.noTelp!;
+    // }
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -58,7 +94,7 @@ class _RegisterViewState extends State<RegisterView> {
 
                   // Title
                   const Text(
-                    'Register',
+                    'Update',
                     style: TextStyle(
                         fontSize: 35,
                         color: Colors.green,
@@ -100,9 +136,6 @@ class _RegisterViewState extends State<RegisterView> {
                         if (!value.contains('@')) {
                           return 'Email harus menggunakan @';
                         }
-                        if (isExist) {
-                            return 'Email sudah digunakan';
-                        }
                         return null;
                       },
                       controller: emailController,
@@ -110,12 +143,6 @@ class _RegisterViewState extends State<RegisterView> {
                         labelText: "Email",
                         prefixIcon: Icon(Icons.email),
                       ),
-                      onChanged: (value) async {
-                        isExist = await isEmail(value);
-                        setState(() {
-                          isExist;
-                        });
-                      },
                     ),
                   ),
 
@@ -214,62 +241,6 @@ class _RegisterViewState extends State<RegisterView> {
                     ),
                   ),
 
-                  // Jenis Kelamin
-                  Column(
-                    children: <Widget>[
-                      const SizedBox(height: 30.0),
-                      const Text(
-                        'Jenis Kelamin',
-                        style: TextStyle(fontSize: 16.0),
-                      ),
-                      RadioListTile(
-                        title: const Text('Laki-laki'),
-                        value: 'Laki-laki',
-                        groupValue: selectedGender,
-                        onChanged: (value) {
-                          setSelectedGender('Laki-laki');
-                        },
-                      ),
-                      RadioListTile(
-                        title: const Text('Perempuan'),
-                        value: 'Perempuan',
-                        groupValue: selectedGender,
-                        onChanged: (value) {
-                          setSelectedGender('Perempuan');
-                        },
-                      ),
-                    ],
-                  ),
-                  if (_showErrorJenisKelamin)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 0, left: 25, bottom: 10),
-                          child: Text(
-                            'Jenis Kelamin harus dipilih',
-                            style:
-                                TextStyle(color: Colors.red[700], fontSize: 12),
-                          ),
-                        )
-                      ],
-                    ),
-
-                  // Checkbox BPJS
-                  CheckboxListTile(
-                    title: const Text('Saya memiliki BPJS'),
-                    value: isChecked,
-                    onChanged: (bool? newValue) {
-                      setState(() {
-                        isChecked = newValue;
-                      });
-                    },
-                    activeColor: Colors.transparent,
-                    checkColor: Colors.green,
-                    controlAffinity: ListTileControlAffinity.leading,
-                  ),
-
                   const SizedBox(
                     height: 20,
                   ),
@@ -281,24 +252,14 @@ class _RegisterViewState extends State<RegisterView> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          // munculkan text validasi/error handling merah ketika radio button jenis kelamin kosong
-                          setState(() {
-                            if (selectedGender.isEmpty) {
-                              _showErrorJenisKelamin = true;
-                            } else {
-                              _showErrorJenisKelamin = false;
-                              // lalu simpan jenis kelamin
-                            }
-                          });
-
                           // validasi form
-                          if (_formKey.currentState!.validate() &&
-                              selectedGender.isNotEmpty) {
+                          if (_formKey.currentState!.validate()) {
                             // ScaffoldMessenger.of(context).showSnackBar{
                             // const SnackBar(content: Text('Processing Data))};
                             Map<String, dynamic> formData = {};
                             formData['username'] = usernameController.text;
                             formData['password'] = passwordController.text;
+
                             //* Navigator.push(context, MaterialPageRoute(builder: (BuildContext buildContext) => LoginView(data: formData ,)) );
 
                             //Navigator; //.push(context, MaterialPageRoute(builder: (_) => LoginView(data: formData ,)) );
@@ -306,9 +267,9 @@ class _RegisterViewState extends State<RegisterView> {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: const Text('Konfirmasi Pendaftaran'),
+                                  title: const Text('Konfirmasi Update'),
                                   content: const Text(
-                                      'Apakah Anda yakin ingin mendaftar?'),
+                                      'Apakah Anda yakin ingin Update Data'),
                                   actions: <Widget>[
                                     TextButton(
                                       child: const Text('Batal'),
@@ -319,12 +280,7 @@ class _RegisterViewState extends State<RegisterView> {
                                     TextButton(
                                       child: const Text('Ya'),
                                       onPressed: () async {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
-                                            content: Text('Register Berhasil'),
-                                          ),
-                                        );
-                                        await addUser();
+                                        await editEmployee(widget.id!);
 
                                         //*Push data jika memilih 'Ya'
                                         // ignore: use_build_context_synchronously
@@ -332,7 +288,7 @@ class _RegisterViewState extends State<RegisterView> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (_) =>
-                                                    const LoginView()));
+                                                    const HomeView()));
                                       },
                                     ),
                                   ],
@@ -341,7 +297,7 @@ class _RegisterViewState extends State<RegisterView> {
                             );
                           }
                         },
-                        child: const Text('Register'),
+                        child: const Text('Update'),
                       ),
                     ),
                   ),
@@ -357,8 +313,21 @@ class _RegisterViewState extends State<RegisterView> {
       ),
     );
   }
-  Future<bool> isEmail(String email) async {
-    final data = await SQLHelper.checkEmail(email);
-    return data.isNotEmpty;
+
+  Future<void> editEmployee(int id) async {
+    await SQLHelper.editUser(
+        id,
+        usernameController.text,
+        emailController.text,
+        passwordController.text,
+        tglLahirController.text,
+        noTelpController.text);
+
+    // Setelah mengedit data, Anda dapat menyimpan data yang baru dalam SharedPreferences.
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('username', usernameController.text);
+
+    // Kemudian kembali ke halaman profil atau tindakan lain sesuai kebutuhan aplikasi Anda.
+    Navigator.push(context, MaterialPageRoute(builder: (_) => const Profile()));
   }
 }

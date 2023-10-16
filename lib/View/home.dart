@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ugd_modul_2_kel1/View/grid.dart';
-import 'package:ugd_modul_2_kel1/View/view_list.dart';
+import 'package:ugd_modul_2_kel1/View/daftar_periksa.dart';
+import 'package:ugd_modul_2_kel1/View/main_home.dart';
+import 'package:ugd_modul_2_kel1/View/profile.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -42,22 +43,23 @@ class _HomeViewState extends State<HomeView> {
   //* Menampung List Widget yang akan ditampilkan sesuai index yang dipilih
   static const List<Widget> _widgetOptions = <Widget>[
     //* index 0
-    MyGrid(),
+    MainHomeView(),
     //* index 1
-    ListNamaView(), //* Jika Error di comment dulu aja
+    DaftarPeriksaView(), //* Jika Error di comment dulu aja
     //* index 2
-    Center(
-      child: Text('Index 3: Profile'),
-    ),
+    Profile(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.green,
+        ),
       ),
-      darkTheme: ThemeData.dark(),
+      darkTheme: ThemeData.dark(useMaterial3: true),
       themeMode: _themeMode,
       home: Scaffold(
         // floating button untuk change light/system mode to dark mode dan sebaliknya
@@ -80,7 +82,7 @@ class _HomeViewState extends State<HomeView> {
                 icon: Icon(
                   Icons.list,
                 ),
-                label: 'List'),
+                label: 'Daftar Periksa'),
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.person,
