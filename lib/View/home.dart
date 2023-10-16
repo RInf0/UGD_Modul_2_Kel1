@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ugd_modul_2_kel1/View/input_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/View/daftar_periksa.dart';
-import 'package:ugd_modul_2_kel1/View/grid.dart';
 import 'package:ugd_modul_2_kel1/View/main_home.dart';
 import 'package:ugd_modul_2_kel1/View/profile.dart';
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ugd_modul_2_kel1/View/home.dart';
 import 'package:ugd_modul_2_kel1/View/login.dart';
 
 void main() {
@@ -19,7 +18,6 @@ class MainApp extends StatelessWidget {
         ),
       ),
       home: const LoginView(),
-      // home: const HomeView(),
     );
   }
 }
