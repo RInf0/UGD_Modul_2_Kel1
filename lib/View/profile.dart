@@ -12,7 +12,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  List<Map<String, dynamic>> employee = [];
+  List<Map<String, dynamic>> userProfile = [];
 
   void refresh() async {
     final data = await SQLHelper.getUser();
@@ -20,10 +20,11 @@ class _ProfileState extends State<Profile> {
     final storedUsername = prefs.getString('username');
 
     // Filter data user berdasarkan username yang tersimpan di SharedPreferences
-    final userData = data.where((user) => user['username'] == storedUsername).toList();
+    final userData =
+        data.where((user) => user['username'] == storedUsername).toList();
 
     setState(() {
-      employee = userData;
+      userProfile = userData;
     });
   }
 
@@ -37,22 +38,10 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
-        itemCount: employee.length,
+        itemCount: userProfile.length,
         itemBuilder: (context, index) {
           return Slidable(
-            child: Container(
-              padding: const EdgeInsets.all(16.0), 
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 242, 242, 242), 
-              ),
-            child: ListTile(
-              title: Text("Username         : " + employee[index]['username'] + "\n" + 
-                          "Email                  : " + employee[index]['email'] + "\n" + 
-                          "Tanggal Lahir   : " + employee[index]['tgl_lahir'] + "\n" + 
-                          "Nomor Telepon: " + employee[index]['no_telp']),
-            ),
-            ),
-            actionPane: SlidableDrawerActionPane(),
+            actionPane: const SlidableDrawerActionPane(),
             secondaryActions: [
               IconSlideAction(
                 caption: 'Update',
@@ -63,18 +52,37 @@ class _ProfileState extends State<Profile> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => UpdateView(
-                        id: employee[index]['id'],
-                        username: employee[index]['username'],
-                        email: employee[index]['email'],
-                        password: employee[index]['password'],
-                        tgl_lahir: employee[index]['tgl_lahir'],
-                        no_telp: employee[index]['no_telp'],
+                        id: userProfile[index]['id'],
+                        username: userProfile[index]['username'],
+                        email: userProfile[index]['email'],
+                        password: userProfile[index]['password'],
+                        tglLahir: userProfile[index]['tgl_lahir'],
+                        noTelp: userProfile[index]['no_telp'],
                       ),
                     ),
                   ).then((_) => refresh());
                 },
               ),
             ],
+            child: Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 242, 242, 242),
+              ),
+              child: ListTile(
+                title: Text("Username         : " +
+                    userProfile[index]['username'] +
+                    "\n" +
+                    "Email                  : " +
+                    userProfile[index]['email'] +
+                    "\n" +
+                    "Tanggal Lahir   : " +
+                    userProfile[index]['tgl_lahir'] +
+                    "\n" +
+                    "Nomor Telepon: " +
+                    userProfile[index]['no_telp']),
+              ),
+            ),
           );
         },
       ),

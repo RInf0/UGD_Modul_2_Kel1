@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:ugd_modul_2_kel1/View/home.dart';
-import 'package:ugd_modul_2_kel1/View/login.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 import 'package:ugd_modul_2_kel1/View/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class UpdateView extends StatefulWidget {
   const UpdateView({
@@ -14,14 +12,14 @@ class UpdateView extends StatefulWidget {
     required this.id,
     required this.username,
     required this.password,
-    required this. email,
-    required this.tgl_lahir,
-    required this.no_telp,
-    });
+    required this.email,
+    required this.tglLahir,
+    required this.noTelp,
+  });
 
-    final String?username, password, email, tgl_lahir, no_telp;
-    final int? id;
-  
+  final String? username, password, email, tglLahir, noTelp;
+  final int? id;
+
   @override
   State<UpdateView> createState() => _UpdateViewState();
 }
@@ -36,7 +34,6 @@ class _UpdateViewState extends State<UpdateView> {
 
   bool passwordInvisible = true;
   bool? isChecked = false;
-  bool _showErrorJenisKelamin = false;
   String selectedGender = '';
 
   setSelectedGender(String gender) {
@@ -45,6 +42,33 @@ class _UpdateViewState extends State<UpdateView> {
     });
   }
 
+  List<Map<String, dynamic>> userProfile = [];
+
+  void refresh() async {
+    final data = await SQLHelper.getUser();
+    final prefs = await SharedPreferences.getInstance();
+    final storedUsername = prefs.getString('username');
+
+    // Filter data user berdasarkan username yang tersimpan di SharedPreferences
+    final userData =
+        data.where((user) => user['username'] == storedUsername).toList();
+
+    setState(() {
+      userProfile = userData;
+
+      usernameController.text = userProfile[0]['username'];
+      emailController.text = userProfile[0]['email'];
+      passwordController.text = userProfile[0]['password'];
+      tglLahirController.text = userProfile[0]['tgl_lahir'];
+      noTelpController.text = userProfile[0]['no_telp'];
+    });
+  }
+
+  @override
+  void initState() {
+    refresh();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +76,8 @@ class _UpdateViewState extends State<UpdateView> {
     //   usernameController.text = widget.username!;
     //   emailController.text = widget.email!;
     //   passwordController.text = widget.password!;
-    //   tglLahirController.text = widget.tgl_lahir!;
-    //   noTelpController.text =widget.no_telp!;
+    //   tglLahirController.text = widget.tglLahir!;
+    //   noTelpController.text =widget.noTelp!;
     // }
     return Scaffold(
       body: SafeArea(
@@ -217,7 +241,6 @@ class _UpdateViewState extends State<UpdateView> {
                     ),
                   ),
 
-
                   const SizedBox(
                     height: 20,
                   ),
@@ -229,8 +252,6 @@ class _UpdateViewState extends State<UpdateView> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          
-
                           // validasi form
                           if (_formKey.currentState!.validate()) {
                             // ScaffoldMessenger.of(context).showSnackBar{
@@ -239,7 +260,6 @@ class _UpdateViewState extends State<UpdateView> {
                             formData['username'] = usernameController.text;
                             formData['password'] = passwordController.text;
 
-                            
                             //* Navigator.push(context, MaterialPageRoute(builder: (BuildContext buildContext) => LoginView(data: formData ,)) );
 
                             //Navigator; //.push(context, MaterialPageRoute(builder: (_) => LoginView(data: formData ,)) );
@@ -295,13 +315,19 @@ class _UpdateViewState extends State<UpdateView> {
   }
 
   Future<void> editEmployee(int id) async {
-  await SQLHelper.editUser(id, usernameController.text, emailController.text, passwordController.text, tglLahirController.text, noTelpController.text);
+    await SQLHelper.editUser(
+        id,
+        usernameController.text,
+        emailController.text,
+        passwordController.text,
+        tglLahirController.text,
+        noTelpController.text);
 
-  // Setelah mengedit data, Anda dapat menyimpan data yang baru dalam SharedPreferences.
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setString('username', usernameController.text);
+    // Setelah mengedit data, Anda dapat menyimpan data yang baru dalam SharedPreferences.
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('username', usernameController.text);
 
-  // Kemudian kembali ke halaman profil atau tindakan lain sesuai kebutuhan aplikasi Anda.
-  Navigator.push(context, MaterialPageRoute(builder: (_) => const Profile()));
-}
+    // Kemudian kembali ke halaman profil atau tindakan lain sesuai kebutuhan aplikasi Anda.
+    Navigator.push(context, MaterialPageRoute(builder: (_) => const Profile()));
+  }
 }
