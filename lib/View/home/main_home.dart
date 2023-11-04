@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ugd_modul_2_kel1/View/input_janji_periksa.dart';
-import 'package:ugd_modul_2_kel1/View/grid.dart';
+import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
+import 'package:ugd_modul_2_kel1/view/home/grid.dart';
 
 class MainHomeView extends StatefulWidget {
   const MainHomeView({super.key});

@@ -78,10 +78,9 @@ class SQLHelper {
     );
   }
 
+  // cek unique email
   static Future<List<Map<String, dynamic>>> checkEmail(String email) async {
     final db = await SQLHelper.db();
-    return await db.rawQuery(
-      "SELECT * FROM User WHERE email = '$email'"
-    );
+    return await db.rawQuery("SELECT * FROM User WHERE email = '$email'");
   }
 }

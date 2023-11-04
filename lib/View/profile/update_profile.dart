@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:ugd_modul_2_kel1/View/home.dart';
+import 'package:ugd_modul_2_kel1/view/home/home.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
-import 'package:ugd_modul_2_kel1/View/profile.dart';
+import 'package:ugd_modul_2_kel1/view/profile/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateView extends StatefulWidget {
@@ -80,6 +80,7 @@ class _UpdateViewState extends State<UpdateView> {
     //   noTelpController.text =widget.noTelp!;
     // }
     return Scaffold(
+      appBar: AppBar(),
       body: SafeArea(
         child: ListView(
           children: [
