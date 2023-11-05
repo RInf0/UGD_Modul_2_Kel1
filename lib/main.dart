@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:ugd_modul_2_kel1/document_scanner/cunning_scanner.dart';
+import 'package:ugd_modul_2_kel1/document_scanner/document_scanner_flutter.dart';
+import 'package:ugd_modul_2_kel1/document_scanner/edge_detection_scanner.dart';
 import 'package:ugd_modul_2_kel1/view/login/login.dart';
 
+// RUN APP
 void main() {
+  // RUN MYAPP
   runApp(
     MyApp(
       key: myAppKey,
     ),
   );
+
+  // TEST CUNNING DOCUMENT SCANNER
+  // runApp(const CDocScanner());
+
+  // TEST EDGE DETECTION SCANNER
+  // runApp(EdgeDetectionScanner());
+
+  // TEST DOCUMENT SCANNER FLUTTER
+  // runApp(DocScannerFlutter());
 }
 
 // global key untuk class MyApp

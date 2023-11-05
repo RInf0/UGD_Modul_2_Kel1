@@ -2,6 +2,7 @@ class JanjiPeriksa {
   final int? id;
   int? idPasien;
   String namaDokter, tglPeriksa, keluhan;
+  String? dokumen;
 
   JanjiPeriksa({
     this.id,
@@ -9,5 +10,6 @@ class JanjiPeriksa {
     required this.namaDokter,
     required this.tglPeriksa,
     required this.keluhan,
+    this.dokumen,
   });
 }
