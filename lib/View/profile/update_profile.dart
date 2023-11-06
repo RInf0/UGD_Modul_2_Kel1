@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -5,6 +7,7 @@ import 'package:ugd_modul_2_kel1/view/home/home.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 import 'package:ugd_modul_2_kel1/view/profile/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UpdateView extends StatefulWidget {
   const UpdateView({
@@ -25,6 +28,8 @@ class UpdateView extends StatefulWidget {
 }
 
 class _UpdateViewState extends State<UpdateView> {
+  late String _selectedImage;
+  
   final _formKey = GlobalKey<FormState>();
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -33,6 +38,7 @@ class _UpdateViewState extends State<UpdateView> {
   TextEditingController noTelpController = TextEditingController();
 
   bool passwordInvisible = true;
+  bool isEditable = false;
   bool? isChecked = false;
   String selectedGender = '';
 
@@ -64,10 +70,62 @@ class _UpdateViewState extends State<UpdateView> {
     });
   }
 
+  Future<void> refreshProfileImage() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? savedImagePath = preferences.getString('imageProfilePath');
+
+    if (savedImagePath != null && savedImagePath.isNotEmpty) {
+      setState(() {
+        _selectedImage = savedImagePath;
+      });
+    } else {
+      setState(() {
+        _selectedImage = 'image/random.png';
+      });
+    }
+  }
+
   @override
   void initState() {
     refresh();
+    refreshProfileImage();
+    _selectedImage = '';
     super.initState();
+  }
+
+  Future<void> _pickImageFromCamera(ImageSource source) async{
+    final ImagePicker imagePicker = ImagePicker();
+    final returnedImage = await imagePicker.pickImage(source: source);
+
+    if(returnedImage != null) {
+      setState(() {
+        _selectedImage = returnedImage.path;
+      });
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString('imageProfilePath', _selectedImage);
+
+      int? userId = preferences.getInt('id');
+      if (userId != null) {
+        await SQLHelper.editData(userId, {'profilePicture': _selectedImage});
+      }
+    }
+  }
+
+  Future<void> _pickImageFromGallery(ImageSource source) async{
+    final returnedImage = await ImagePicker().pickImage(source: source);
+
+    if(returnedImage != null) {
+      setState(() {
+        _selectedImage = returnedImage.path;
+      });
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString('profileImagePath', _selectedImage);
+
+      int? userId = preferences.getInt('id');
+      if (userId != null) {
+        await SQLHelper.editData(userId, {'profilePicture': _selectedImage});
+      }
+    }
   }
 
   @override
@@ -101,6 +159,9 @@ class _UpdateViewState extends State<UpdateView> {
                         color: Colors.green,
                         fontWeight: FontWeight.w500),
                   ),
+
+                  // Image Profile
+                  imageProfile(),
 
                   // Username
                   Padding(
@@ -315,6 +376,89 @@ class _UpdateViewState extends State<UpdateView> {
     );
   }
 
+  Widget imageProfile(){
+    return Center(
+      child: Stack(
+        children: <Widget>[
+          Container(
+            width: 150.0,
+            height: 150.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: _selectedImage.isNotEmpty
+                ? FileImage(File(_selectedImage))
+                : AssetImage('image/random.png')
+                  as ImageProvider<Object>,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 20.0,
+            right: 20.0,
+            child: InkWell(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: ((builder) => bottomSheet()),
+                );
+              },
+              child: Icon(
+                Icons.camera_alt,
+                color: Colors.teal,
+                size: 28.0,
+              ),
+            ),
+          ),
+        ]
+      ),
+    );
+  }
+
+  Widget bottomSheet(){
+    return Container(
+      height: 100.0,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 20,
+      ),
+      child: Column(
+        children: <Widget>[
+          Text(
+            "Choose Profile Photo",
+            style: TextStyle(
+              fontSize: 20.0,
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextButton.icon(
+                icon: Icon(Icons.camera),
+                onPressed: (){
+                  _pickImageFromCamera(ImageSource.camera);
+                },
+                label: Text("Camera"),
+              ),
+              TextButton.icon(
+                icon: Icon(Icons.image),
+                onPressed: (){
+                  _pickImageFromGallery(ImageSource.gallery);
+                },
+                label: Text("Gallery"),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
   Future<void> editEmployee(int id) async {
     await SQLHelper.editUser(
         id,
@@ -322,7 +466,8 @@ class _UpdateViewState extends State<UpdateView> {
         emailController.text,
         passwordController.text,
         tglLahirController.text,
-        noTelpController.text);
+        noTelpController.text,
+        _selectedImage);
 
     // Setelah mengedit data, Anda dapat menyimpan data yang baru dalam SharedPreferences.
     final prefs = await SharedPreferences.getInstance();
