@@ -10,8 +10,8 @@ class SQLHelper {
       email TEXT,
       password TEXT,
       no_telp TEXT,
-      tgl_lahir TEXT
-      profilePicture TEXT
+      tgl_lahir TEXT,
+      profile_photo TEXT
     )
     """);
   }
@@ -62,7 +62,7 @@ class SQLHelper {
       'password': password,
       'tgl_lahir': tglLahir,
       'no_telp': noTelp,
-      'photoProfile': photo
+      'profile_photo': photo
     };
     return await db.update(
       'user',
@@ -86,7 +86,7 @@ class SQLHelper {
     return await db.rawQuery("SELECT * FROM User WHERE email = '$email'");
   }
 
-  //Edit Data
+  //Update Data Image
   static Future<void> editData(int? id, Map<String, dynamic> users) async {
     final db = await SQLHelper.db();
     await db

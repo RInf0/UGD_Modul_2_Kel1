@@ -20,7 +20,11 @@ dependencies:
   path: ^1.8.3
   geolocator: ^10.1.0
   geocoding: ^2.0.4
+  google_maps_flutter: ^2.5.0
   image_picker: ^1.0.4
+  speech_to_text: ^6.4.0
+  google_speech: ^4.1.0
+  flutter_tts: ^3.8.3
 
 dev_dependencies:
   flutter_test:

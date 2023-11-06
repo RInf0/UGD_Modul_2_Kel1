@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,6 +16,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   Map<String, dynamic>? userProfile;
   String username = '', email = '', noTelp = '';
+  String? profilePic;
 
   void refresh() async {
     final data = await SQLHelper.getUser();
@@ -29,6 +32,8 @@ class _ProfileState extends State<Profile> {
       username = userProfile!['username'];
       email = userProfile!['email'];
       noTelp = userProfile!['no_telp'];
+
+      profilePic = userProfile!['profile_photo'];
     });
   }
 
@@ -57,9 +62,12 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 cSizedBox2,
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 60,
-                  backgroundImage: AssetImage('image/icon/1.png'),
+                  backgroundImage: profilePic != null
+                      ? FileImage(File(profilePic!))
+                      : const AssetImage('image/random.png')
+                          as ImageProvider<Object>,
                 ),
                 Text(
                   username,

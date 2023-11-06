@@ -203,6 +203,10 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                     ),
                   ),
 
+                  const SizedBox(
+                    height: 25,
+                  ),
+
                   // tambah dokumen pelengkap
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
