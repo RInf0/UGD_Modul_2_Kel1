@@ -1,12 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper_janji_periksa.dart';
+import 'package:ugd_modul_2_kel1/document_scanner/edge_detection_scanner.dart';
 import 'package:ugd_modul_2_kel1/entity/janji_periksa.dart';
 
 class CreateJanjiPeriksaView extends StatefulWidget {
-  const CreateJanjiPeriksaView({super.key, required this.janjiPeriksa});
+  const CreateJanjiPeriksaView({super.key, this.janjiPeriksa});
 
   final JanjiPeriksa? janjiPeriksa;
 
@@ -20,6 +23,10 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
   TextEditingController dokterController = TextEditingController();
   TextEditingController tglPeriksaController = TextEditingController();
   TextEditingController keluhanController = TextEditingController();
+
+  // img scanner
+  EdgeDetectionScanner imgScanner = EdgeDetectionScanner();
+  bool hasImageDokumen = false;
 
   // data dropdown
   final List<String> listDokter = ['dr. Natasha', 'dr. Willy', 'dr. John Doe'];
@@ -48,21 +55,35 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
   }
 
   Future<void> addJanjiPeriksa() async {
+    String imgBase64 = '';
+
+    if (imgScanner.encoded != null) {
+      imgBase64 = imgScanner.encoded!;
+    }
+
     await SQLHelperJanjiPeriksa.addJanjiPeriksa(
       userProfile[0]['id'],
       dokterController.text,
       tglPeriksaController.text,
       keluhanController.text,
+      dokumen: imgBase64,
     );
   }
 
   Future<void> editJanjiPeriksa(int id) async {
+    String imgBase64 = '';
+
+    if (imgScanner.encoded != null) {
+      imgBase64 = imgScanner.encoded!;
+    }
+
     await SQLHelperJanjiPeriksa.editJanjiPeriksa(
       id,
       userProfile[0]['id'],
       dokterController.text,
       tglPeriksaController.text,
       keluhanController.text,
+      dokumen: imgBase64,
     );
   }
 
@@ -71,6 +92,9 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
     if (widget.janjiPeriksa != null) {
       tglPeriksaController.text = widget.janjiPeriksa!.tglPeriksa;
       keluhanController.text = widget.janjiPeriksa!.keluhan;
+      if (widget.janjiPeriksa!.dokumen != '') {
+        hasImageDokumen = true;
+      }
     }
 
     return Scaffold(
@@ -180,33 +204,82 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                   ),
 
                   const SizedBox(
+                    height: 25,
+                  ),
+
+                  // tambah dokumen pelengkap
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Foto Dokumen Pelengkap, Surat Rujukan, dll. (Opsional)',
+                      ),
+                    ],
+                  ),
+
+                  if (hasImageDokumen)
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      // child: _uploadedFileImage,
+                      child: Column(
+                        children: [
+                          const Text('Dokumen Sebelumnya:'),
+                          Image.memory(
+                            const Base64Decoder()
+                                .convert(widget.janjiPeriksa!.dokumen!),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                  imgScanner,
+
+                  const SizedBox(
                     height: 20,
                   ),
 
-                  // Button Submit
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          // validasi form
-                          if (_formKey.currentState!.validate()) {
-                            // refresh();
-
-                            if (widget.janjiPeriksa != null) {
-                              await editJanjiPeriksa(widget.janjiPeriksa!.id!);
-                            } else {
-                              await addJanjiPeriksa();
-                            }
-
-                            // ignore: use_build_context_synchronously
-                            Navigator.pop(context);
-                          }
-                        },
-                        child: const Text('Submit'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Button Cancel
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: SizedBox(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                        ),
                       ),
-                    ),
+
+                      // Button Submit
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: SizedBox(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              // validasi form
+                              if (_formKey.currentState!.validate()) {
+                                // refresh();
+
+                                if (widget.janjiPeriksa != null) {
+                                  await editJanjiPeriksa(
+                                      widget.janjiPeriksa!.id!);
+                                } else {
+                                  await addJanjiPeriksa();
+                                }
+
+                                // ignore: use_build_context_synchronously
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: const Text('Submit'),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
 
                   const SizedBox(

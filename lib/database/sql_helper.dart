@@ -10,7 +10,8 @@ class SQLHelper {
       email TEXT,
       password TEXT,
       no_telp TEXT,
-      tgl_lahir TEXT
+      tgl_lahir TEXT,
+      profile_photo TEXT
     )
     """);
   }
@@ -53,7 +54,7 @@ class SQLHelper {
 
   // update user
   static Future<int> editUser(int id, String username, String email,
-      String password, String tglLahir, String noTelp) async {
+      String password, String tglLahir, String noTelp, String photo) async {
     final db = await SQLHelper.db();
     final data = {
       'username': username,
@@ -61,6 +62,7 @@ class SQLHelper {
       'password': password,
       'tgl_lahir': tglLahir,
       'no_telp': noTelp,
+      'profile_photo': photo
     };
     return await db.update(
       'user',
@@ -78,10 +80,16 @@ class SQLHelper {
     );
   }
 
+  // cek unique email
   static Future<List<Map<String, dynamic>>> checkEmail(String email) async {
     final db = await SQLHelper.db();
-    return await db.rawQuery(
-      "SELECT * FROM User WHERE email = '$email'"
-    );
+    return await db.rawQuery("SELECT * FROM User WHERE email = '$email'");
+  }
+
+  //Update Data Image
+  static Future<void> editData(int? id, Map<String, dynamic> users) async {
+    final db = await SQLHelper.db();
+    await db
+        .update('users', users, where: 'id = ?', whereArgs: [id.toString()]);
   }
 }

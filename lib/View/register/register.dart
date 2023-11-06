@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:ugd_modul_2_kel1/View/login.dart';
+import 'package:ugd_modul_2_kel1/view/login/login.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 
 class RegisterView extends StatefulWidget {
@@ -101,7 +101,7 @@ class _RegisterViewState extends State<RegisterView> {
                           return 'Email harus menggunakan @';
                         }
                         if (isExist) {
-                            return 'Email sudah digunakan';
+                          return 'Email sudah digunakan';
                         }
                         return null;
                       },
@@ -201,7 +201,7 @@ class _RegisterViewState extends State<RegisterView> {
                         if (value == null || value.isEmpty) {
                           return "Nomor Telepon tidak boleh kosong";
                         }
-                        if (regex.hasMatch(value)) {
+                        if (!regex.hasMatch(value)) {
                           return "Nomor Telepon tidak valid";
                         }
                         return null;
@@ -319,7 +319,8 @@ class _RegisterViewState extends State<RegisterView> {
                                     TextButton(
                                       child: const Text('Ya'),
                                       onPressed: () async {
-                                        ScaffoldMessenger.of(context).showSnackBar(
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
                                           const SnackBar(
                                             content: Text('Register Berhasil'),
                                           ),
@@ -357,6 +358,7 @@ class _RegisterViewState extends State<RegisterView> {
       ),
     );
   }
+
   Future<bool> isEmail(String email) async {
     final data = await SQLHelper.checkEmail(email);
     return data.isNotEmpty;

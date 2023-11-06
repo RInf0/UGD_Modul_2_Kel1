@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 //* Sesuai dengan nama project, awalnya akan error pada home, register, dan form component karena belum ada dibuat
-import 'package:ugd_modul_2_kel1/View/home.dart';
-import 'package:ugd_modul_2_kel1/View/register.dart';
+import 'package:ugd_modul_2_kel1/view/home/home.dart';
+import 'package:ugd_modul_2_kel1/view/register/register.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 // import 'package:ugd_modul_2_kel1/component/form_component.dart';
 import 'package:shared_preferences/shared_preferences.dart';

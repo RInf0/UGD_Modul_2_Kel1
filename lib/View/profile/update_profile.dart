@@ -1,10 +1,14 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:ugd_modul_2_kel1/View/home.dart';
+import 'package:ugd_modul_2_kel1/view/home/home.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
-import 'package:ugd_modul_2_kel1/View/profile.dart';
+import 'package:ugd_modul_2_kel1/view/profile/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UpdateView extends StatefulWidget {
   const UpdateView({
@@ -25,6 +29,9 @@ class UpdateView extends StatefulWidget {
 }
 
 class _UpdateViewState extends State<UpdateView> {
+  late String _selectedImage;
+  bool hasProfileImageFromDb = false;
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -33,6 +40,7 @@ class _UpdateViewState extends State<UpdateView> {
   TextEditingController noTelpController = TextEditingController();
 
   bool passwordInvisible = true;
+  bool isEditable = false;
   bool? isChecked = false;
   String selectedGender = '';
 
@@ -40,6 +48,19 @@ class _UpdateViewState extends State<UpdateView> {
     setState(() {
       selectedGender = gender;
     });
+  }
+
+  final Base64Codec base64Codec = const Base64Codec();
+
+  String encodeToBase64(String imagePath) {
+    Uint8List imageBytes = File(imagePath).readAsBytesSync();
+    String encoded = base64.encode(imageBytes);
+    return encoded;
+  }
+
+  Image decodeFromBase64(String imgBase64String) {
+    Uint8List decoded = base64.decode(imgBase64String);
+    return Image.memory(decoded);
   }
 
   List<Map<String, dynamic>> userProfile = [];
@@ -61,13 +82,73 @@ class _UpdateViewState extends State<UpdateView> {
       passwordController.text = userProfile[0]['password'];
       tglLahirController.text = userProfile[0]['tgl_lahir'];
       noTelpController.text = userProfile[0]['no_telp'];
+
+      if (userProfile[0]['profile_photo'] != null) {
+        hasProfileImageFromDb = true;
+        _selectedImage = userProfile[0]['profile_photo'];
+      }
     });
+  }
+
+  Future<void> refreshProfileImage() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? savedImagePath = preferences.getString('imageProfilePath');
+    print('===================AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+    print(savedImagePath);
+
+    if (savedImagePath != null && savedImagePath.isNotEmpty) {
+      setState(() {
+        _selectedImage = savedImagePath;
+      });
+    } else if (!hasProfileImageFromDb) {
+      _selectedImage = '';
+    }
+    // jika hasProfileImageFromDb true, _selectedImage akan tetap dari Db (didapat dari fungsi refresh())
+
+    print(_selectedImage);
   }
 
   @override
   void initState() {
     refresh();
+    refreshProfileImage();
+    _selectedImage = '';
     super.initState();
+  }
+
+  Future<void> _pickImageFromCamera(ImageSource source) async {
+    final ImagePicker imagePicker = ImagePicker();
+    final returnedImage = await imagePicker.pickImage(source: source);
+
+    if (returnedImage != null) {
+      setState(() {
+        _selectedImage = returnedImage.path;
+      });
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString('imageProfilePath', _selectedImage);
+
+      int? userId = preferences.getInt('id');
+      if (userId != null) {
+        // await SQLHelper.editData(widget.id, {'profile_photo': _selectedImage});
+      }
+    }
+  }
+
+  Future<void> _pickImageFromGallery(ImageSource source) async {
+    final returnedImage = await ImagePicker().pickImage(source: source);
+
+    if (returnedImage != null) {
+      setState(() {
+        _selectedImage = returnedImage.path;
+      });
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString('profileImagePath', _selectedImage);
+
+      int? userId = preferences.getInt('id');
+      if (userId != null) {
+        // await SQLHelper.editData(widget.id, {'profile_photo': _selectedImage});
+      }
+    }
   }
 
   @override
@@ -80,6 +161,7 @@ class _UpdateViewState extends State<UpdateView> {
     //   noTelpController.text =widget.noTelp!;
     // }
     return Scaffold(
+      appBar: AppBar(),
       body: SafeArea(
         child: ListView(
           children: [
@@ -100,6 +182,9 @@ class _UpdateViewState extends State<UpdateView> {
                         color: Colors.green,
                         fontWeight: FontWeight.w500),
                   ),
+
+                  // Image Profile
+                  imageProfile(),
 
                   // Username
                   Padding(
@@ -228,7 +313,7 @@ class _UpdateViewState extends State<UpdateView> {
                         if (value == null || value.isEmpty) {
                           return "Nomor Telepon tidak boleh kosong";
                         }
-                        if (regex.hasMatch(value)) {
+                        if (!regex.hasMatch(value)) {
                           return "Nomor Telepon tidak valid";
                         }
                         return null;
@@ -280,15 +365,15 @@ class _UpdateViewState extends State<UpdateView> {
                                     TextButton(
                                       child: const Text('Ya'),
                                       onPressed: () async {
-                                        await editEmployee(widget.id!);
-
                                         //*Push data jika memilih 'Ya'
-                                        // ignore: use_build_context_synchronously
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (_) =>
-                                                    const HomeView()));
+                                        await editUserProfile(widget.id!);
+                                        // Kemudian kembali ke halaman profil atau tindakan lain sesuai kebutuhan aplikasi Anda.
+                                        if (!context.mounted) return;
+                                        // pop yes/no dialog
+                                        Navigator.of(context).pop();
+
+                                        // pop update_profile view
+                                        Navigator.of(context).pop();
                                       },
                                     ),
                                   ],
@@ -314,20 +399,99 @@ class _UpdateViewState extends State<UpdateView> {
     );
   }
 
-  Future<void> editEmployee(int id) async {
+  Widget imageProfile() {
+    return Center(
+      child: Stack(children: <Widget>[
+        Container(
+          width: 150.0,
+          height: 150.0,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: _selectedImage != ''
+                  ? FileImage(File(_selectedImage))
+                  : const AssetImage('image/random.png')
+                      as ImageProvider<Object>,
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 20.0,
+          right: 20.0,
+          child: InkWell(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                builder: ((builder) => bottomSheet()),
+              );
+            },
+            child: Icon(
+              Icons.camera_alt,
+              color: Colors.teal,
+              size: 28.0,
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
+
+  Widget bottomSheet() {
+    return Container(
+      height: 100.0,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 20,
+      ),
+      child: Column(
+        children: <Widget>[
+          Text(
+            "Choose Profile Photo",
+            style: TextStyle(
+              fontSize: 20.0,
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextButton.icon(
+                icon: Icon(Icons.camera),
+                onPressed: () {
+                  _pickImageFromCamera(ImageSource.camera);
+                },
+                label: Text("Camera"),
+              ),
+              TextButton.icon(
+                icon: Icon(Icons.image),
+                onPressed: () {
+                  _pickImageFromGallery(ImageSource.gallery);
+                },
+                label: Text("Gallery"),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Future<void> editUserProfile(int id) async {
     await SQLHelper.editUser(
         id,
         usernameController.text,
         emailController.text,
         passwordController.text,
         tglLahirController.text,
-        noTelpController.text);
+        noTelpController.text,
+        _selectedImage);
 
     // Setelah mengedit data, Anda dapat menyimpan data yang baru dalam SharedPreferences.
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('username', usernameController.text);
-
-    // Kemudian kembali ke halaman profil atau tindakan lain sesuai kebutuhan aplikasi Anda.
-    Navigator.push(context, MaterialPageRoute(builder: (_) => const Profile()));
   }
 }

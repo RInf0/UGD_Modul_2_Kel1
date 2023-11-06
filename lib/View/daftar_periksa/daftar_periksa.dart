@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ugd_modul_2_kel1/View/input_janji_periksa.dart';
+import 'package:ugd_modul_2_kel1/view/daftar_periksa/detail_janji_periksa.dart';
+import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/entity/janji_periksa.dart';
@@ -15,6 +16,8 @@ class DaftarPeriksaView extends StatefulWidget {
 class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
   List<Map<String, dynamic>> listJanjiPeriksa = [];
   List<Map<String, dynamic>> userProfile = [];
+
+  bool isLoadingData = true;
 
   void refresh() async {
     final data = await SQLHelper.getUser();
@@ -32,8 +35,11 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
     int idPasien = userProfile[0]['id'];
 
     final dataJanji = await SQLHelperJanjiPeriksa.getJanjiPeriksaById(idPasien);
+    await Future.delayed(const Duration(milliseconds: 200));
+
     setState(() {
       listJanjiPeriksa = dataJanji;
+      isLoadingData = false;
     });
   }
 
@@ -50,6 +56,12 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
 
   @override
   Widget build(BuildContext context) {
+    if (isLoadingData) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     if (listJanjiPeriksa.isEmpty) {
       return const Center(
         child: Text('Janji Periksa Masih Kosong!'),
@@ -108,7 +120,37 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => DetailJanjiPeriksaView(
+                                    janjiPeriksaPassed: JanjiPeriksa(
+                                      id: listJanjiPeriksa[index]['id'],
+                                      idPasien: listJanjiPeriksa[index]
+                                          ['id_pasien'],
+                                      namaDokter: listJanjiPeriksa[index]
+                                          ['nama_dokter'],
+                                      tglPeriksa: listJanjiPeriksa[index]
+                                          ['tgl_periksa'],
+                                      keluhan: listJanjiPeriksa[index]
+                                          ['keluhan'],
+                                      dokumen: listJanjiPeriksa[index]
+                                          ['dokumen'],
+                                    ),
+                                  ),
+                                ),
+                              ).then(
+                                (_) => refresh(),
+                              );
+                            },
+                            child: const Text('Detail'),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -123,6 +165,8 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                                           ['tgl_periksa'],
                                       keluhan: listJanjiPeriksa[index]
                                           ['keluhan'],
+                                      dokumen: listJanjiPeriksa[index]
+                                          ['dokumen'],
                                     ),
                                   ),
                                 ),

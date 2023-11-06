@@ -9,7 +9,8 @@ class SQLHelperJanjiPeriksa {
       id_pasien INTEGER,
       nama_dokter TEXT,
       tgl_periksa TEXT,
-      keluhan TEXT
+      keluhan TEXT,
+      dokumen TEXT
     )
     """);
   }
@@ -26,14 +27,16 @@ class SQLHelperJanjiPeriksa {
   }
 
   // insert janji_periksa
-  static Future<int> addJanjiPeriksa(int idPasien, String namaDokter,
-      String tglPeriksa, String keluhan) async {
+  static Future<int> addJanjiPeriksa(
+      int idPasien, String namaDokter, String tglPeriksa, String keluhan,
+      {String dokumen = ''}) async {
     final db = await SQLHelperJanjiPeriksa.db();
     final data = {
       'id_pasien': idPasien,
       'nama_dokter': namaDokter,
       'tgl_periksa': tglPeriksa,
       'keluhan': keluhan,
+      'dokumen': dokumen,
     };
     return await db.insert(
       'janji_periksa',
@@ -60,14 +63,28 @@ class SQLHelperJanjiPeriksa {
 
   // update janji_periksa
   static Future<int> editJanjiPeriksa(int id, int idPasien, String namaDokter,
-      String tglPeriksa, String keluhan) async {
+      String tglPeriksa, String keluhan,
+      {String dokumen = ''}) async {
     final db = await SQLHelperJanjiPeriksa.db();
-    final data = {
+
+    var data = {
       'id_pasien': idPasien,
       'nama_dokter': namaDokter,
       'tgl_periksa': tglPeriksa,
       'keluhan': keluhan,
     };
+
+    // jika ada request edit image dokumen
+    if (dokumen != '') {
+      data = {
+        'id_pasien': idPasien,
+        'nama_dokter': namaDokter,
+        'tgl_periksa': tglPeriksa,
+        'keluhan': keluhan,
+        'dokumen': dokumen,
+      };
+    }
+
     return await db.update(
       'janji_periksa',
       data,

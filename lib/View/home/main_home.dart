@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ugd_modul_2_kel1/View/input_janji_periksa.dart';
-import 'package:ugd_modul_2_kel1/View/grid.dart';
+import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
+import 'package:ugd_modul_2_kel1/view/home/grid.dart';
+import 'package:ugd_modul_2_kel1/View/lokasi_rs/lokasi_rs.dart';
 
 class MainHomeView extends StatefulWidget {
   const MainHomeView({super.key});
@@ -34,6 +35,21 @@ class _MainHomeViewState extends State<MainHomeView> {
                     child: const Text('Buat Janji Periksa'),
                   ),
                 ),
+                const SizedBox(height: 20),
+                  SizedBox(
+                    height: 100,
+                    width: 200,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const GeoLocationPage()
+                              ));
+                      },
+                      child: const Text('Jarak Rumah Sakit'),
+                    ),                      
+                  ),
                 const MyGrid(),
               ],
             ),
