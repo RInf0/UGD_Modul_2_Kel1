@@ -7,29 +7,33 @@ environment:
   sdk: ">=3.1.0 <4.0.0"
 
 dependencies:
+  barcode_widget: ^2.0.4
+  edge_detection: ^1.0.6
   flutter:
     sdk: flutter
-  intl: ^0.18.1
-  sqflite: ^2.3.0
   flutter_slidable: ^0.6.0
-  shared_preferences: ^2.0.7
-  # cunning_document_scanner: ^1.0.2
-  permission_handler: ^10.4.5
-  edge_detection: ^1.0.6
-  path_provider: ^2.1.1
-  path: ^1.8.3
-  geolocator: ^10.1.0
-  geocoding: ^2.0.4
-  google_maps_flutter: ^2.5.0
-  image_picker: ^1.0.4
-  speech_to_text: ^6.4.0
-  google_speech: ^4.1.0
   flutter_tts: ^3.8.3
+  geocoding: ^2.0.4
+  geolocator: ^10.1.0
+  google_maps_flutter: ^2.5.0
+  google_speech: ^4.1.0
+  image_picker: ^1.0.4
+  intl: ^0.18.1
+  path: ^1.8.3
+  path_provider: ^2.1.1
+  pdf: ^3.6.4
+  permission_handler: ^10.4.5
+  printing: ^5.9.0
+  responsive_sizer: ^3.2.0
+  shared_preferences: ^2.0.7
+  speech_to_text: ^6.4.0
+  sqflite: ^2.3.0
+  uuid: ^3.0.6
 
 dev_dependencies:
+  flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
 
 flutter:
   uses-material-design: true
