@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/entity/janji_periksa.dart';
+import 'package:ugd_modul_2_kel1/pdf/pdf_view.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class DetailJanjiPeriksaView extends StatefulWidget {
   const DetailJanjiPeriksaView({super.key, required this.janjiPeriksaPassed});
@@ -19,6 +21,7 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
   JanjiPeriksa? janjiPeriksa;
 
   FlutterTts tts = FlutterTts();
+  // late double height;
 
   void textToSpeech(String text) async {
     await tts.setLanguage('id-ID');
@@ -61,6 +64,51 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
     super.initState();
   }
 
+  Container buttonCreatePDF(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+      // height: 2,
+      // width: 2,
+      child: ElevatedButton(
+        onPressed: () {
+          if (janjiPeriksa == null) {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('Warning'),
+                content: const Text(
+                  'Please fill in all the :.',
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            );
+            return;
+          } else {
+            createPdf(context, janjiPeriksa!);
+            // setState(() {
+            //   const uuid = Uuid();
+            //   id = uuid.v1();
+            // });
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.amber,
+          textStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 15.w,
+            // height = 15.sp;
+          ),
+        ),
+        child: const Text('Create PDF'),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,8 +135,8 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
                       textToSpeech(textUntukDibaca);
                     },
                     child: Container(
-                      height: 50,
                       width: 50,
+                      // height: 50,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.green,
@@ -107,7 +155,7 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
                         padding: const EdgeInsets.all(10),
                         child: SizedBox(
                           width: 120,
-                          height: 120,
+                          // height: 120,
                           child: Image.asset(
                             'image/${janjiPeriksa!.namaDokter.toLowerCase()}.jpg',
                           ),
@@ -188,7 +236,9 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
                         ),
                       ],
                     ),
-                  )
+                  ),
+
+                  buttonCreatePDF(context)
                 ],
               ),
             ),

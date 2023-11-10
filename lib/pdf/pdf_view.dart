@@ -1,78 +1,54 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:ugd_modul_2_kel1/entity/janji_periksa.dart';
+// import 'package:ugd_modul_2_kel1/pdf/invoice/model/custom_row_invoice.dart';
 import 'package:ugd_modul_2_kel1/pdf/preview_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-Future<void> createPdf(
-    TextEditingController nameController,
-    TextEditingController phoneController,
-    TextEditingController addressController,
-    String id,
-    File image,
-    BuildContext context,
-    List<Product> soldProducts) async {
+Future<void> createPdf(BuildContext context, JanjiPeriksa janjiPeriksa) async {
   final doc = pw.Document();
   final now = DateTime.now();
   final formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
 
-  final imageLogo =
-      (await rootBundle.load("assets/logo.png")).buffer.asUint8List();
-  final imageInvoice = pw.MemoryImage(imageLogo);
+  // final imageLogo =
+  //     (await rootBundle.load("assets/logo.png")).buffer.asUint8List();
+  // final imageInvoice = pw.MemoryImage(imageLogo);
 
-  pw.ImageProvider pdfImageProvider(Uint8List imageBytes) {
-    return pw.MemoryImage(imageBytes);
-  }
+  // pw.ImageProvider pdfImageProvider(Uint8List imageBytes) {
+  //   return pw.MemoryImage(imageBytes);
+  // }
 
-  final imageBytes = image.readAsBytesSync();
+  // final imageBytes = image.readAsBytesSync();
 
   final pdfTheme = pw.PageTheme(
-      pageFormat: PdfPageFormat.a4,
-      buildBackground: (pw.Context context) {
-        return pw.Container(
-          decoration: pw.BoxDecoration(
-            border: pw.Border.all(
-              color: PdfColor.fromHex('#FFBD59'),
-              width: 1.w,
-            ),
+    pageFormat: PdfPageFormat.a4,
+    buildBackground: (pw.Context context) {
+      return pw.Container(
+        decoration: pw.BoxDecoration(
+          border: pw.Border.all(
+            color: PdfColor.fromHex('#FFBD59'),
+            width: 1.w,
           ),
-        );
-      });
+        ),
+      );
+    },
+  );
 
-  final List<CustomRow> elements = [
-    CustomRow("Item Name", "Item Price", "Amount", "Sub Total Product"),
-    for (var product in soldProducts)
-      CustomRow(
-        product.name,
-        product.price.toStringAsFixed(2),
-        product.amount.toString(),
-        (product.price * product.amount).toStringAsFixed(2),
-      ),
-    CustomRow(
-      "Sub Total",
-      "",
-      "",
-      "Rp ${getSubTotal(soldProducts)}",
-    ),
-    CustomRow(
-      "PPN Total(11%)",
-      "",
-      "",
-      "Rp ${getPPNTotal(soldProducts)}",
-    ),
-    CustomRow(
-      "Total",
-      "",
-      "",
-      "Rp ${(double.parse(getSubTotal(soldProducts)) + double.parse(getPPNTotal(soldProducts))).toStringAsFixed(2)}",
-    )
-  ];
+  // final List<CustomRow> elements = [
+  //   CustomRow("Item Name", "Item Price", "Amount", "Sub Total Product"),
+  //   CustomRow(
+  //     "Sub Total",
+  //     "",
+  //     "",
+  //     "Rp ",
+  //   ),
+  // ];
 
-  pw.Widget table = itemColumn(elements);
+  // pw.Widget table = itemColumn(elements);
 
   doc.addPage(pw.MultiPage(
     pageTheme: pdfTheme,
@@ -89,16 +65,16 @@ Future<void> createPdf(
               pw.Container(
                   margin:
                       pw.EdgeInsets.symmetric(horizontal: 2.h, vertical: 2.h)),
-              imageFromInput(pdfImageProvider, imageBytes),
-              personalDataFromInput(
-                  nameController, phoneController, addressController),
+              // imageFromInput(pdfImageProvider, imageBytes),
+              // personalDataFromInput(nameController, phoneController, addressController),
               pw.SizedBox(height: 10.h),
-              topOfInvoice(imageInvoice),
-              barcodeGaris(id),
-              pw.SizedBox(height: 5.h),
-              contentOfInvoice(table),
-              barcodeKotak(id),
-              pw.SizedBox(height: 1.h),
+              // topOfInvoice(imageInvoice),
+
+              // BARCODE
+              // barcodeGaris(id),
+              // pw.SizedBox(height: 5.h),
+              // barcodeKotak(id),
+              // pw.SizedBox(height: 1.h),
             ])),
       ];
     },

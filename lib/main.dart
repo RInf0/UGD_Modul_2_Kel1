@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugd_modul_2_kel1/document_scanner/cunning_scanner.dart';
 import 'package:ugd_modul_2_kel1/document_scanner/document_scanner_flutter.dart';
 import 'package:ugd_modul_2_kel1/document_scanner/edge_detection_scanner.dart';
@@ -76,17 +77,37 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.green,
+    return ResponsiveSizer(builder: (context, orientation, deviceType) {
+      Device.orientation == Orientation.portrait
+          ? Container(
+              width: 100.w,
+              height: 20.5.h,
+            )
+          : Container(
+              width: 100.w,
+              height: 12.5.h,
+            );
+      Device.screenType == ScreenType.tablet
+          ? Container(
+              width: 100.w,
+              height: 20.5.h,
+            )
+          : Container(
+              width: 100.w,
+              height: 12.5.h,
+            );
+      return MaterialApp(
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.green,
+          ),
         ),
-      ),
-      darkTheme: ThemeData.dark(useMaterial3: true),
-      themeMode: _themeMode,
-      home: const LoginView(),
-    );
+        darkTheme: ThemeData.dark(useMaterial3: true),
+        themeMode: _themeMode,
+        home: const LoginView(),
+      );
+    });
   }
 }
 
