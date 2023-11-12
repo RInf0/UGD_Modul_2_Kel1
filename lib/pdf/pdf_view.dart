@@ -69,9 +69,11 @@ Future<void> createPdf(BuildContext context, JanjiPeriksa janjiPeriksa) async {
               // personalDataFromInput(nameController, phoneController, addressController),
               pw.SizedBox(height: 10.h),
               // topOfInvoice(imageInvoice),
-
+              pw.Text(janjiPeriksa.namaDokter),
+              pw.Text(janjiPeriksa.keluhan),
+              pw.Text(janjiPeriksa.tglPeriksa),
               // BARCODE
-              // barcodeGaris(id),
+              barcodeGaris(janjiPeriksa.id!),
               // pw.SizedBox(height: 5.h),
               // barcodeKotak(id),
               // pw.SizedBox(height: 1.h),
@@ -107,7 +109,7 @@ pw.Header headerPDF() {
       ),
       child: pw.Center(
         child: pw.Text(
-          '-Modul 8 Library-',
+          'PDF Documents',
           style: pw.TextStyle(
             fontWeight: pw.FontWeight.bold,
             fontSize: 12.sp,
@@ -303,13 +305,14 @@ pw.Padding barcodeKotak(String id) {
   );
 }
 
-pw.Container barcodeGaris(String id) {
+pw.Container barcodeGaris(int id) {
+  final idPer = id.toString();
   return pw.Container(
     child: pw.Padding(
       padding: pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
       child: pw.BarcodeWidget(
         barcode: Barcode.code128(escapes: true),
-        data: id,
+        data: idPer,
         width: 10.w,
         height: 5.h,
       ),

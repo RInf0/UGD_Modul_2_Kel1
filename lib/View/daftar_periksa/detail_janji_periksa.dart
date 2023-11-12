@@ -66,7 +66,7 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
 
   Container buttonCreatePDF(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+      margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
       // height: 2,
       // width: 2,
       child: ElevatedButton(
