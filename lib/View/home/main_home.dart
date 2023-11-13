@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/view/home/grid.dart';
-import 'package:ugd_modul_2_kel1/View/lokasi_rs/lokasi_rs.dart';
+import 'package:ugd_modul_2_kel1/view/lokasi_rs/lokasi_rs.dart';
 
 class MainHomeView extends StatefulWidget {
-  const MainHomeView({super.key});
+  const MainHomeView({Key? key}) : super(key: key);
 
   @override
   State<MainHomeView> createState() => _MainHomeViewState();
@@ -19,38 +20,51 @@ class _MainHomeViewState extends State<MainHomeView> {
           children: [
             Column(
               children: [
-                const Text('Rumah Sakit'),
+                Text(
+                  'Rumah Sakit',
+                  style: TextStyle(fontSize: 17.sp),
+                ),
                 SizedBox(
-                  height: 100,
-                  width: 200,
+                  height: 6.h,
+                  width: 70.w,
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const CreateJanjiPeriksaView(
-                                    janjiPeriksa: null,
-                                  )));
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const CreateJanjiPeriksaView(
+                            janjiPeriksa: null,
+                          ),
+                        ),
+                      );
                     },
-                    child: const Text('Buat Janji Periksa'),
+                    child: Text(
+                      'Buat Janji Periksa',
+                      style: TextStyle(fontSize: 17.sp),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 20),
-                  SizedBox(
-                    height: 100,
-                    width: 200,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const GeoLocationPage()
-                              ));
-                      },
-                      child: const Text('Jarak Rumah Sakit'),
-                    ),                      
+                SizedBox(height: 2.h), 
+                SizedBox(
+                  height: 6.h,
+                  width: 70.w,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const GeoLocationPage(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Jarak Rumah Sakit',
+                      style: TextStyle(fontSize: 17.sp),
+                    ),
                   ),
-                const MyGrid(),
+                ),
+                SizedBox(height: 2.h), 
+                MyGrid(),
               ],
             ),
           ],

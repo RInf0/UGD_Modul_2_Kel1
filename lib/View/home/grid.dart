@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class MyGrid extends StatefulWidget {
   const MyGrid({super.key});
@@ -39,8 +40,8 @@ class _MyGridState extends State<MyGrid> {
               height: !isExpanded ? width * 0.4 : width * 0.85,
               child: Center(
                 child: SizedBox(
-                  width: 100,
-                  height: 100,
+                  width: 20.w,
+                  height: 20.w,
                   child: Image.asset('image/icon/$index.png'),
                 ),
               ),
