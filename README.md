@@ -28,3 +28,12 @@ Membuat sebuah aplikasi Rumah Sakit sederhana yang berbasis Android. Project ini
 - Hardware camera untuk tambah dan update dokumen janji periksa, dapat pilih foto dari gallery, serta crop foto dokumen (Seto)
 - Hardware speaker untuk fungsi text-to-speech yang menjelaskan detail janji periksa user (Seto)
 - Hardware GPS untuk track jarak rumah sakit dengan lokasi user saat itu (Adit)
+
+### UGD MODUL LIBRARY
+
+- Responsive Sizer (Adit)
+- PDF dan Printing, design ui pdf_view (Seto)
+- Image Picker yang dimasukkan ke dalam pdf_view (Seto)
+- INTL untuk tanggal create PDF, tanggal lahir, dan tanggal periksa pada pdf_view (Adit, Seto)
+- Barcode QR berdasarkan UUID (Reyhan, Gre)
+- UUID autogenerate untuk nomor antrian (Gre)
