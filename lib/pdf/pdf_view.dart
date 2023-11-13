@@ -9,6 +9,12 @@ import 'package:ugd_modul_2_kel1/entity/user.dart';
 // import 'package:ugd_modul_2_kel1/pdf/invoice/model/custom_row_invoice.dart';
 import 'package:ugd_modul_2_kel1/pdf/preview_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:uuid/uuid.dart';
+
+String randomUuid() {
+  var uuid = Uuid();
+  return uuid.v4();
+}
 
 Future<void> createPdf(
     BuildContext context, JanjiPeriksa janjiPeriksa, User pasien) async {
@@ -460,17 +466,26 @@ pw.Padding contentOfInvoice(pw.Widget table) {
 }
 
 pw.Padding barcodeKotak(int id) {
-  final idPer = id.toString();
+  // final idPer = id.toString();
+  String randomId = randomUuid();
   return pw.Padding(
     padding: pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
     child: pw.Center(
-      child: pw.BarcodeWidget(
-        barcode: pw.Barcode.qrCode(
-          errorCorrectLevel: BarcodeQRCorrectionLevel.high,
-        ),
-        data: idPer,
-        width: 30.w,
-        height: 30.h,
+      child: pw.Column(
+        children: [
+          pw.BarcodeWidget(
+            barcode: pw.Barcode.qrCode(
+              errorCorrectLevel: BarcodeQRCorrectionLevel.high,
+            ),
+            data: randomId,
+            width: 15.w,
+            height: 15.h,
+          ),
+          pw.SizedBox(
+            height: 20,
+          ),
+          pw.Text(randomId),
+        ],
       ),
     ),
   );
