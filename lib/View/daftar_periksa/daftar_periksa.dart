@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ugd_modul_2_kel1/entity/user.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/detail_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
@@ -137,6 +138,14 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                                           ['keluhan'],
                                       dokumen: listJanjiPeriksa[index]
                                           ['dokumen'],
+                                    ),
+                                    userPassed: User(
+                                      id: userProfile[0]['id'],
+                                      email: userProfile[0]['email'],
+                                      noTelp: userProfile[0]['no_telp'],
+                                      username: userProfile[0]['username'],
+                                      password: userProfile[0]['password'],
+                                      tglLahir: userProfile[0]['tgl_lahir'],
                                     ),
                                   ),
                                 ),

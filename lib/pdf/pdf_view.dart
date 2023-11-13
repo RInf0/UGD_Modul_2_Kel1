@@ -5,11 +5,13 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:ugd_modul_2_kel1/entity/janji_periksa.dart';
+import 'package:ugd_modul_2_kel1/entity/user.dart';
 // import 'package:ugd_modul_2_kel1/pdf/invoice/model/custom_row_invoice.dart';
 import 'package:ugd_modul_2_kel1/pdf/preview_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-Future<void> createPdf(BuildContext context, JanjiPeriksa janjiPeriksa) async {
+Future<void> createPdf(
+    BuildContext context, JanjiPeriksa janjiPeriksa, User pasien) async {
   final doc = pw.Document();
   final now = DateTime.now();
   final formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
@@ -25,16 +27,17 @@ Future<void> createPdf(BuildContext context, JanjiPeriksa janjiPeriksa) async {
   // final imageBytes = image.readAsBytesSync();
 
   final pdfTheme = pw.PageTheme(
+    margin: pw.EdgeInsets.zero,
     pageFormat: PdfPageFormat.a4,
     buildBackground: (pw.Context context) {
       return pw.Container(
-        decoration: pw.BoxDecoration(
-          border: pw.Border.all(
-            color: PdfColor.fromHex('#FFBD59'),
-            width: 1.w,
-          ),
-        ),
-      );
+          // decoration: pw.BoxDecoration(
+          //   border: pw.Border.all(
+          //     color: PdfColor.fromHex('#000000'),
+          //     width: 1,
+          //   ),
+          // ),
+          );
     },
   );
 
@@ -62,27 +65,88 @@ Future<void> createPdf(BuildContext context, JanjiPeriksa janjiPeriksa) async {
                 mainAxisAlignment: pw.MainAxisAlignment.center,
                 crossAxisAlignment: pw.CrossAxisAlignment.center,
                 children: [
-              pw.Container(
-                  margin:
-                      pw.EdgeInsets.symmetric(horizontal: 2.h, vertical: 2.h)),
               // imageFromInput(pdfImageProvider, imageBytes),
-              // personalDataFromInput(nameController, phoneController, addressController),
-              pw.SizedBox(height: 10.h),
+
+              pw.SizedBox(height: 2.h),
+
+              pw.Text(
+                'Dokumen Janji Periksa',
+                style: pw.TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+
+              pw.SizedBox(height: 2.h),
+
+              pw.Text(
+                'Data Pasien',
+                style: pw.TextStyle(
+                  fontSize: 15.sp,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+              personalDataFromInput(
+                nama: pasien.username!,
+                email: pasien.email!,
+                noTelp: pasien.noTelp!,
+                tglLahir: pasien.tglLahir!,
+              ),
+
+              pw.SizedBox(height: 1.h),
+
+              pw.Text(
+                'Data Periksa',
+                style: pw.TextStyle(
+                  fontSize: 15.sp,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+              janjiPeriksaDataFromInput(
+                namaDokter: janjiPeriksa.namaDokter,
+                keluhan: janjiPeriksa.keluhan,
+              ),
+
+              pw.Row(
+                children: [
+                  // pw.Expanded(
+                  //   child: pw.Text(
+                  //     'Expand A',
+                  //     style: pw.TextStyle(
+                  //       fontSize: 16.sp,
+                  //     ),
+                  //     textAlign: pw.TextAlign.center,
+                  //   ),
+                  // ),
+                  // pw.Expanded(
+                  //   child: pw.Text(
+                  //     'Expand B',
+                  //     style: pw.TextStyle(
+                  //       fontSize: 16.sp,
+                  //     ),
+                  //     textAlign: pw.TextAlign.center,
+                  //   ),
+                  // ),
+                ],
+              ),
+
+              pw.SizedBox(height: 2.h),
+
               // topOfInvoice(imageInvoice),
-              pw.Text(janjiPeriksa.namaDokter),
-              pw.Text(janjiPeriksa.keluhan),
-              pw.Text(janjiPeriksa.tglPeriksa),
               // BARCODE
               //barcodeGaris(janjiPeriksa.id!),
               // pw.SizedBox(height: 5.h),
               barcodeKotak(janjiPeriksa.id!),
+              pw.Text('Scan QR ini untuk Cetak No. Antrian di Rumah Sakit'),
               // pw.SizedBox(height: 1.h),
             ])),
       ];
     },
     footer: (pw.Context context) {
       return pw.Container(
-          color: PdfColor.fromHex('#FFBD59'), child: footerPdf(formattedDate));
+        color: PdfColor.fromHex('#2bed31'),
+        child: footerPdf(formattedDate),
+      );
     },
   ));
   // ignore: use_build_context_synchronously
@@ -102,17 +166,20 @@ pw.Header headerPDF() {
       decoration: pw.BoxDecoration(
         shape: pw.BoxShape.rectangle,
         gradient: pw.LinearGradient(
-          colors: [PdfColor.fromHex('#FCDF8A'), PdfColor.fromHex('#F38381')],
+          colors: [PdfColor.fromHex('#2bed31'), PdfColor.fromHex('#9dfaa1')],
           begin: pw.Alignment.topLeft,
           end: pw.Alignment.bottomRight,
         ),
       ),
       child: pw.Center(
-        child: pw.Text(
-          'PDF Documents',
-          style: pw.TextStyle(
-            fontWeight: pw.FontWeight.bold,
-            fontSize: 12.sp,
+        child: pw.Padding(
+          padding: const pw.EdgeInsets.all(10),
+          child: pw.Text(
+            'Atma Hospital',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+              fontSize: 20.sp,
+            ),
           ),
         ),
       ));
@@ -132,85 +199,188 @@ pw.Padding imageFromInput(
 }
 
 pw.Padding personalDataFromInput(
-    TextEditingController nameController,
-    TextEditingController phoneController,
-    TextEditingController addressController) {
+    {required String nama,
+    required String email,
+    required String noTelp,
+    required String tglLahir}) {
   return pw.Padding(
       padding: pw.EdgeInsets.symmetric(horizontal: 5.h, vertical: 1.h),
-      child: pw.Table(border: pw.TableBorder.all(), children: [
-        pw.TableRow(
-          children: [
-            pw.Padding(
-              padding: pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
-              child: pw.Text(
-                'Name',
-                style: pw.TextStyle(
-                  fontWeight: pw.FontWeight.bold,
-                  fontSize: 10.sp,
+      child: pw.Table(
+        // border: pw.TableBorder.all(),
+        columnWidths: const {
+          0: pw.FlexColumnWidth(1),
+          1: pw.FlexColumnWidth(4),
+        },
+        children: [
+          pw.TableRow(
+            children: [
+              pw.Padding(
+                padding:
+                    pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
+                child: pw.Text(
+                  'Nama Pasien',
+                  style: pw.TextStyle(
+                    fontWeight: pw.FontWeight.bold,
+                    fontSize: 14.sp,
+                  ),
                 ),
               ),
-            ),
-            pw.Padding(
-              padding: pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
-              child: pw.Text(
-                nameController.text,
-                style: pw.TextStyle(
-                  fontWeight: pw.FontWeight.bold,
-                  fontSize: 10.sp,
+              pw.Padding(
+                padding:
+                    pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
+                child: pw.Text(
+                  ' : $nama',
+                  style: pw.TextStyle(
+                    fontSize: 14.sp,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        pw.TableRow(
-          children: [
-            pw.Padding(
-              padding: pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
-              child: pw.Text(
-                'Phone Number',
-                style: pw.TextStyle(
-                  fontWeight: pw.FontWeight.bold,
-                  fontSize: 10.sp,
+            ],
+          ),
+          pw.TableRow(
+            children: [
+              pw.Padding(
+                padding:
+                    pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
+                child: pw.Text(
+                  'Tanggal Lahir',
+                  style: pw.TextStyle(
+                    fontWeight: pw.FontWeight.bold,
+                    fontSize: 14.sp,
+                  ),
                 ),
               ),
-            ),
-            pw.Padding(
-              padding: pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
-              child: pw.Text(
-                phoneController.text,
-                style: pw.TextStyle(
-                  fontWeight: pw.FontWeight.bold,
-                  fontSize: 10.sp,
+              pw.Padding(
+                padding:
+                    pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
+                child: pw.Text(
+                  ' : $tglLahir',
+                  style: pw.TextStyle(
+                    fontSize: 14.sp,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        pw.TableRow(
-          children: [
-            pw.Padding(
-              padding: pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
-              child: pw.Text(
-                'Address',
-                style: pw.TextStyle(
-                  fontWeight: pw.FontWeight.bold,
-                  fontSize: 10.sp,
+            ],
+          ),
+          pw.TableRow(
+            children: [
+              pw.Padding(
+                padding:
+                    pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
+                child: pw.Text(
+                  'No. Telepon',
+                  style: pw.TextStyle(
+                    fontWeight: pw.FontWeight.bold,
+                    fontSize: 14.sp,
+                  ),
                 ),
               ),
-            ),
-            pw.Padding(
-              padding: pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
-              child: pw.Text(
-                addressController.text,
-                style: pw.TextStyle(
-                  fontWeight: pw.FontWeight.bold,
-                  fontSize: 10.sp,
+              pw.Padding(
+                padding:
+                    pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
+                child: pw.Text(
+                  ' : $noTelp',
+                  style: pw.TextStyle(
+                    fontSize: 14.sp,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ]));
+            ],
+          ),
+          pw.TableRow(
+            children: [
+              pw.Padding(
+                padding:
+                    pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
+                child: pw.Text(
+                  'Email',
+                  style: pw.TextStyle(
+                    fontWeight: pw.FontWeight.bold,
+                    fontSize: 14.sp,
+                  ),
+                ),
+              ),
+              pw.Padding(
+                padding:
+                    pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
+                child: pw.Text(
+                  ' : $email',
+                  style: pw.TextStyle(
+                    fontSize: 14.sp,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ));
+}
+
+pw.Padding janjiPeriksaDataFromInput({
+  required String namaDokter,
+  required String keluhan,
+}) {
+  return pw.Padding(
+      padding: pw.EdgeInsets.symmetric(horizontal: 5.h, vertical: 1.h),
+      child: pw.Table(
+        // border: pw.TableBorder.all(),
+        columnWidths: const {
+          0: pw.FlexColumnWidth(1),
+          1: pw.FlexColumnWidth(4),
+        },
+        children: [
+          pw.TableRow(
+            children: [
+              pw.Padding(
+                padding:
+                    pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
+                child: pw.Text(
+                  'Nama Dokter',
+                  style: pw.TextStyle(
+                    fontWeight: pw.FontWeight.bold,
+                    fontSize: 14.sp,
+                  ),
+                ),
+              ),
+              pw.Padding(
+                padding:
+                    pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
+                child: pw.Text(
+                  ' : $namaDokter',
+                  style: pw.TextStyle(
+                    fontSize: 14.sp,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          pw.TableRow(
+            children: [
+              pw.Padding(
+                padding:
+                    pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
+                child: pw.Text(
+                  'Keluhan',
+                  style: pw.TextStyle(
+                    fontWeight: pw.FontWeight.bold,
+                    fontSize: 14.sp,
+                  ),
+                ),
+              ),
+              pw.Padding(
+                padding:
+                    pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
+                child: pw.Text(
+                  ' : $keluhan',
+                  style: pw.TextStyle(
+                    fontSize: 14.sp,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ));
 }
 
 pw.Padding topOfInvoice(pw.MemoryImage imageInvoice) {
@@ -299,8 +469,8 @@ pw.Padding barcodeKotak(int id) {
           errorCorrectLevel: BarcodeQRCorrectionLevel.high,
         ),
         data: idPer,
-        width: 15.w,
-        height: 15.h,
+        width: 30.w,
+        height: 30.h,
       ),
     ),
   );
@@ -323,4 +493,4 @@ pw.Container barcodeGaris(int id) {
 
 pw.Center footerPdf(String formattedDate) => pw.Center(
     child: pw.Text('Created At $formattedDate',
-        style: pw.TextStyle(fontSize: 10.sp, color: PdfColors.blue)));
+        style: pw.TextStyle(fontSize: 10.sp, color: PdfColors.black)));

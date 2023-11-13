@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/entity/janji_periksa.dart';
+import 'package:ugd_modul_2_kel1/entity/user.dart';
 import 'package:ugd_modul_2_kel1/pdf/pdf_view.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class DetailJanjiPeriksaView extends StatefulWidget {
-  const DetailJanjiPeriksaView({super.key, required this.janjiPeriksaPassed});
+  const DetailJanjiPeriksaView({super.key, required this.janjiPeriksaPassed, this.userPassed});
 
   final JanjiPeriksa? janjiPeriksaPassed;
+  final User? userPassed;
 
   @override
   State<DetailJanjiPeriksaView> createState() => _DetailJanjiPeriksaViewState();
@@ -89,7 +91,7 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
             );
             return;
           } else {
-            createPdf(context, janjiPeriksa!);
+            createPdf(context, janjiPeriksa!, widget.userPassed!);
             // setState(() {
             //   const uuid = Uuid();
             //   id = uuid.v1();
