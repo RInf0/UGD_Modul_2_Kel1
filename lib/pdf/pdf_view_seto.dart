@@ -11,12 +11,6 @@ import 'package:ugd_modul_2_kel1/entity/user.dart';
 // import 'package:ugd_modul_2_kel1/pdf/invoice/model/custom_row_invoice.dart';
 import 'package:ugd_modul_2_kel1/pdf/preview_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:uuid/uuid.dart';
-
-String randomUuid() {
-  var uuid = const Uuid();
-  return uuid.v4();
-}
 
 Future<void> createPdf(
     BuildContext context, JanjiPeriksa janjiPeriksa, User pasien) async {
@@ -28,9 +22,9 @@ Future<void> createPdf(
   //     (await rootBundle.load("assets/logo.png")).buffer.asUint8List();
   // final imageInvoice = pw.MemoryImage(imageLogo);
 
-  pw.ImageProvider pdfImageProvider(Uint8List imageBytes) {
-    return pw.MemoryImage(imageBytes);
-  }
+  // pw.ImageProvider pdfImageProvider(Uint8List imageBytes) {
+  //   return pw.MemoryImage(imageBytes);
+  // }
 
   // final imageBytes = image.readAsBytesSync();
 
@@ -64,7 +58,7 @@ Future<void> createPdf(
   doc.addPage(pw.MultiPage(
     pageTheme: pdfTheme,
     header: (pw.Context context) {
-      return headerPDF();
+      return headerPDF(janjiPeriksa.tglPeriksa);
     },
     build: (pw.Context context) {
       return [
@@ -73,43 +67,11 @@ Future<void> createPdf(
                 mainAxisAlignment: pw.MainAxisAlignment.center,
                 crossAxisAlignment: pw.CrossAxisAlignment.center,
                 children: [
+              // imageFromInput(pdfImageProvider, imageBytes),
+
               pw.SizedBox(height: 2.h),
 
-              pw.Text(
-                'Dokumen Janji Periksa',
-                style: pw.TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
-
-              pw.SizedBox(height: 1.h),
-
-              pw.Row(
-                mainAxisAlignment: pw.MainAxisAlignment.center,
-                children: [
-                  pw.Text(
-                    'ID Periksa : ${janjiPeriksa.id}',
-                    style: pw.TextStyle(
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                  pw.Text(
-                    '   |   ',
-                    style: pw.TextStyle(
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                  pw.Text(
-                    'Tanggal Periksa : ${janjiPeriksa.tglPeriksa}',
-                    style: pw.TextStyle(
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                ],
-              ),
-
-              pw.SizedBox(height: 3.h),
+              pw.SizedBox(height: 2.h),
 
               pw.Text(
                 'Data Pasien',
@@ -168,33 +130,13 @@ Future<void> createPdf(
               // BARCODE
               //barcodeGaris(janjiPeriksa.id!),
               // pw.SizedBox(height: 5.h),
-              barcodeKotak(),
+              barcodeKotak(janjiPeriksa.id!),
               pw.Text('Scan QR ini untuk Cetak No. Antrian di Rumah Sakit'),
 
               pw.SizedBox(height: 1.h),
 
               if (janjiPeriksa.dokumen != '')
-                pw.Column(
-                  children: [
-                    pw.SizedBox(height: 2.h),
-
-                    pw.Text(
-                      'Foto Dokumen',
-                      style: pw.TextStyle(
-                        fontSize: 15.sp,
-                        fontWeight: pw.FontWeight.bold,
-                      ),
-                    ),
-
-                    // image from input
-                    imageFromInput(
-                      pdfImageProvider,
-                      const Base64Decoder().convert(janjiPeriksa.dokumen!),
-                    ),
-                  ],
-                ),
-
-              // showImageDokumenJanjiPeriksa(janjiPeriksa.dokumen!),
+                showImageDokumenJanjiPeriksa(janjiPeriksa.dokumen!),
             ])),
       ];
     },
@@ -220,19 +162,19 @@ pw.Padding showImageDokumenJanjiPeriksa(String fotoDokumen) {
     child: pw.Column(
       mainAxisAlignment: pw.MainAxisAlignment.center,
       children: [
-        pw.Image(base64StringToImage(fotoDokumen)),
+        base64StringToImage(fotoDokumen) as pw.Widget,
       ],
     ),
   );
 }
 
-pw.MemoryImage base64StringToImage(String fotoDokumen) {
-  return pw.MemoryImage(
+Image base64StringToImage(String fotoDokumen) {
+  return Image.memory(
     const Base64Decoder().convert(fotoDokumen),
   );
 }
 
-pw.Header headerPDF() {
+pw.Header headerPDF(String tglPeriksa) {
   return pw.Header(
       margin: pw.EdgeInsets.zero,
       outlineColor: PdfColors.amber50,
@@ -249,25 +191,40 @@ pw.Header headerPDF() {
       child: pw.Center(
         child: pw.Padding(
           padding: const pw.EdgeInsets.all(10),
-          child: pw.Text(
-            'Atma Hospital',
-            style: pw.TextStyle(
-              fontWeight: pw.FontWeight.bold,
-              fontSize: 20.sp,
-            ),
+          child: pw.Column(
+            children: [
+              pw.Text(
+                'Atma Hospital',
+                style: pw.TextStyle(
+                  fontWeight: pw.FontWeight.bold,
+                  fontSize: 20.sp,
+                ),
+              ),
+              pw.Text(
+                'Dokumen Janji Periksa',
+                style: pw.TextStyle(
+                  fontSize: 18.sp,
+                ),
+              ),
+              pw.Text(
+                tglPeriksa,
+                style: pw.TextStyle(
+                  fontSize: 16.sp,
+                ),
+              ),
+            ],
           ),
         ),
       ));
 }
 
 pw.Padding imageFromInput(
-  pw.ImageProvider Function(Uint8List imageBytes) pdfImageProvider,
-  Uint8List imageBytes,
-) {
+    pw.ImageProvider Function(Uint8List imageBytes) pdfImageProvider,
+    Uint8List imageBytes) {
   return pw.Padding(
     padding: pw.EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
     child: pw.FittedBox(
-      child: pw.Image(pdfImageProvider(imageBytes), width: 85.w),
+      child: pw.Image(pdfImageProvider(imageBytes), width: 33.h),
       fit: pw.BoxFit.fitHeight,
       alignment: pw.Alignment.center,
     ),
@@ -535,27 +492,18 @@ pw.Padding contentOfInvoice(pw.Widget table) {
       ]));
 }
 
-pw.Padding barcodeKotak() {
-  // final idPer = id.toString();
-  String randomId = randomUuid();
+pw.Padding barcodeKotak(int id) {
+  final idPer = id.toString();
   return pw.Padding(
     padding: pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
     child: pw.Center(
-      child: pw.Column(
-        children: [
-          pw.BarcodeWidget(
-            barcode: pw.Barcode.qrCode(
-              errorCorrectLevel: BarcodeQRCorrectionLevel.high,
-            ),
-            data: randomId,
-            width: 30.w,
-            height: 30.h,
-          ),
-          pw.Text(randomId),
-          pw.SizedBox(
-            height: 10,
-          ),
-        ],
+      child: pw.BarcodeWidget(
+        barcode: pw.Barcode.qrCode(
+          errorCorrectLevel: BarcodeQRCorrectionLevel.high,
+        ),
+        data: idPer,
+        width: 30.w,
+        height: 30.h,
       ),
     ),
   );
@@ -578,4 +526,4 @@ pw.Container barcodeGaris(int id) {
 
 pw.Center footerPdf(String formattedDate) => pw.Center(
     child: pw.Text('Created At $formattedDate',
-        style: pw.TextStyle(fontSize: 14.sp, color: PdfColors.black)));
+        style: pw.TextStyle(fontSize: 10.sp, color: PdfColors.black)));

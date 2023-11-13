@@ -10,7 +10,8 @@ import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class DetailJanjiPeriksaView extends StatefulWidget {
-  const DetailJanjiPeriksaView({super.key, required this.janjiPeriksaPassed, this.userPassed});
+  const DetailJanjiPeriksaView(
+      {super.key, required this.janjiPeriksaPassed, this.userPassed});
 
   final JanjiPeriksa? janjiPeriksaPassed;
   final User? userPassed;
@@ -69,8 +70,7 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
   Container buttonCreatePDF(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-      // height: 2,
-      // width: 2,
+      width: 80.w,
       child: ElevatedButton(
         onPressed: () {
           if (janjiPeriksa == null) {
@@ -99,10 +99,10 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
           }
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.amber,
+          backgroundColor: Colors.greenAccent,
           textStyle: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 15.w,
+            fontSize: 18.sp,
             // height = 15.sp;
           ),
         ),
