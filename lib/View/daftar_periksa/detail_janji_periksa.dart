@@ -7,6 +7,7 @@ import 'package:ugd_modul_2_kel1/entity/janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/pdf/pdf_view.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:uuid/uuid.dart';
 
 class DetailJanjiPeriksaView extends StatefulWidget {
   const DetailJanjiPeriksaView({super.key, required this.janjiPeriksaPassed});
@@ -19,6 +20,7 @@ class DetailJanjiPeriksaView extends StatefulWidget {
 
 class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
   JanjiPeriksa? janjiPeriksa;
+  String id = const Uuid().v1();
 
   FlutterTts tts = FlutterTts();
   // late double height;
@@ -66,9 +68,7 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
 
   Container buttonCreatePDF(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-      // height: 2,
-      // width: 2,
+      margin: EdgeInsets.symmetric(vertical: 2.h),
       child: ElevatedButton(
         onPressed: () {
           if (janjiPeriksa == null) {
@@ -76,9 +76,7 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
               context: context,
               builder: (context) => AlertDialog(
                 title: const Text('Warning'),
-                content: const Text(
-                  'Please fill in all the :.',
-                ),
+                content: const Text('Please fill in all the :.'),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
@@ -89,19 +87,18 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
             );
             return;
           } else {
-            createPdf(context, janjiPeriksa!);
-            // setState(() {
-            //   const uuid = Uuid();
-            //   id = uuid.v1();
-            // });
+            createPdf(context, janjiPeriksa!, id);
+             setState(() {
+               const uuid = Uuid();
+               id = uuid.v1();
+             });
           }
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.amber,
           textStyle: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 15.w,
-            // height = 15.sp;
+            fontSize: 15,
           ),
         ),
         child: const Text('Create PDF'),

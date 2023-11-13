@@ -8,8 +8,9 @@ import 'package:ugd_modul_2_kel1/entity/janji_periksa.dart';
 // import 'package:ugd_modul_2_kel1/pdf/invoice/model/custom_row_invoice.dart';
 import 'package:ugd_modul_2_kel1/pdf/preview_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugd_modul_2_kel1/View/profile/profile.dart';
 
-Future<void> createPdf(BuildContext context, JanjiPeriksa janjiPeriksa) async {
+Future<void> createPdf(BuildContext context, JanjiPeriksa janjiPeriksa, String id) async {
   final doc = pw.Document();
   final now = DateTime.now();
   final formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
@@ -67,14 +68,17 @@ Future<void> createPdf(BuildContext context, JanjiPeriksa janjiPeriksa) async {
                       pw.EdgeInsets.symmetric(horizontal: 2.h, vertical: 2.h)),
               // imageFromInput(pdfImageProvider, imageBytes),
               // personalDataFromInput(nameController, phoneController, addressController),
+              pw.Text(janjiPeriksa.namaDokter),
+              pw.Text(janjiPeriksa.keluhan),
+              pw.Text(janjiPeriksa.tglPeriksa),
               pw.SizedBox(height: 10.h),
               // topOfInvoice(imageInvoice),
 
               // BARCODE
               // barcodeGaris(id),
               // pw.SizedBox(height: 5.h),
-              // barcodeKotak(id),
-              // pw.SizedBox(height: 1.h),
+              barcodeKotak(id),
+              pw.SizedBox(height: 1.h),
             ])),
       ];
     },
@@ -303,19 +307,19 @@ pw.Padding barcodeKotak(String id) {
   );
 }
 
-pw.Container barcodeGaris(String id) {
-  return pw.Container(
-    child: pw.Padding(
-      padding: pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
-      child: pw.BarcodeWidget(
-        barcode: Barcode.code128(escapes: true),
-        data: id,
-        width: 10.w,
-        height: 5.h,
-      ),
-    ),
-  );
-}
+// pw.Container barcodeGaris(String id) {
+//   return pw.Container(
+//     child: pw.Padding(
+//       padding: pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
+//       child: pw.BarcodeWidget(
+//         barcode: Barcode.code128(escapes: true),
+//         data: id,
+//         width: 10.w,
+//         height: 5.h,
+//       ),
+//     ),
+//   );
+// }
 
 pw.Center footerPdf(String formattedDate) => pw.Center(
     child: pw.Text('Created At $formattedDate',
