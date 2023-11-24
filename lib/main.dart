@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:ugd_modul_2_kel1/document_scanner/cunning_scanner.dart';
-import 'package:ugd_modul_2_kel1/document_scanner/document_scanner_flutter.dart';
-import 'package:ugd_modul_2_kel1/document_scanner/edge_detection_scanner.dart';
-import 'package:ugd_modul_2_kel1/speech_to_text/google_speech.dart';
-import 'package:ugd_modul_2_kel1/speech_to_text/speech_to_text_page.dart';
-import 'package:ugd_modul_2_kel1/speech_to_text/speech_to_text_widget.dart';
+// import 'package:ugd_modul_2_kel1/document_scanner/cunning_scanner.dart';
+// import 'package:ugd_modul_2_kel1/document_scanner/document_scanner_flutter.dart';
+// import 'package:ugd_modul_2_kel1/document_scanner/edge_detection_scanner.dart';
+// import 'package:ugd_modul_2_kel1/speech_to_text/google_speech.dart';
+// import 'package:ugd_modul_2_kel1/speech_to_text/speech_to_text_page.dart';
+// import 'package:ugd_modul_2_kel1/speech_to_text/speech_to_text_widget.dart';
 import 'package:ugd_modul_2_kel1/view/login/login.dart';
 
 // RUN APP
 void main() {
   // RUN MYAPP
   runApp(
-    MyApp(
-      key: myAppKey,
+    ProviderScope(
+      child: MyApp(
+        key: myAppKey,
+      ),
     ),
   );
 

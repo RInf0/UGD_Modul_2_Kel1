@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
+import 'package:ugd_modul_2_kel1/client/user_client.dart';
+// import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 import 'package:ugd_modul_2_kel1/view/profile/update_profile.dart';
@@ -15,25 +16,33 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   Map<String, dynamic>? userProfile;
-  String username = '', email = '', noTelp = '';
+  String username = '', email = '', noTelp = '', tglLahir = '';
   String? profilePic;
 
   void refresh() async {
-    final data = await SQLHelper.getUser();
+    // final data = await SQLHelper.getUser();
+
     final prefs = await SharedPreferences.getInstance();
-    final storedUsername = prefs.getString('username');
+    final storedId = prefs.getInt('id');
+
+    final dataUser = await UserClient.find(storedId);
 
     // Filter data user berdasarkan username yang tersimpan di SharedPreferences
     setState(() {
-      final userData =
-          data.where((user) => user['username'] == storedUsername).toList();
+      // final userData =
+      //     data.where((user) => user['username'] == storedUsername).toList();
+      // userProfile = userData[0];
 
-      userProfile = userData[0];
-      username = userProfile!['username'];
-      email = userProfile!['email'];
-      noTelp = userProfile!['no_telp'];
+      // username = userProfile!['username'];
+      // email = userProfile!['email'];
+      // noTelp = userProfile!['no_telp'];
+      // profilePic = userProfile!['profile_photo'];
 
-      profilePic = userProfile!['profile_photo'];
+      username = dataUser.username!;
+      email = dataUser.email!;
+      noTelp = dataUser.noTelp!;
+      tglLahir = dataUser.tglLahir!;
+      // profilePic =
     });
   }
 
@@ -76,6 +85,7 @@ class _ProfileState extends State<Profile> {
                 cSizedBox2,
                 Text(email),
                 Text(noTelp),
+                Text(tglLahir),
                 const SizedBox(
                   height: 100,
                 ),
@@ -106,54 +116,52 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-
-
-      // body: ListView.builder(
-      //   itemCount: userProfile.length,
-      //   itemBuilder: (context, index) {
-      //     return Slidable(
-      //       actionPane: const SlidableDrawerActionPane(),
-      //       secondaryActions: [
-      //         IconSlideAction(
-      //           caption: 'Update',
-      //           color: Colors.blue,
-      //           icon: Icons.update,
-      //           onTap: () async {
-      //             Navigator.push(
-      //               context,
-      //               MaterialPageRoute(
-      //                 builder: (context) => UpdateView(
-      //                   id: userProfile[index]['id'],
-      //                   username: userProfile[index]['username'],
-      //                   email: userProfile[index]['email'],
-      //                   password: userProfile[index]['password'],
-      //                   tglLahir: userProfile[index]['tgl_lahir'],
-      //                   noTelp: userProfile[index]['no_telp'],
-      //                 ),
-      //               ),
-      //             ).then((_) => refresh());
-      //           },
-      //         ),
-      //       ],
-      //       child: Container(
-      //         padding: const EdgeInsets.all(16.0),
-      //         decoration: const BoxDecoration(
-      //           color: Color.fromARGB(255, 242, 242, 242),
-      //         ),
-      //         child: ListTile(
-      //           title: Text("Username         : " +
-      //               userProfile[index]['username'] +
-      //               "\n" +
-      //               "Email                  : " +
-      //               userProfile[index]['email'] +
-      //               "\n" +
-      //               "Tanggal Lahir   : " +
-      //               userProfile[index]['tgl_lahir'] +
-      //               "\n" +
-      //               "Nomor Telepon: " +
-      //               userProfile[index]['no_telp']),
-      //         ),
-      //       ),
-      //     );
-      //   },
-      // ),
+// body: ListView.builder(
+//   itemCount: userProfile.length,
+//   itemBuilder: (context, index) {
+//     return Slidable(
+//       actionPane: const SlidableDrawerActionPane(),
+//       secondaryActions: [
+//         IconSlideAction(
+//           caption: 'Update',
+//           color: Colors.blue,
+//           icon: Icons.update,
+//           onTap: () async {
+//             Navigator.push(
+//               context,
+//               MaterialPageRoute(
+//                 builder: (context) => UpdateView(
+//                   id: userProfile[index]['id'],
+//                   username: userProfile[index]['username'],
+//                   email: userProfile[index]['email'],
+//                   password: userProfile[index]['password'],
+//                   tglLahir: userProfile[index]['tgl_lahir'],
+//                   noTelp: userProfile[index]['no_telp'],
+//                 ),
+//               ),
+//             ).then((_) => refresh());
+//           },
+//         ),
+//       ],
+//       child: Container(
+//         padding: const EdgeInsets.all(16.0),
+//         decoration: const BoxDecoration(
+//           color: Color.fromARGB(255, 242, 242, 242),
+//         ),
+//         child: ListTile(
+//           title: Text("Username         : " +
+//               userProfile[index]['username'] +
+//               "\n" +
+//               "Email                  : " +
+//               userProfile[index]['email'] +
+//               "\n" +
+//               "Tanggal Lahir   : " +
+//               userProfile[index]['tgl_lahir'] +
+//               "\n" +
+//               "Nomor Telepon: " +
+//               userProfile[index]['no_telp']),
+//         ),
+//       ),
+//     );
+//   },
+// ),

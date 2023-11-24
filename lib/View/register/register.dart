@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:ugd_modul_2_kel1/client/auth_client.dart';
+import 'package:ugd_modul_2_kel1/entity/user.dart';
 import 'package:ugd_modul_2_kel1/view/login/login.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 
@@ -32,13 +34,25 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   Future<void> addUser() async {
-    await SQLHelper.addUser(
-      usernameController.text,
-      emailController.text,
-      passwordController.text,
-      tglLahirController.text,
-      noTelpController.text,
+    // CODE LAMA PAKAI SQFLITE
+    // 
+    // await SQLHelper.addUser(
+    //   usernameController.text,
+    //   emailController.text,
+    //   passwordController.text,
+    //   tglLahirController.text,
+    //   noTelpController.text,
+    // );
+
+    final dataRegister = User(
+      username: usernameController.text,
+      email: emailController.text,
+      password: passwordController.text,
+      tglLahir: tglLahirController.text,
+      noTelp: noTelpController.text,
     );
+
+    await AuthClient.register(dataRegister);
   }
 
   @override

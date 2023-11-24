@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ugd_modul_2_kel1/client/auth_client.dart';
+import 'package:ugd_modul_2_kel1/entity/user.dart';
 //* Sesuai dengan nama project, awalnya akan error pada home, register, dan form component karena belum ada dibuat
 import 'package:ugd_modul_2_kel1/view/home/home.dart';
 import 'package:ugd_modul_2_kel1/view/register/register.dart';
-import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
+// import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 // import 'package:ugd_modul_2_kel1/component/form_component.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,7 +19,6 @@ class LoginView extends StatefulWidget {
   State<LoginView> createState() => _LoginViewState();
 }
 
-
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   bool passwordInvisible = true;
@@ -26,14 +27,10 @@ class _LoginViewState extends State<LoginView> {
 
   List<Map<String, dynamic>> listUser = [];
 
-  void refresh() async {
-    final data = await SQLHelper.getUser();
-    listUser = data;
-  }
+  User? userFound;
 
   @override
   void initState() {
-    refresh();
     super.initState();
   }
 
@@ -123,33 +120,51 @@ class _LoginViewState extends State<LoginView> {
                       onPressed: () async {
                         //* Cek statenya sudah valid atau belum valid
                         if (_formKey.currentState!.validate()) {
-                          //* Jika sudah valid, cek usernamedan password yang diinputkan pada form telah sesuai dengan data yang dibawah
+                          //* Jika sudah valid, cek username dan password yang diinputkan pada form telah sesuai dengan data yang dibawah
                           //* dari halaman register atau belum
-                          refresh();
 
-                          Map<String, dynamic>? userLoggedIn;
+                          // API
 
-                          for (Map<String, dynamic> user in listUser) {
-                            if (user['username'] == usernameController.text &&
-                                user['password'] == passwordController.text) {
-                              userLoggedIn = user;
-                            }
-                          }
-                          if (userLoggedIn != null) {
+                          // refresh();
+
+                          User data = await AuthClient.login(User(
+                            username: usernameController.text,
+                            password: passwordController.text,
+                          ));
+
+                          userFound = data;
+
+                          // if (userFound is User) {
+                          // } else {
+                          //   userFound = null;
+                          // }
+
+                          print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                          // print(userFound!.username);
+
+                          if (userFound!.id != null) {
                             final prefs = await SharedPreferences.getInstance();
-                            prefs.setString('username', userLoggedIn['username']);
+                            prefs.setString(
+                              'username',
+                              userFound!.username!,
+                            );
+                            prefs.setInt(
+                              'id',
+                              userFound!.id!,
+                            );
+
+                            // ignore: use_build_context_synchronously
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => const HomeView()
-                                )
-                            );
-                            
+                                    builder: (_) => const HomeView()));
                           } else {
+                            // ignore: use_build_context_synchronously
                             showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
-                                title: const Text('Password salah!'),
+                                title:
+                                    const Text('Username atau password salah!'),
                                 //* isi alert dialog
                                 actions: <Widget>[
                                   TextButton(
@@ -165,6 +180,50 @@ class _LoginViewState extends State<LoginView> {
                               ),
                             );
                           }
+
+                          // CODE LAMA PAKAI SQFLITE
+
+                          // final data = await SQLHelper.getUser();
+                          // listUser = data;
+
+                          // Map<String, dynamic>? userLoggedIn;
+
+                          // for (Map<String, dynamic> user in listUser) {
+                          //   if (user['username'] == usernameController.text &&
+                          //       user['password'] == passwordController.text) {
+                          //     userLoggedIn = user;
+                          //   }
+                          // }
+                          // if (userLoggedIn != null) {
+                          //   final prefs = await SharedPreferences.getInstance();
+                          //   prefs.setString(
+                          //       'username', userLoggedIn['username']);
+                          //   // ignore: use_build_context_synchronously
+                          //   Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //           builder: (_) => const HomeView()));
+                          // } else {
+                          //   showDialog(
+                          //     context: context,
+                          //     builder: (_) => AlertDialog(
+                          //       title:
+                          //           const Text('Username atau password salah!'),
+                          //       //* isi alert dialog
+                          //       actions: <Widget>[
+                          //         TextButton(
+                          //           //* pushRegister(context) fungsi pada baris 118-124 untuk meminimalkan nested code
+                          //           onPressed: () => pushRegister(context),
+                          //           child: const Text('Register'),
+                          //         ),
+                          //         TextButton(
+                          //           onPressed: () => Navigator.pop(context),
+                          //           child: const Text('Ok'),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   );
+                          // }
                         }
                       },
                       child: const Text('Login')),
@@ -203,7 +262,19 @@ class _LoginViewState extends State<LoginView> {
 
               const SizedBox(
                 height: 20,
-              )
+              ),
+
+              ElevatedButton(
+                onPressed: () {
+                  
+                  
+                },
+                child: const Text('Reset Password'),
+              ),
+
+              const SizedBox(
+                height: 20,
+              ),
             ],
           ),
         ),
