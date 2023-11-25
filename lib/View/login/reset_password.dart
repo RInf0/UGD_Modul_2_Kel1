@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ugd_modul_2_kel1/View/login/reset_password.dart';
 import 'package:ugd_modul_2_kel1/client/auth_client.dart';
 import 'package:ugd_modul_2_kel1/entity/user.dart';
 //* Sesuai dengan nama project, awalnya akan error pada home, register, dan form component karena belum ada dibuat
@@ -9,18 +8,18 @@ import 'package:ugd_modul_2_kel1/view/register/register.dart';
 // import 'package:ugd_modul_2_kel1/component/form_component.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginView extends StatefulWidget {
+class ResetPasswordView extends StatefulWidget {
   //* Variabel map data dibuat bersifat nullabl, karena ketika aplikasi dijalankan(dipanggil dari main, tdak ada yang dibawa)
   //* data memiliki nilai ketika registrasi berhasil dilakukan
   // final Map? data;
   //* Agar Map data bisa ebrsifat nullable, pada konstruktor dibungkus dengan kurung ( ) agar bersifat opsional
-  const LoginView({super.key});
+  const ResetPasswordView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<ResetPasswordView> createState() => _ResetPasswordViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _ResetPasswordViewState extends State<ResetPasswordView> {
   final _formKey = GlobalKey<FormState>();
   bool passwordInvisible = true;
   TextEditingController usernameController = TextEditingController();
@@ -38,7 +37,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     //* TextEditingController
-    //* widget mengacu pada instance/objek Loginview
+    //* widget mengacu pada instance/objek ResetPasswordView
     // Map? dataForm = widget.data;
     return Scaffold(
       body: SafeArea(
@@ -49,7 +48,7 @@ class _LoginViewState extends State<LoginView> {
             children: [
               // Title
               const Text(
-                'Login',
+                'Forgot Password',
                 style: TextStyle(
                     fontSize: 35,
                     color: Colors.green,
@@ -128,59 +127,71 @@ class _LoginViewState extends State<LoginView> {
 
                           // refresh();
 
-                          User data = await AuthClient.login(User(
-                            username: usernameController.text,
-                            password: passwordController.text,
-                          ));
+                          try {
+                            await AuthClient.resetPassword(User(
+                              username: usernameController.text,
+                              password: passwordController.text,
+                            ));
+                            // ignore: use_build_context_synchronously
+                            showSnackBar(context, 'Password berhasil direset',
+                                Colors.green);
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
+                          } catch (e) {
+                            // ignore: use_build_context_synchronously
+                            showSnackBar(context, e.toString(), Colors.red);
+                            // ignore: use_build_context_synchronously
+                            // Navigator.pop(context);
+                          }
 
-                          userFound = data;
+                          // User data = await AuthClient.login(User(
+                          //   username: usernameController.text,
+                          //   password: passwordController.text,
+                          // ));
 
                           // if (userFound is User) {
                           // } else {
                           //   userFound = null;
                           // }
 
-                          print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                          // print(userFound!.username);
+                          // print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                          // // print(userFound!.username);
 
-                          if (userFound!.id != null) {
-                            final prefs = await SharedPreferences.getInstance();
-                            prefs.setString(
-                              'username',
-                              userFound!.username!,
-                            );
-                            prefs.setInt(
-                              'id',
-                              userFound!.id!,
-                            );
+                          // if (userFound!.id != null) {
+                          //   final prefs = await SharedPreferences.getInstance();
+                          //   prefs.setString(
+                          //     'username',
+                          //     userFound!.username!,
+                          //   );
+                          //   prefs.setInt(
+                          //     'id',
+                          //     userFound!.id!,
+                          //   );
 
-                            // ignore: use_build_context_synchronously
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const HomeView()));
-                          } else {
-                            // ignore: use_build_context_synchronously
-                            showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                title:
-                                    const Text('Username atau password salah!'),
-                                //* isi alert dialog
-                                actions: <Widget>[
-                                  TextButton(
-                                    //* pushRegister(context) fungsi pada baris 118-124 untuk meminimalkan nested code
-                                    onPressed: () => pushRegister(context),
-                                    child: const Text('Register'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('Ok'),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
+                          //   // ignore: use_build_context_synchronously
+                          //   Navigator.pop(context);
+                          // } else {
+                          //   // ignore: use_build_context_synchronously
+                          //   showDialog(
+                          //     context: context,
+                          //     builder: (_) => AlertDialog(
+                          //       title:
+                          //           const Text('Username atau password salah!'),
+                          //       //* isi alert dialog
+                          //       actions: <Widget>[
+                          //         TextButton(
+                          //           //* pushRegister(context) fungsi pada baris 118-124 untuk meminimalkan nested code
+                          //           onPressed: () => pushRegister(context),
+                          //           child: const Text('Register'),
+                          //         ),
+                          //         TextButton(
+                          //           onPressed: () => Navigator.pop(context),
+                          //           child: const Text('Ok'),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   );
+                          // }
 
                           // CODE LAMA PAKAI SQFLITE
 
@@ -227,11 +238,11 @@ class _LoginViewState extends State<LoginView> {
                           // }
                         }
                       },
-                      child: const Text('Login')),
+                      child: const Text('Reset Password')),
                 ),
               ),
 
-              //* tombol ke halaman register
+              //* tombol ke halaman login
               TextButton(
                 style: ButtonStyle(
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
@@ -240,7 +251,7 @@ class _LoginViewState extends State<LoginView> {
                   Map<String, dynamic> formData = {};
                   formData['username'] = usernameController.text;
                   formData['password'] = usernameController.text;
-                  pushRegister(context);
+                  Navigator.pop(context);
                 },
                 child: Padding(
                   padding:
@@ -249,12 +260,8 @@ class _LoginViewState extends State<LoginView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Belum punya akun? ',
+                        'Batal',
                         style: TextStyle(color: Colors.grey.shade600),
-                      ),
-                      const Text(
-                        'Register',
-                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -263,13 +270,6 @@ class _LoginViewState extends State<LoginView> {
 
               const SizedBox(
                 height: 20,
-              ),
-
-              ElevatedButton(
-                onPressed: () {
-                  pushForgotPassword(context);
-                },
-                child: const Text('Forgot Password'),
               ),
 
               const SizedBox(
@@ -290,13 +290,18 @@ class _LoginViewState extends State<LoginView> {
       ),
     );
   }
+}
 
-  void pushForgotPassword(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const ResetPasswordView(),
+void showSnackBar(BuildContext context, String msg, Color bg) {
+  final scaffold = ScaffoldMessenger.of(context);
+  scaffold.showSnackBar(
+    SnackBar(
+      content: Text(msg),
+      backgroundColor: bg,
+      action: SnackBarAction(
+        label: 'hide',
+        onPressed: scaffold.hideCurrentSnackBar,
       ),
-    );
-  }
+    ),
+  );
 }

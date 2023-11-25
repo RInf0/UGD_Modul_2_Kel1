@@ -15,13 +15,13 @@ class UpdateView extends StatefulWidget {
     super.key,
     required this.id,
     required this.username,
-    required this.password,
+    // required this.password,
     required this.email,
     required this.tglLahir,
     required this.noTelp,
   });
 
-  final String? username, password, email, tglLahir, noTelp;
+  final String? username, email, tglLahir, noTelp;
   final int? id;
 
   @override
@@ -68,25 +68,25 @@ class _UpdateViewState extends State<UpdateView> {
   void refresh() async {
     final data = await SQLHelper.getUser();
     final prefs = await SharedPreferences.getInstance();
-    final storedUsername = prefs.getString('username');
+    // final storedUsername = prefs.getString('username');
+    // final storedId = prefs.getInt('id');
 
     // Filter data user berdasarkan username yang tersimpan di SharedPreferences
-    final userData =
-        data.where((user) => user['username'] == storedUsername).toList();
+    // final userData =
+    //     data.where((user) => user['username'] == storedUsername).toList();
 
     setState(() {
-      userProfile = userData;
+      // userProfile = userData;
 
-      usernameController.text = userProfile[0]['username'];
-      emailController.text = userProfile[0]['email'];
-      passwordController.text = userProfile[0]['password'];
-      tglLahirController.text = userProfile[0]['tgl_lahir'];
-      noTelpController.text = userProfile[0]['no_telp'];
+      usernameController.text = widget.username!;
+      emailController.text = widget.email!;
+      tglLahirController.text = widget.tglLahir!;
+      noTelpController.text = widget.noTelp!;
 
-      if (userProfile[0]['profile_photo'] != null) {
-        hasProfileImageFromDb = true;
-        _selectedImage = userProfile[0]['profile_photo'];
-      }
+      // if (userProfile[0]['profile_photo'] != null) {
+      //   hasProfileImageFromDb = true;
+      //   _selectedImage = userProfile[0]['profile_photo'];
+      // }
     });
   }
 
@@ -232,39 +232,42 @@ class _UpdateViewState extends State<UpdateView> {
                   ),
 
                   // Password
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20, top: 10, right: 20),
-                    child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Password tidak boleh kosong";
-                        }
-                        if (value.length < 5) {
-                          return 'Password minimal 5 karakter';
-                        }
-                        return null;
-                      },
-                      obscureText: passwordInvisible,
-                      controller: passwordController,
-                      decoration: InputDecoration(
-                        labelText: "Password",
-                        prefixIcon: const Icon(Icons.lock),
-                        suffixIcon: IconButton(
-                          icon: Icon(passwordInvisible
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                          onPressed: () {
-                            setState(
-                              () {
-                                passwordInvisible = !passwordInvisible;
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Field password tidak dipakai krn udah ada reset password page
+                  // Untuk kepentingan security juga
+                  //
+                  // Padding(
+                  //   padding:
+                  //       const EdgeInsets.only(left: 20, top: 10, right: 20),
+                  //   child: TextFormField(
+                  //     validator: (value) {
+                  //       if (value == null || value.isEmpty) {
+                  //         return "Password tidak boleh kosong";
+                  //       }
+                  //       if (value.length < 5) {
+                  //         return 'Password minimal 5 karakter';
+                  //       }
+                  //       return null;
+                  //     },
+                  //     obscureText: passwordInvisible,
+                  //     controller: passwordController,
+                  //     decoration: InputDecoration(
+                  //       labelText: "Password",
+                  //       prefixIcon: const Icon(Icons.lock),
+                  //       suffixIcon: IconButton(
+                  //         icon: Icon(passwordInvisible
+                  //             ? Icons.visibility_off
+                  //             : Icons.visibility),
+                  //         onPressed: () {
+                  //           setState(
+                  //             () {
+                  //               passwordInvisible = !passwordInvisible;
+                  //             },
+                  //           );
+                  //         },
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
 
                   // Tanggal Lahir
                   Padding(
@@ -341,9 +344,9 @@ class _UpdateViewState extends State<UpdateView> {
                           if (_formKey.currentState!.validate()) {
                             // ScaffoldMessenger.of(context).showSnackBar{
                             // const SnackBar(content: Text('Processing Data))};
-                            Map<String, dynamic> formData = {};
-                            formData['username'] = usernameController.text;
-                            formData['password'] = passwordController.text;
+                            // Map<String, dynamic> formData = {};
+                            // formData['username'] = usernameController.text;
+                            // formData['password'] = passwordController.text;
 
                             //* Navigator.push(context, MaterialPageRoute(builder: (BuildContext buildContext) => LoginView(data: formData ,)) );
 
@@ -481,14 +484,8 @@ class _UpdateViewState extends State<UpdateView> {
   }
 
   Future<void> editUserProfile(int id) async {
-    await SQLHelper.editUser(
-        id,
-        usernameController.text,
-        emailController.text,
-        passwordController.text,
-        tglLahirController.text,
-        noTelpController.text,
-        _selectedImage);
+    await SQLHelper.editUser(id, usernameController.text, emailController.text,
+        tglLahirController.text, noTelpController.text, _selectedImage);
 
     // Setelah mengedit data, Anda dapat menyimpan data yang baru dalam SharedPreferences.
     final prefs = await SharedPreferences.getInstance();

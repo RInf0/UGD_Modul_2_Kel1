@@ -53,13 +53,31 @@ class SQLHelper {
   }
 
   // update user
-  static Future<int> editUser(int id, String username, String email,
+  static Future<int> editUserWithPass(int id, String username, String email,
       String password, String tglLahir, String noTelp, String photo) async {
     final db = await SQLHelper.db();
     final data = {
       'username': username,
       'email': email,
       'password': password,
+      'tgl_lahir': tglLahir,
+      'no_telp': noTelp,
+      'profile_photo': photo
+    };
+    return await db.update(
+      'user',
+      data,
+      where: "id = $id",
+    );
+  }
+
+  // update user without password
+  static Future<int> editUser(int id, String username, String email,
+      String tglLahir, String noTelp, String photo) async {
+    final db = await SQLHelper.db();
+    final data = {
+      'username': username,
+      'email': email,
       'tgl_lahir': tglLahir,
       'no_telp': noTelp,
       'profile_photo': photo

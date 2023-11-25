@@ -8,6 +8,7 @@ class AuthClient {
   static const String url = '10.0.2.2:8000';
   static const String endpointRegister = '/api/register';
   static const String endpointLogin = '/api/login';
+  static const String endpointResetPassword = '/api/resetPassword';
 
   // untuk hp
   // static final String url = '192.168.1.14';
@@ -58,5 +59,35 @@ class AuthClient {
     }
 
     return userLoggedIn;
+  }
+
+  // reset password
+  static Future<Response> resetPassword(User user) async {
+    User userLoggedIn = User();
+
+    try {
+      var response = await post(
+        Uri.http(url, endpointResetPassword),
+        headers: {"Content-Type": "application/json"},
+        body: user.toRawJson(),
+      );
+
+      print(json.decode(response.body)['message']);
+
+      // if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      if (response.statusCode == 200) {
+        userLoggedIn = User.fromJson(json.decode(response.body)['data']);
+      } else {
+        throw Exception("Gagal reset password");
+      }
+
+      return response;
+
+      // print(userLoggedIn!.username);
+    } catch (e) {
+      print(Future.error(e.toString()));
+      return Future.error(e.toString());
+    }
   }
 }

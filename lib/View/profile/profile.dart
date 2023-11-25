@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:ugd_modul_2_kel1/View/profile/update_profile.dart';
 import 'package:ugd_modul_2_kel1/client/user_client.dart';
 // import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd_modul_2_kel1/utilities/constant.dart';
-import 'package:ugd_modul_2_kel1/view/profile/update_profile.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -17,7 +17,10 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   Map<String, dynamic>? userProfile;
   String username = '', email = '', noTelp = '', tglLahir = '';
+  String password = '';
   String? profilePic;
+
+  int? idUser;
 
   void refresh() async {
     // final data = await SQLHelper.getUser();
@@ -38,10 +41,12 @@ class _ProfileState extends State<Profile> {
       // noTelp = userProfile!['no_telp'];
       // profilePic = userProfile!['profile_photo'];
 
+      idUser = dataUser.id!;
       username = dataUser.username!;
       email = dataUser.email!;
       noTelp = dataUser.noTelp!;
       tglLahir = dataUser.tglLahir!;
+      password = dataUser.password!;
       // profilePic =
     });
   }
@@ -95,12 +100,11 @@ class _ProfileState extends State<Profile> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => UpdateView(
-                          id: userProfile!['id'],
-                          username: userProfile!['username'],
-                          email: userProfile!['email'],
-                          password: userProfile!['password'],
-                          tglLahir: userProfile!['tgl_lahir'],
-                          noTelp: userProfile!['no_telp'],
+                          id: idUser,
+                          username: username,
+                          email: email,
+                          tglLahir: tglLahir,
+                          noTelp: noTelp,
                         ),
                       ),
                     ).then((_) => refresh());
