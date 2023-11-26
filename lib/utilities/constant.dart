@@ -25,15 +25,12 @@ const cTextStyle1 = TextStyle(
 const cTextStyle2 = TextStyle(
   // fontFamily: 'Source Sans Pro',
   fontSize: 20,
-  color: Colors.white,
-  letterSpacing: 2.5,
   fontWeight: FontWeight.bold,
 );
 
 const cTextStyle3 = TextStyle(
   // fontFamily: 'Source Sans Pro',
-  fontSize: 20,
-  color: Colors.white,
+  fontSize: 15,
   fontWeight: FontWeight.bold,
   letterSpacing: 2.5,
 );

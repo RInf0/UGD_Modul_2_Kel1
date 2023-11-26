@@ -106,7 +106,13 @@ class MyAppState extends State<MyApp> {
             seedColor: Colors.green,
           ),
         ),
-        darkTheme: ThemeData.dark(useMaterial3: true),
+        darkTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            brightness: Brightness.dark,
+            seedColor: Colors.green.shade800,
+          ),
+        ),
         themeMode: _themeMode,
         home: const LoginView(),
       );

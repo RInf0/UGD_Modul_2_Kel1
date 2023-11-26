@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:ugd_modul_2_kel1/View/home/home.dart';
 import 'package:ugd_modul_2_kel1/View/profile/update_profile.dart';
 import 'package:ugd_modul_2_kel1/client/user_client.dart';
 // import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ugd_modul_2_kel1/main.dart';
 import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 
 class Profile extends StatefulWidget {
@@ -46,7 +48,7 @@ class _ProfileState extends State<Profile> {
       email = dataUser.email!;
       noTelp = dataUser.noTelp!;
       tglLahir = dataUser.tglLahir!;
-      password = dataUser.password!;
+      // password = dataUser.password!;
       // profilePic =
     });
   }
@@ -57,62 +59,218 @@ class _ProfileState extends State<Profile> {
     super.initState();
   }
 
+  Widget buildProfileCoverTop({double? height}) {
+    return Container(
+      clipBehavior: Clip.none,
+      height: height ?? 200.0,
+      color: Colors.transparent,
+      child: Container(
+        decoration: BoxDecoration(
+          color: isDark ? Colors.black : Colors.green,
+        ),
+      ),
+    );
+  }
+
+  Widget buildCircleAvatar({double? radius}) {
+    return CircleAvatar(
+      radius: radius ?? 60.0,
+      backgroundImage: profilePic != null
+          ? FileImage(File(profilePic!))
+          : const AssetImage('image/random.png') as ImageProvider<Object>,
+    );
+  }
+
+  Widget buildProfileContentInside({double? spacerHeight}) {
+    return Column(
+      children: [
+        // untuk spacer antara circle avatar dan text dibawahnya
+        // relatif menyesuaikan radius circle avatar
+        SizedBox(
+          height: (spacerHeight ?? 60.0) + 15.0,
+        ),
+        Text(
+          username,
+          style: cTextStyle1,
+        ),
+        cSizedBox2,
+        Text(email),
+        Text(noTelp),
+        Text(tglLahir),
+        const SizedBox(
+          height: 20,
+        ),
+        Container(
+          height: 10,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+          ),
+        ),
+        cSizedBox2,
+        Column(
+          children: [
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: Text(
+                    'Akun',
+                    style: cTextStyle2,
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom:
+                          BorderSide(width: 0.5, color: Colors.grey.shade400))),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  child: ListTile(
+                    leading: const Icon(Icons.circle),
+                    trailing: const Icon(Icons.chevron_right),
+                    title: const Text('Edit Profile'),
+                    onTap: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UpdateView(
+                            id: idUser,
+                            username: username,
+                            email: email,
+                            tglLahir: tglLahir,
+                            noTelp: noTelp,
+                          ),
+                        ),
+                      ).then((_) => refresh());
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom:
+                          BorderSide(width: 0.5, color: Colors.grey.shade400))),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  child: ListTile(
+                    leading: const Icon(Icons.circle),
+                    trailing: const Icon(Icons.chevron_right),
+                    title: const Text('Ganti Password'),
+                    onTap: () {
+                      print('object');
+                    },
+                  ),
+                ),
+              ),
+            ),
+            cSizedBox2,
+            cSizedBox2,
+          ],
+        ),
+        Column(
+          children: [
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: Text(
+                    'Pengaturan',
+                    style: cTextStyle2,
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom:
+                          BorderSide(width: 0.5, color: Colors.grey.shade400))),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  child: ListTile(
+                    leading: const Icon(Icons.circle),
+                    trailing: const Icon(Icons.chevron_right),
+                    title: const Text('Ganti Tema'),
+                    onTap: () {
+                      print('object');
+                    },
+                  ),
+                ),
+              ),
+            ),
+            cSizedBox2,
+            cSizedBox2,
+          ],
+        ),
+        Container(
+          height: 10,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+          ),
+        ),
+        cSizedBox2,
+        cSizedBox2,
+        cSizedBox2,
+      ],
+    );
+  }
+
+  Widget buildProfileContent({double? borderRadiusTop}) {
+    double circleAvatarRadius = 70.0;
+
+    print(myAppKey.currentState!.getIsDarkTheme());
+
+    return Container(
+      constraints:
+          BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+      width: double.infinity,
+      clipBehavior: Clip.none,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.onPrimary,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(borderRadiusTop ?? 25.0),
+        ),
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.topCenter,
+        children: [
+          // Stack 1
+          buildProfileContentInside(spacerHeight: circleAvatarRadius),
+
+          // Stack 2
+          Positioned(
+            top: (0 - circleAvatarRadius),
+            child: buildCircleAvatar(radius: circleAvatarRadius),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    const bgCoverHeight = 120.0;
+    const borderRadius = 25.0;
+
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.primary,
       body: SafeArea(
         child: ListView(
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: 150.0,
-                  color: Colors.transparent,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.green,
-                    ),
-                  ),
-                ),
-                cSizedBox2,
-                CircleAvatar(
-                  radius: 60,
-                  backgroundImage: profilePic != null
-                      ? FileImage(File(profilePic!))
-                      : const AssetImage('image/random.png')
-                          as ImageProvider<Object>,
-                ),
-                Text(
-                  username,
-                  style: cTextStyle1,
-                ),
-                cSizedBox2,
-                Text(email),
-                Text(noTelp),
-                Text(tglLahir),
-                const SizedBox(
-                  height: 100,
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UpdateView(
-                          id: idUser,
-                          username: username,
-                          email: email,
-                          tglLahir: tglLahir,
-                          noTelp: noTelp,
-                        ),
-                      ),
-                    ).then((_) => refresh());
-                  },
-                  child: const Text('Edit Profile'),
-                ),
-              ],
-            )
+            const SizedBox(height: bgCoverHeight),
+            buildProfileContent(borderRadiusTop: borderRadius),
           ],
         ),
       ),

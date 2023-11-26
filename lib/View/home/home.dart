@@ -4,11 +4,15 @@ import 'package:ugd_modul_2_kel1/view/home/main_home.dart';
 import 'package:ugd_modul_2_kel1/view/profile/profile.dart';
 import 'package:ugd_modul_2_kel1/main.dart';
 
+bool isDark = myAppKey.currentState!.getIsDarkTheme();
+
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
   State<HomeView> createState() => _HomeViewState();
+
+  // membuat global key untuk simpan state dari HomeViewState
 }
 
 class _HomeViewState extends State<HomeView> {
@@ -52,7 +56,10 @@ class _HomeViewState extends State<HomeView> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           changeTheme(_isDarkTheme);
-          _isDarkTheme = !_isDarkTheme;
+          setState(() {
+            _isDarkTheme = !_isDarkTheme;
+            isDark = _isDarkTheme;
+          });
         },
         child: _changeThemeButtonIcon,
       ),
