@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:ugd_modul_2_kel1/client/user_client.dart';
+import 'package:ugd_modul_2_kel1/entity/user.dart';
 import 'package:ugd_modul_2_kel1/view/home/home.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 import 'package:ugd_modul_2_kel1/view/profile/profile.dart';
@@ -44,6 +46,8 @@ class _UpdateViewState extends State<UpdateView> {
   bool? isChecked = false;
   String selectedGender = '';
 
+  int? idUser;
+
   setSelectedGender(String gender) {
     setState(() {
       selectedGender = gender;
@@ -66,10 +70,11 @@ class _UpdateViewState extends State<UpdateView> {
   List<Map<String, dynamic>> userProfile = [];
 
   void refresh() async {
-    final data = await SQLHelper.getUser();
+    // final data = await SQLHelper.getUser();
     final prefs = await SharedPreferences.getInstance();
     // final storedUsername = prefs.getString('username');
-    // final storedId = prefs.getInt('id');
+    final storedId = prefs.getInt('id');
+    idUser = storedId;
 
     // Filter data user berdasarkan username yang tersimpan di SharedPreferences
     // final userData =
@@ -484,8 +489,19 @@ class _UpdateViewState extends State<UpdateView> {
   }
 
   Future<void> editUserProfile(int id) async {
-    await SQLHelper.editUser(id, usernameController.text, emailController.text,
-        tglLahirController.text, noTelpController.text, _selectedImage);
+    // await SQLHelper.editUser(id, usernameController.text, emailController.text,
+    //     tglLahirController.text, noTelpController.text, _selectedImage);
+
+    await UserClient.update(
+      User(
+        id: idUser,
+        username: usernameController.text,
+        email: emailController.text,
+        tglLahir: tglLahirController.text,
+        noTelp: noTelpController.text,
+        profilePhoto: _selectedImage,
+      ),
+    );
 
     // Setelah mengedit data, Anda dapat menyimpan data yang baru dalam SharedPreferences.
     final prefs = await SharedPreferences.getInstance();

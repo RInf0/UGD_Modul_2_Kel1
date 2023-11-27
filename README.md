@@ -1,6 +1,7 @@
-# TUBES PBP - RUMAH SAKIT 
+# TUBES PBP - RUMAH SAKIT
 
 ## Anggota Kelompok / Kontributor
+
 - Gregorius Fuchen Taran Boro (NPM 210711074)
 - Aloysius Gonzaga Seto Galih D. (NPM 210711180)
 - Reyhan (NPM 210711212)
@@ -13,13 +14,13 @@ Membuat sebuah aplikasi Rumah Sakit sederhana yang berbasis Android. Project ini
 ### UGD MODUL 1 & 2
 
 - Enhance Register Page : confirm alert dialog (Adit), date picker (Reyhan), radio button (Seto), checkbox (Adit), toggle password visibility (Reyhan)
-- Enhance Login Page :  toggle password visibility (Reyhan)
+- Enhance Login Page : toggle password visibility (Reyhan)
 - Enhance Home Page : light/dark mode (Seto), apply expandable grid views (Gre)
 
 ### UGD MODUL 5 & 6
 
 - Enhance Register Page : more validations (Seto, Reyhan, Adit), unique email (Reyhan), register using sqflite (Seto), snackbar (Adit, Reyhan), ui improvement (Seto)
-- Enhance Login Page :  login using sqflite (Seto), ui improvement (Seto)
+- Enhance Login Page : login using sqflite (Seto), ui improvement (Seto)
 - Enhance Home Page : ui improvement & grid icons (Seto), profile section & update profile (Adit), crud janji periksa dan daftar periksa (Seto, Reyhan, Gre)
 
 ### UGD MODUL HARDWARE
@@ -37,3 +38,12 @@ Membuat sebuah aplikasi Rumah Sakit sederhana yang berbasis Android. Project ini
 - INTL untuk tanggal create PDF, tanggal lahir, dan tanggal periksa pada pdf_view (Adit, Seto)
 - Barcode QR berdasarkan UUID (Reyhan, Gre)
 - UUID autogenerate untuk nomor antrian (Gre)
+
+### UGD MODUL API
+
+- a Login (Seto)
+- b Register (Seto)
+- c Tampil Profil (Seto)
+- d Reset Password (Seto)
+- e Update Profile (Reyhan, Seto)
+- f CRUD Transaksi (Adit, Seto)

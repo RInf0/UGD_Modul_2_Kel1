@@ -35,11 +35,14 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
 
   List<Map<String, dynamic>> userProfile = [];
 
+  int? userId;
+
   void refresh() async {
     // final data = await SQLHelper.getUser();
     final prefs = await SharedPreferences.getInstance();
     // final storedUsername = prefs.getString('username');
     final storedId = prefs.getInt('id');
+    userId = storedId;
     // Filter data user berdasarkan username yang tersimpan di SharedPreferences
     // final userData =
     //     data.where((user) => user['username'] == storedUsername).toList();
