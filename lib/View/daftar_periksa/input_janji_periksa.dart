@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
-import 'package:ugd_modul_2_kel1/database/sql_helper_janji_periksa.dart';
+// import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
+// import 'package:ugd_modul_2_kel1/database/sql_helper_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/document_scanner/edge_detection_scanner.dart';
+import 'package:ugd_modul_2_kel1/client/janji_periksa_client.dart';
 import 'package:ugd_modul_2_kel1/entity/janji_periksa.dart';
 
 class CreateJanjiPeriksaView extends StatefulWidget {
@@ -35,17 +36,18 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
   List<Map<String, dynamic>> userProfile = [];
 
   void refresh() async {
-    final data = await SQLHelper.getUser();
+    // final data = await SQLHelper.getUser();
     final prefs = await SharedPreferences.getInstance();
-    final storedUsername = prefs.getString('username');
-
+    // final storedUsername = prefs.getString('username');
+    final storedId = prefs.getInt('id');
     // Filter data user berdasarkan username yang tersimpan di SharedPreferences
-    final userData =
-        data.where((user) => user['username'] == storedUsername).toList();
+    // final userData =
+    //     data.where((user) => user['username'] == storedUsername).toList();
+    final dataJanjiPeriksa = await JanjiPeriksaClient.find(storedId);
 
-    setState(() {
-      userProfile = userData;
-    });
+    // setState(() {
+    //   userProfile = userData;
+    // });
   }
 
   @override
@@ -61,13 +63,18 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
       imgBase64 = imgScanner.encoded!;
     }
 
-    await SQLHelperJanjiPeriksa.addJanjiPeriksa(
-      userProfile[0]['id'],
-      dokterController.text,
-      tglPeriksaController.text,
-      keluhanController.text,
+    final prefs = await SharedPreferences.getInstance();
+    final storedId = prefs.getInt('id');
+
+    final dataJanjiPeriksa = JanjiPeriksa(
+      namaDokter: dokterController.text,
+      tglPeriksa: tglPeriksaController.text,
+      keluhan: keluhanController.text,
       dokumen: imgBase64,
     );
+
+    await JanjiPeriksaClient.create(dataJanjiPeriksa, storedId!);
+    
   }
 
   Future<void> editJanjiPeriksa(int id) async {
@@ -77,14 +84,17 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
       imgBase64 = imgScanner.encoded!;
     }
 
-    await SQLHelperJanjiPeriksa.editJanjiPeriksa(
-      id,
-      userProfile[0]['id'],
-      dokterController.text,
-      tglPeriksaController.text,
-      keluhanController.text,
+    final prefs = await SharedPreferences.getInstance();
+    final storedId = prefs.getInt('id');
+
+    final dataJanjiPeriksa = JanjiPeriksa(
+      namaDokter: dokterController.text,
+      tglPeriksa: tglPeriksaController.text,
+      keluhan: keluhanController.text,
       dokumen: imgBase64,
     );
+
+    await JanjiPeriksaClient.update(dataJanjiPeriksa, storedId!);
   }
 
   @override
@@ -265,8 +275,8 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                                 // refresh();
 
                                 if (widget.janjiPeriksa != null) {
-                                  await editJanjiPeriksa(
-                                      widget.janjiPeriksa!.id!);
+                                  // await editJanjiPeriksa(
+                                  //     widget.janjiPeriksa!.id!);
                                 } else {
                                   await addJanjiPeriksa();
                                 }
