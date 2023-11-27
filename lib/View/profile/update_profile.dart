@@ -316,7 +316,7 @@ class _UpdateViewState extends State<UpdateView> {
                         if (value == null || value.isEmpty) {
                           return "Nomor Telepon tidak boleh kosong";
                         }
-                        if (!regex.hasMatch(value)) {
+                        if (regex.hasMatch(value)) {
                           return "Nomor Telepon tidak valid";
                         }
                         return null;

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:ugd_modul_2_kel1/client/janji_periksa_client.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/entity/janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/entity/user.dart';
@@ -35,36 +36,30 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
   }
 
   Future<void> deleteJanjiPeriksa(int id) async {
-    await SQLHelperJanjiPeriksa.deleteJanjiPeriksa(id);
+    // await SQLHelperJanjiPeriksa.deleteJanjiPeriksa(id);
+    await JanjiPeriksaClient.destroy(id);
     refresh();
   }
 
   void refresh() async {
     // update data janji periksa menjadi yang terbaru
-    final list = await SQLHelperJanjiPeriksa.getJanjiPeriksa();
-    final dataJP = list
-        .where((janjiPeriksa) => janjiPeriksa['id'] == this.janjiPeriksa!.id)
-        .toList();
+    // final list = await SQLHelperJanjiPeriksa.getJanjiPeriksa();
+    // final dataJP = list
+    //     .where((janjiPeriksa) => janjiPeriksa['id'] == this.janjiPeriksa!.id)
+    //     .toList();
 
-    JanjiPeriksa janjiPeriksaUpdated = JanjiPeriksa(
-      id: dataJP[0]['id'],
-      idPasien: dataJP[0]['id_pasien'],
-      namaDokter: dataJP[0]['nama_dokter'],
-      tglPeriksa: dataJP[0]['tgl_periksa'],
-      keluhan: dataJP[0]['keluhan'],
-      dokumen: dataJP[0]['dokumen'],
-    );
+    final dataJP = await JanjiPeriksaClient.find(widget.janjiPeriksaPassed!.id);
 
     setState(() {
-      janjiPeriksa = janjiPeriksaUpdated;
+      janjiPeriksa = dataJP;
     });
   }
 
   @override
   void initState() {
     // TODO: implement initState
-    janjiPeriksa = widget.janjiPeriksaPassed;
     super.initState();
+    refresh();
   }
 
   Container buttonCreatePDF(BuildContext context) {
@@ -181,7 +176,7 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
                   ),
 
                   // FOTO DOKUMEN YG DIUNGGAH
-                  if (janjiPeriksa!.dokumen != '')
+                  if (janjiPeriksa!.dokumen != null)
                     Padding(
                       padding: const EdgeInsets.all(20),
                       // child: _uploadedFileImage,
@@ -215,7 +210,7 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
                                     namaDokter: janjiPeriksa!.namaDokter,
                                     tglPeriksa: janjiPeriksa!.tglPeriksa,
                                     keluhan: janjiPeriksa!.keluhan,
-                                    dokumen: janjiPeriksa!.dokumen,
+                                    // dokumen: janjiPeriksa!.dokumen,
                                   ),
                                 ),
                               ),

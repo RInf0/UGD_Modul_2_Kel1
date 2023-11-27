@@ -43,7 +43,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
     // Filter data user berdasarkan username yang tersimpan di SharedPreferences
     // final userData =
     //     data.where((user) => user['username'] == storedUsername).toList();
-    final dataJanjiPeriksa = await JanjiPeriksaClient.find(storedId);
+    // final dataJanjiPeriksa = await JanjiPeriksaClient.find(storedId);
 
     // setState(() {
     //   userProfile = userData;
@@ -66,15 +66,13 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
     final prefs = await SharedPreferences.getInstance();
     final storedId = prefs.getInt('id');
 
-    final dataJanjiPeriksa = JanjiPeriksa(
+    await JanjiPeriksaClient.create(JanjiPeriksa(
+      idPasien: storedId,
       namaDokter: dokterController.text,
       tglPeriksa: tglPeriksaController.text,
       keluhan: keluhanController.text,
       dokumen: imgBase64,
-    );
-
-    await JanjiPeriksaClient.create(dataJanjiPeriksa, storedId!);
-    
+    ));
   }
 
   Future<void> editJanjiPeriksa(int id) async {
@@ -88,13 +86,15 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
     final storedId = prefs.getInt('id');
 
     final dataJanjiPeriksa = JanjiPeriksa(
+      id: id,
+      idPasien: storedId,
       namaDokter: dokterController.text,
       tglPeriksa: tglPeriksaController.text,
       keluhan: keluhanController.text,
       dokumen: imgBase64,
     );
 
-    await JanjiPeriksaClient.update(dataJanjiPeriksa, storedId!);
+    await JanjiPeriksaClient.update(dataJanjiPeriksa);
   }
 
   @override
@@ -102,7 +102,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
     if (widget.janjiPeriksa != null) {
       tglPeriksaController.text = widget.janjiPeriksa!.tglPeriksa;
       keluhanController.text = widget.janjiPeriksa!.keluhan;
-      if (widget.janjiPeriksa!.dokumen != '') {
+      if (widget.janjiPeriksa!.dokumen != null) {
         hasImageDokumen = true;
       }
     }
@@ -275,8 +275,8 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                                 // refresh();
 
                                 if (widget.janjiPeriksa != null) {
-                                  // await editJanjiPeriksa(
-                                  //     widget.janjiPeriksa!.id!);
+                                  await editJanjiPeriksa(
+                                      widget.janjiPeriksa!.id!);
                                 } else {
                                   await addJanjiPeriksa();
                                 }

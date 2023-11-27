@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ugd_modul_2_kel1/client/janji_periksa_client.dart';
+import 'package:ugd_modul_2_kel1/client/user_client.dart';
 import 'package:ugd_modul_2_kel1/entity/user.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/detail_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
@@ -15,27 +17,32 @@ class DaftarPeriksaView extends StatefulWidget {
 }
 
 class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
-  List<Map<String, dynamic>> listJanjiPeriksa = [];
-  List<Map<String, dynamic>> userProfile = [];
+  // List<Map<String, dynamic>> listJanjiPeriksa = [];
+  List<JanjiPeriksa> listJanjiPeriksa = [];
+  User? userProfile;
 
   bool isLoadingData = true;
 
   void refresh() async {
-    final data = await SQLHelper.getUser();
+    // final data = await SQLHelper.getUser();
     final prefs = await SharedPreferences.getInstance();
-    final storedUsername = prefs.getString('username');
+    final storedId = prefs.getInt('id');
 
     // Filter data user berdasarkan username yang tersimpan di SharedPreferences
-    final userData =
-        data.where((user) => user['username'] == storedUsername).toList();
+    // final userData =
+    //     data.where((user) => user['username'] == storedUsername).toList();
+
+    final userData = await UserClient.find(storedId);
 
     setState(() {
       userProfile = userData;
     });
 
-    int idPasien = userProfile[0]['id'];
+    int idPasien = storedId!;
 
-    final dataJanji = await SQLHelperJanjiPeriksa.getJanjiPeriksaById(idPasien);
+    // final dataJanji = await SQLHelperJanjiPeriksa.getJanjiPeriksaById(idPasien);
+    final dataJanji = await JanjiPeriksaClient.fetchAll(idPasien);
+
     await Future.delayed(const Duration(milliseconds: 200));
 
     setState(() {
@@ -45,7 +52,8 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
   }
 
   Future<void> deleteJanjiPeriksa(int id) async {
-    await SQLHelperJanjiPeriksa.deleteJanjiPeriksa(id);
+    // await SQLHelperJanjiPeriksa.deleteJanjiPeriksa(id);
+    await JanjiPeriksaClient.destroy(id);
     refresh();
   }
 
@@ -94,7 +102,7 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                             width: 120,
                             height: 120,
                             child: Image.asset(
-                              'image/${listJanjiPeriksa[index]['nama_dokter'].toLowerCase()}.jpg',
+                              'image/${listJanjiPeriksa[index].namaDokter.toLowerCase()}.jpg',
                             ),
                           ),
                         ),
@@ -105,11 +113,10 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(listJanjiPeriksa[index]['id_pasien']
-                                  .toString()),
-                              Text(listJanjiPeriksa[index]['tgl_periksa']),
-                              Text(listJanjiPeriksa[index]['nama_dokter']),
-                              Text(listJanjiPeriksa[index]['keluhan']),
+                              Text(listJanjiPeriksa[index].idPasien.toString()),
+                              Text(listJanjiPeriksa[index].tglPeriksa),
+                              Text(listJanjiPeriksa[index].namaDokter),
+                              Text(listJanjiPeriksa[index].keluhan),
                             ],
                           ),
                         )
@@ -127,26 +134,14 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                                 MaterialPageRoute(
                                   builder: (_) => DetailJanjiPeriksaView(
                                     janjiPeriksaPassed: JanjiPeriksa(
-                                      id: listJanjiPeriksa[index]['id'],
-                                      idPasien: listJanjiPeriksa[index]
-                                          ['id_pasien'],
-                                      namaDokter: listJanjiPeriksa[index]
-                                          ['nama_dokter'],
-                                      tglPeriksa: listJanjiPeriksa[index]
-                                          ['tgl_periksa'],
-                                      keluhan: listJanjiPeriksa[index]
-                                          ['keluhan'],
-                                      dokumen: listJanjiPeriksa[index]
-                                          ['dokumen'],
+                                      id: listJanjiPeriksa[index].id,
+                                      namaDokter:
+                                          listJanjiPeriksa[index].namaDokter,
+                                      tglPeriksa:
+                                          listJanjiPeriksa[index].tglPeriksa,
+                                      keluhan: listJanjiPeriksa[index].keluhan,
                                     ),
-                                    userPassed: User(
-                                      id: userProfile[0]['id'],
-                                      email: userProfile[0]['email'],
-                                      noTelp: userProfile[0]['no_telp'],
-                                      username: userProfile[0]['username'],
-                                      password: userProfile[0]['password'],
-                                      tglLahir: userProfile[0]['tgl_lahir'],
-                                    ),
+                                    userPassed: userProfile,
                                   ),
                                 ),
                               ).then(
@@ -164,19 +159,7 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => CreateJanjiPeriksaView(
-                                    janjiPeriksa: JanjiPeriksa(
-                                      id: listJanjiPeriksa[index]['id'],
-                                      idPasien: listJanjiPeriksa[index]
-                                          ['id_pasien'],
-                                      namaDokter: listJanjiPeriksa[index]
-                                          ['nama_dokter'],
-                                      tglPeriksa: listJanjiPeriksa[index]
-                                          ['tgl_periksa'],
-                                      keluhan: listJanjiPeriksa[index]
-                                          ['keluhan'],
-                                      dokumen: listJanjiPeriksa[index]
-                                          ['dokumen'],
-                                    ),
+                                    janjiPeriksa: listJanjiPeriksa[index],
                                   ),
                                 ),
                               ).then(
@@ -191,7 +174,7 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                           ElevatedButton(
                             onPressed: () async {
                               await deleteJanjiPeriksa(
-                                  listJanjiPeriksa[index]['id']);
+                                  listJanjiPeriksa[index].id!);
                             },
                             child: const Text('Delete'),
                           ),

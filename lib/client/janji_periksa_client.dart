@@ -12,9 +12,9 @@ class JanjiPeriksaClient {
   // static final String url = '192.168.1.14';
   // static final String endpoint = '/GD_API_1180/public/api/User';
 
-  static Future<List<JanjiPeriksa>> fetchAll(int id) async {
+  static Future<List<JanjiPeriksa>> fetchAll(int idUser) async {
     try {
-      var response = await get(Uri.http(url, 'api/index/$id'));
+      var response = await get(Uri.http(url, 'api/index/$idUser'));
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
@@ -24,7 +24,7 @@ class JanjiPeriksaClient {
     } catch (e) {
       return Future.error(e.toString());
     }
-  }  
+  }
 
   static Future<JanjiPeriksa> find(id) async {
     try {
@@ -37,12 +37,12 @@ class JanjiPeriksaClient {
     }
   }
 
-  static Future<Response> create(JanjiPeriksa janjiPeriksa, int id) async {
+  static Future<Response> create(JanjiPeriksa janjiPeriksa) async {
     try {
       var response = await post(
-        Uri.http(url, '/api/store/$id'),
-        headers: {"Accept": "application/json"},
-        body: janjiPeriksa.toJson(), 
+        Uri.http(url, endpoint),
+        headers: {"Content-Type": "application/json"},
+        body: janjiPeriksa.toRawJson(),
       );
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
@@ -53,12 +53,12 @@ class JanjiPeriksaClient {
     }
   }
 
-  static Future<Response> update(JanjiPeriksa janjiPeriksa, int id) async {
+  static Future<Response> update(JanjiPeriksa janjiPeriksa) async {
     try {
       var response = await put(
-        Uri.http(url, 'api/update/$id'),
+        Uri.http(url, '$endpoint/${janjiPeriksa.id}'),
         headers: {"Content-Type": "application/json"},
-        body: janjiPeriksa.toJson(),
+        body: janjiPeriksa.toRawJson(),
       );
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
