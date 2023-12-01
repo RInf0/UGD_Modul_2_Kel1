@@ -173,7 +173,7 @@ Future<void> createPdf(
 
               pw.SizedBox(height: 1.h),
 
-              if (janjiPeriksa.dokumen != '')
+              if (janjiPeriksa.dokumen != null)
                 pw.Column(
                   children: [
                     pw.SizedBox(height: 2.h),

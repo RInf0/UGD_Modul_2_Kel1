@@ -31,7 +31,7 @@ class UpdateView extends StatefulWidget {
 }
 
 class _UpdateViewState extends State<UpdateView> {
-  late String _selectedImage;
+  String _selectedImage = '';
   bool hasProfileImageFromDb = false;
 
   final _formKey = GlobalKey<FormState>();
@@ -62,14 +62,14 @@ class _UpdateViewState extends State<UpdateView> {
     return encoded;
   }
 
-  Image decodeFromBase64(String imgBase64String) {
+  MemoryImage decodeFromBase64(String imgBase64String) {
     Uint8List decoded = base64.decode(imgBase64String);
-    return Image.memory(decoded);
+    return MemoryImage(decoded);
   }
 
   List<Map<String, dynamic>> userProfile = [];
 
-  void refresh() async {
+  Future<void> refresh() async {
     // final data = await SQLHelper.getUser();
     final prefs = await SharedPreferences.getInstance();
     // final storedUsername = prefs.getString('username');
@@ -87,6 +87,10 @@ class _UpdateViewState extends State<UpdateView> {
           'Hahahhhhhhhhhhhhhaaaaaaaaaaaaaaa921093102318301312801830222222222222222');
     }
 
+    if (user.profilePhoto != null) {
+      hasProfileImageFromDb = true;
+      _selectedImage = user.profilePhoto!;
+    }
     setState(() {
       // userProfile = userData;
 
@@ -94,25 +98,19 @@ class _UpdateViewState extends State<UpdateView> {
       emailController.text = widget.email!;
       tglLahirController.text = widget.tglLahir!;
       noTelpController.text = widget.noTelp!;
-
-      if (user.profilePhoto != null) {
-        hasProfileImageFromDb = true;
-        _selectedImage = user.profilePhoto!;
-      }
     });
+
+    // refreshProfileImage();
   }
 
   Future<void> refreshProfileImage() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? savedImagePath = preferences.getString('imageProfilePath');
-    print('===================AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-    print(savedImagePath);
+    print('===================AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA123');
 
-    print('IMAGE222222444 ' + savedImagePath!);
+    print(hasProfileImageFromDb);
 
-    if (savedImagePath != '' &&
-        savedImagePath.isNotEmpty &&
-        hasProfileImageFromDb) {
+    if (savedImagePath != '' && savedImagePath!.isNotEmpty) {
       setState(() {
         _selectedImage = savedImagePath;
       });
@@ -121,15 +119,14 @@ class _UpdateViewState extends State<UpdateView> {
     }
     // jika hasProfileImageFromDb true, _selectedImage akan tetap dari Db (didapat dari fungsi refresh())
 
-    print('IMAGE222222 SEELEECTEEDDD ' + _selectedImage);
+    // print('IMAGE222222 SEELEECTEEDDD ' + _selectedImage);
   }
 
   @override
   void initState() {
-    refresh();
-    refreshProfileImage();
-    _selectedImage = '';
     super.initState();
+    refresh();
+    // _selectedImage = '';
   }
 
   Future<void> _pickImageFromCamera(ImageSource source) async {
@@ -419,7 +416,7 @@ class _UpdateViewState extends State<UpdateView> {
   }
 
   Widget imageProfile() {
-    print('IMAGE ===========================' + _selectedImage);
+    // print('IMAGE ===========================' + _selectedImage);
     return Center(
       child: Stack(children: <Widget>[
         Container(
@@ -503,6 +500,15 @@ class _UpdateViewState extends State<UpdateView> {
   Future<void> editUserProfile(int id) async {
     // await SQLHelper.editUser(id, usernameController.text, emailController.text,
     //     tglLahirController.text, noTelpController.text, _selectedImage);
+
+    // encode dari File ke base64
+    final imgFile = File(_selectedImage);
+    final bytes = imgFile.readAsBytesSync();
+    final base64Img = base64.encode(bytes);
+
+    // nanti decode ke <ImageProvider> MemoryImage
+
+    print(base64Img);
 
     await UserClient.update(
       User(

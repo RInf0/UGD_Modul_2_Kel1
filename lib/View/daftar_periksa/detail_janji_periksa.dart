@@ -50,6 +50,8 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
 
     final dataJP = await JanjiPeriksaClient.find(widget.janjiPeriksaPassed!.id);
 
+    // await Future.delayed(const Duration(milliseconds: 500));
+
     setState(() {
       janjiPeriksa = dataJP;
     });
@@ -58,8 +60,8 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
     refresh();
+    super.initState();
   }
 
   Container buttonCreatePDF(BuildContext context) {
@@ -108,6 +110,16 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
 
   @override
   Widget build(BuildContext context) {
+    if (janjiPeriksa == null) {
+      return const Scaffold(
+        body: SafeArea(
+          child: Center(
+              // child: CircularProgressIndicator(),
+              ),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detail Janji Periksa'),
@@ -185,9 +197,22 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
                         children: [
                           const Text('Foto Dokumen:'),
                           Image.memory(
-                            const Base64Decoder()
-                                .convert(janjiPeriksa!.dokumen!),
-                          ),
+                              // Uri.parse(janjiPeriksa!.dokumen!)
+                              //       .data!
+                              //       .contentAsBytes()
+
+                              base64.decode(janjiPeriksa!.dokumen!)
+
+                              // base64Decode(
+                              //   janjiPeriksa!.dokumen!
+                              //       .replaceAll(RegExp(r'\s'), ''),
+                              // ),
+
+                              // const Base64Decoder().convert(
+                              //   janjiPeriksa!.dokumen!
+                              //       .replaceAll(RegExp(r'\s'), ''),
+                              // ),
+                              ),
                         ],
                       ),
                     ),
