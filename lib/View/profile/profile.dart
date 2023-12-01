@@ -50,6 +50,10 @@ class _ProfileState extends State<Profile> {
       tglLahir = dataUser.tglLahir!;
       // password = dataUser.password!;
       // profilePic =
+
+      if (dataUser.profilePhoto != null) {
+        profilePic = dataUser.profilePhoto!;
+      }
     });
   }
 

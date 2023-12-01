@@ -76,9 +76,16 @@ class _UpdateViewState extends State<UpdateView> {
     final storedId = prefs.getInt('id');
     idUser = storedId;
 
+    User user = await UserClient.find(idUser);
+
     // Filter data user berdasarkan username yang tersimpan di SharedPreferences
     // final userData =
     //     data.where((user) => user['username'] == storedUsername).toList();
+
+    if (user.profilePhoto == null) {
+      print(
+          'Hahahhhhhhhhhhhhhaaaaaaaaaaaaaaa921093102318301312801830222222222222222');
+    }
 
     setState(() {
       // userProfile = userData;
@@ -88,10 +95,10 @@ class _UpdateViewState extends State<UpdateView> {
       tglLahirController.text = widget.tglLahir!;
       noTelpController.text = widget.noTelp!;
 
-      // if (userProfile[0]['profile_photo'] != null) {
-      //   hasProfileImageFromDb = true;
-      //   _selectedImage = userProfile[0]['profile_photo'];
-      // }
+      if (user.profilePhoto != null) {
+        hasProfileImageFromDb = true;
+        _selectedImage = user.profilePhoto!;
+      }
     });
   }
 
@@ -101,16 +108,20 @@ class _UpdateViewState extends State<UpdateView> {
     print('===================AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     print(savedImagePath);
 
-    if (savedImagePath != null && savedImagePath.isNotEmpty) {
+    print('IMAGE222222444 ' + savedImagePath!);
+
+    if (savedImagePath != '' &&
+        savedImagePath.isNotEmpty &&
+        hasProfileImageFromDb) {
       setState(() {
         _selectedImage = savedImagePath;
       });
-    } else if (!hasProfileImageFromDb) {
+    } else {
       _selectedImage = '';
     }
     // jika hasProfileImageFromDb true, _selectedImage akan tetap dari Db (didapat dari fungsi refresh())
 
-    print(_selectedImage);
+    print('IMAGE222222 SEELEECTEEDDD ' + _selectedImage);
   }
 
   @override
@@ -408,6 +419,7 @@ class _UpdateViewState extends State<UpdateView> {
   }
 
   Widget imageProfile() {
+    print('IMAGE ===========================' + _selectedImage);
     return Center(
       child: Stack(children: <Widget>[
         Container(
