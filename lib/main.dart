@@ -114,7 +114,7 @@ class MyAppState extends State<MyApp> {
           ),
         ),
         themeMode: _themeMode,
-        home: const LoginView(),
+        home: LoginView(),
       );
     });
   }

@@ -35,7 +35,7 @@ class _RegisterViewState extends State<RegisterView> {
 
   Future<void> addUser() async {
     // CODE LAMA PAKAI SQFLITE
-    // 
+    //
     // await SQLHelper.addUser(
     //   usernameController.text,
     //   emailController.text,
@@ -346,8 +346,7 @@ class _RegisterViewState extends State<RegisterView> {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (_) =>
-                                                    const LoginView()));
+                                                builder: (_) => LoginView()));
                                       },
                                     ),
                                   ],

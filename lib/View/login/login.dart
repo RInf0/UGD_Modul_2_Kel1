@@ -14,7 +14,19 @@ class LoginView extends StatefulWidget {
   //* data memiliki nilai ketika registrasi berhasil dilakukan
   // final Map? data;
   //* Agar Map data bisa ebrsifat nullable, pada konstruktor dibungkus dengan kurung ( ) agar bersifat opsional
-  const LoginView({super.key});
+  LoginView({
+    super.key,
+    this.firstInputController,
+    this.secondInputController,
+    this.result,
+    this.onLogin,
+  });
+
+  TextEditingController? firstInputController;
+  TextEditingController? secondInputController;
+  String? result;
+  Function? onLogin;
+  // final Function(double, double, String) onCalculate;
 
   @override
   State<LoginView> createState() => _LoginViewState();
@@ -37,6 +49,13 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.firstInputController != null) {
+      setState(() {
+        usernameController = widget.firstInputController!;
+        passwordController = widget.secondInputController!;
+      });
+    }
+
     //* TextEditingController
     //* widget mengacu pada instance/objek Loginview
     // Map? dataForm = widget.data;
@@ -117,9 +136,19 @@ class _LoginViewState extends State<LoginView> {
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
+                      key: const Key('button_login'),
                       //* Fungsi yang dijalankan saat tombol ditekan
                       onPressed: () async {
                         //* Cek statenya sudah valid atau belum valid
+
+                        // widget.onLogin!(
+                        //   usernameController.text,
+                        //   passwordController.text,
+                        //   'login',
+                        // );
+
+                        // return;
+
                         if (_formKey.currentState!.validate()) {
                           //* Jika sudah valid, cek username dan password yang diinputkan pada form telah sesuai dengan data yang dibawah
                           //* dari halaman register atau belum
@@ -127,6 +156,8 @@ class _LoginViewState extends State<LoginView> {
                           // API
 
                           // refresh();
+
+                          // SEMENTARA COMMENT DULU BUAT TESTING ====================
 
                           User data = await AuthClient.login(User(
                             username: usernameController.text,
