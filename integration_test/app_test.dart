@@ -380,6 +380,19 @@ void main() {
     // TEST READ
     testWidgets('Read', (WidgetTester tester) async {
       await isiLoginUntukCRUD(tester);
+      expect(find.byType(MainHomeView), findsOneWidget);
+
+      expect(find.byKey(const Key('bottom_navbar_daftar_periksa')),
+          findsOneWidget);
+
+      // tap bottom navbar daftar periksa untuk menuju tampilan daftar periksa
+      final navHome = find.byKey(const Key('bottom_navbar_daftar_periksa'));
+      await tester.tap(navHome);
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      expect(find.byType(DaftarPeriksaView), findsOneWidget);
+      await tester.pump(duration);
     });
 
     testWidgets('Update', (WidgetTester tester) async {
