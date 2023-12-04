@@ -7,7 +7,7 @@ import 'package:ugd_modul_2_kel1/view/login/login.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 
 class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+  const RegisterView({Key? key}) : super(key: key);
 
   @override
   State<RegisterView> createState() => _RegisterViewState();
@@ -84,6 +84,7 @@ class _RegisterViewState extends State<RegisterView> {
                     padding:
                         const EdgeInsets.only(left: 20, top: 20, right: 20),
                     child: TextFormField(
+                      key: Key('usernameTest'),
                       autofocus: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -107,6 +108,7 @@ class _RegisterViewState extends State<RegisterView> {
                     padding:
                         const EdgeInsets.only(left: 20, top: 10, right: 20),
                     child: TextFormField(
+                      key: Key('emailTest'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Email tidak boleh kosong';
@@ -125,10 +127,10 @@ class _RegisterViewState extends State<RegisterView> {
                         prefixIcon: Icon(Icons.email),
                       ),
                       onChanged: (value) async {
-                        isExist = await isEmail(value);
-                        setState(() {
-                          isExist;
-                        });
+                        // isExist = await isEmail(value);
+                        // setState(() {
+                        //   isExist;
+                        // });
                       },
                     ),
                   ),
@@ -138,6 +140,7 @@ class _RegisterViewState extends State<RegisterView> {
                     padding:
                         const EdgeInsets.only(left: 20, top: 10, right: 20),
                     child: TextFormField(
+                      key: Key('passwordTest'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Password tidak boleh kosong";
@@ -172,32 +175,49 @@ class _RegisterViewState extends State<RegisterView> {
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 20, top: 10, right: 20),
-                    child: TextFormField(
-                      // hide keyboard ketika input date ditap
-                      keyboardType: TextInputType.none,
-                      readOnly: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Tanggal Lahir tidak boleh kosong";
-                        }
-                        return null;
-                      },
-                      controller: tglLahirController,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.calendar_today),
-                        labelText: "Tanggal Lahir",
-                      ),
+                    child: GestureDetector(
                       onTap: () async {
-                        DateTime? pickeddate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime.now());
-                        if (pickeddate != null) {
-                          tglLahirController.text =
-                              DateFormat('dd-MM-yyyy').format(pickeddate);
-                        }
+                        final date = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime.now(),
+                        );
+                        tglLahirController.text =
+                            '${date!.day}/${date.month}/${date.year}';
                       },
+                      child: AbsorbPointer(
+                        child: TextFormField(
+                          key: const Key('tglLahirTest'),
+                          controller: tglLahirController,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.date_range),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50.5),
+                            ),
+                            labelText: 'Date of Birth',
+                            suffixIcon: IconButton(
+                              onPressed: () async {
+                                final date = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(1900),
+                                  lastDate: DateTime.now(),
+                                );
+                                tglLahirController.text =
+                                    '${date!.day}/${date.month}/${date.year}';
+                              },
+                              icon: const Icon(Icons.date_range),
+                            ),
+                          ),
+                          validator: (value) =>
+                              value == '' ? 'Please select a birth date' : null,
+                          onTap: () {
+                            // Ini mencegah keyboard dari muncul saat menekan TextFormField
+                            FocusScope.of(context).requestFocus(FocusNode());
+                          },
+                        ),
+                      ),
                     ),
                   ),
 
@@ -206,6 +226,7 @@ class _RegisterViewState extends State<RegisterView> {
                     padding:
                         const EdgeInsets.only(left: 20, top: 10, right: 20),
                     child: TextFormField(
+                      key: Key('noTelpTest'),
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.digitsOnly,
@@ -237,6 +258,7 @@ class _RegisterViewState extends State<RegisterView> {
                         style: TextStyle(fontSize: 16.0),
                       ),
                       RadioListTile(
+                        key: Key('genderMaleTest'),
                         title: const Text('Laki-laki'),
                         value: 'Laki-laki',
                         groupValue: selectedGender,
@@ -245,6 +267,7 @@ class _RegisterViewState extends State<RegisterView> {
                         },
                       ),
                       RadioListTile(
+                        key: Key('genderFemaleTest'),
                         title: const Text('Perempuan'),
                         value: 'Perempuan',
                         groupValue: selectedGender,
@@ -294,6 +317,7 @@ class _RegisterViewState extends State<RegisterView> {
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
+                        key: const Key('registerClick'),
                         onPressed: () {
                           // munculkan text validasi/error handling merah ketika radio button jenis kelamin kosong
                           setState(() {
@@ -331,6 +355,7 @@ class _RegisterViewState extends State<RegisterView> {
                                       },
                                     ),
                                     TextButton(
+                                      key: const Key('yesButton'),
                                       child: const Text('Ya'),
                                       onPressed: () async {
                                         ScaffoldMessenger.of(context)
@@ -339,7 +364,7 @@ class _RegisterViewState extends State<RegisterView> {
                                             content: Text('Register Berhasil'),
                                           ),
                                         );
-                                        await addUser();
+                                        // await addUser();
 
                                         //*Push data jika memilih 'Ya'
                                         // ignore: use_build_context_synchronously
