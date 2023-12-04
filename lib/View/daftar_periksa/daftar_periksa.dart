@@ -175,6 +175,16 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                             onPressed: () async {
                               await deleteJanjiPeriksa(
                                   listJanjiPeriksa[index].id!);
+
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  key: Key(
+                                      'snackbar_delete_janji_periksa_berhasil'),
+                                  content:
+                                      Text('Berhasil Delete Janji Periksa'),
+                                ),
+                              );
                             },
                             child: const Text('Delete'),
                           ),

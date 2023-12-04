@@ -358,18 +358,20 @@ void main() {
       await tester.pump(duration);
 
       // entertext textfield keluhan
-      await tester.tap(textField.at(1));
       await tester.enterText(textField.at(1), 'sakit maag dan asam lambung');
       await tester.pumpAndSettle();
       await tester.pump(duration);
 
       // submit
       await tester.ensureVisible(find.widgetWithText(ElevatedButton, 'Submit'));
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
 
       expect(find.widgetWithText(ElevatedButton, 'Submit'), findsOneWidget);
       final btnSubmit = find.widgetWithText(ElevatedButton, 'Submit');
       await tester.tap(btnSubmit);
       await tester.pumpAndSettle();
+      await tester.pump(duration);
 
       expect(find.byKey(const Key('snackbar_create_janji_berhasil')),
           findsOneWidget);
@@ -395,12 +397,55 @@ void main() {
       await tester.pump(duration);
     });
 
+    // TEST UPDATE (HARUS ADA ATLEAST 1 DATA)
     testWidgets('Update', (WidgetTester tester) async {
       await isiLoginUntukCRUD(tester);
+      expect(find.byType(MainHomeView), findsOneWidget);
+
+      expect(find.byKey(const Key('bottom_navbar_daftar_periksa')),
+          findsOneWidget);
+
+      // tap bottom navbar daftar periksa untuk menuju tampilan daftar periksa
+      final navHome = find.byKey(const Key('bottom_navbar_daftar_periksa'));
+      await tester.tap(navHome);
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      expect(find.byType(DaftarPeriksaView), findsOneWidget);
+      await tester.pump(duration);
     });
 
+    // TEST DELETE (HARUS ADA ATLEAST 1 DATA)
     testWidgets('Delete', (WidgetTester tester) async {
       await isiLoginUntukCRUD(tester);
+      expect(find.byType(MainHomeView), findsOneWidget);
+
+      expect(find.byKey(const Key('bottom_navbar_daftar_periksa')),
+          findsOneWidget);
+
+      // tap bottom navbar daftar periksa untuk menuju tampilan daftar periksa
+      final navHome = find.byKey(const Key('bottom_navbar_daftar_periksa'));
+      await tester.tap(navHome);
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      expect(find.byType(DaftarPeriksaView), findsOneWidget);
+      await tester.pump(duration);
+
+      // cari setidaknya ada 1 data daftar periksa, dengan menghitung jml button delete
+      expect(find.widgetWithText(ElevatedButton, 'Delete'),
+          findsAtLeastNWidgets(1));
+
+      final btnDelete = find.widgetWithText(ElevatedButton, 'Delete');
+
+      // delete item daftar periksa pertama
+      await tester.tap(btnDelete.at(0));
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      expect(find.byKey(const Key('snackbar_delete_janji_periksa_berhasil')),
+          findsOneWidget);
+      await tester.pump(duration);
     });
   });
 }
