@@ -84,7 +84,7 @@ class _RegisterViewState extends State<RegisterView> {
                     padding:
                         const EdgeInsets.only(left: 20, top: 20, right: 20),
                     child: TextFormField(
-                      key: Key('usernameTest'),
+                      key: const Key('usernameTest'),
                       autofocus: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -108,7 +108,7 @@ class _RegisterViewState extends State<RegisterView> {
                     padding:
                         const EdgeInsets.only(left: 20, top: 10, right: 20),
                     child: TextFormField(
-                      key: Key('emailTest'),
+                      key: const Key('emailTest'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Email tidak boleh kosong';
@@ -140,7 +140,7 @@ class _RegisterViewState extends State<RegisterView> {
                     padding:
                         const EdgeInsets.only(left: 20, top: 10, right: 20),
                     child: TextFormField(
-                      key: Key('passwordTest'),
+                      key: const Key('passwordTest'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Password tidak boleh kosong";
@@ -173,60 +173,89 @@ class _RegisterViewState extends State<RegisterView> {
 
                   // Tanggal Lahir
                   Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20, top: 10, right: 20),
-                    child: GestureDetector(
-                      onTap: () async {
-                        final date = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime.now(),
-                        );
-                        tglLahirController.text =
-                            '${date!.day}/${date.month}/${date.year}';
-                      },
-                      child: AbsorbPointer(
-                        child: TextFormField(
-                          key: const Key('tglLahirTest'),
-                          controller: tglLahirController,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.date_range),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50.5),
-                            ),
-                            labelText: 'Date of Birth',
-                            suffixIcon: IconButton(
-                              onPressed: () async {
-                                final date = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(1900),
-                                  lastDate: DateTime.now(),
-                                );
-                                tglLahirController.text =
-                                    '${date!.day}/${date.month}/${date.year}';
-                              },
-                              icon: const Icon(Icons.date_range),
-                            ),
-                          ),
-                          validator: (value) =>
-                              value == '' ? 'Please select a birth date' : null,
-                          onTap: () {
-                            // Ini mencegah keyboard dari muncul saat menekan TextFormField
-                            FocusScope.of(context).requestFocus(FocusNode());
-                          },
+                      padding:
+                          const EdgeInsets.only(left: 20, top: 10, right: 20),
+                      child: TextFormField(
+                        key: const Key('tglLahirTest'),
+                        // hide keyboard ketika input date ditap
+                        keyboardType: TextInputType.none,
+                        // readOnly: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Tanggal Lahir tidak boleh kosong";
+                          }
+                          return null;
+                        },
+                        controller: tglLahirController,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.calendar_today),
+                          labelText: "Tanggal Lahir",
                         ),
+                        onTap: () async {
+                          DateTime? pickeddate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now(),
+                          );
+                          if (pickeddate != null) {
+                            tglLahirController.text =
+                                DateFormat('dd-MM-yyyy').format(pickeddate);
+                          }
+                        },
+                      )
+                      // child: GestureDetector(
+                      //   onTap: () async {
+                      //     final date = await showDatePicker(
+                      //       context: context,
+                      //       initialDate: DateTime.now(),
+                      //       firstDate: DateTime(1900),
+                      //       lastDate: DateTime.now(),
+                      //     );
+                      //     tglLahirController.text =
+                      //         '${date!.day}/${date.month}/${date.year}';
+                      //   },
+                      //   child: AbsorbPointer(
+                      //     child: TextFormField(
+                      //       key: const Key('tglLahirTest'),
+                      //       controller: tglLahirController,
+                      //       decoration: InputDecoration(
+                      //         prefixIcon: const Icon(Icons.date_range),
+                      //         border: OutlineInputBorder(
+                      //           borderRadius: BorderRadius.circular(50.5),
+                      //         ),
+                      //         labelText: 'Date of Birth',
+                      //         suffixIcon: IconButton(
+                      //           onPressed: () async {
+                      //             final date = await showDatePicker(
+                      //               context: context,
+                      //               initialDate: DateTime.now(),
+                      //               firstDate: DateTime(1900),
+                      //               lastDate: DateTime.now(),
+                      //             );
+                      //             tglLahirController.text =
+                      //                 '${date!.day}/${date.month}/${date.year}';
+                      //           },
+                      //           icon: const Icon(Icons.date_range),
+                      //         ),
+                      //       ),
+                      //       validator: (value) =>
+                      //           value == '' ? 'Please select a birth date' : null,
+                      //       onTap: () {
+                      //         // Ini mencegah keyboard dari muncul saat menekan TextFormField
+                      //         FocusScope.of(context).requestFocus(FocusNode());
+                      //       },
+                      //     ),
+                      //   ),
+                      // ),
                       ),
-                    ),
-                  ),
 
                   // Nomor Telepon
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 20, top: 10, right: 20),
                     child: TextFormField(
-                      key: Key('noTelpTest'),
+                      key: const Key('noTelpTest'),
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.digitsOnly,
@@ -258,7 +287,7 @@ class _RegisterViewState extends State<RegisterView> {
                         style: TextStyle(fontSize: 16.0),
                       ),
                       RadioListTile(
-                        key: Key('genderMaleTest'),
+                        key: const Key('genderMaleTest'),
                         title: const Text('Laki-laki'),
                         value: 'Laki-laki',
                         groupValue: selectedGender,
@@ -267,7 +296,7 @@ class _RegisterViewState extends State<RegisterView> {
                         },
                       ),
                       RadioListTile(
-                        key: Key('genderFemaleTest'),
+                        key: const Key('genderFemaleTest'),
                         title: const Text('Perempuan'),
                         value: 'Perempuan',
                         groupValue: selectedGender,
@@ -366,7 +395,7 @@ class _RegisterViewState extends State<RegisterView> {
                                             content: Text('Register Berhasil'),
                                           ),
                                         );
-                                        // await addUser();
+                                        await addUser();
 
                                         //*Push data jika memilih 'Ya'
                                         // ignore: use_build_context_synchronously
