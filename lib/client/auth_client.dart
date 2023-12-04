@@ -47,7 +47,7 @@ class AuthClient {
         body: user.toRawJson(),
       );
 
-      print(json.decode(response.body)['message']);
+      // print(json.decode(response.body)['message']);
 
       // if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 

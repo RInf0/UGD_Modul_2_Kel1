@@ -3,15 +3,47 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:ugd_modul_2_kel1/main.dart' as app;
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/daftar_periksa.dart';
+import 'package:ugd_modul_2_kel1/view/daftar_periksa/detail_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/view/home/home.dart';
 import 'package:ugd_modul_2_kel1/view/home/main_home.dart';
 import 'package:ugd_modul_2_kel1/view/login/login.dart';
 import 'package:ugd_modul_2_kel1/view/register/register.dart';
 
+// hanya dipanggil utuk test CRUD
+Future<void> isiLoginUntukCRUD(WidgetTester tester) async {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  const durationLogin = Duration(milliseconds: 400);
+
+  app.main();
+  await tester.pumpAndSettle();
+
+  const username = 'a';
+  const password = 'aaaaa';
+
+  expect(find.byType(TextFormField), findsAtLeastNWidgets(2));
+
+  final textField = find.byType(TextFormField);
+  await tester.enterText(textField.at(0), username);
+  await tester.pump(durationLogin);
+
+  await tester.enterText(textField.at(1), password);
+  await tester.pump(durationLogin);
+
+  expect(find.byType(ElevatedButton), findsWidgets);
+  final loginButton = find.byKey(const Key('button_login'));
+
+  await tester.tap(loginButton);
+
+  await tester.pumpAndSettle();
+
+  expect(find.byType(HomeView), findsOneWidget);
+  await tester.pump(durationLogin);
+}
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  const duration = Duration(milliseconds: 900);
+  const duration = Duration(milliseconds: 1000);
 
   // INTEGRATION TESTING
 
@@ -277,39 +309,7 @@ void main() {
   });
 
   group('Integration Testing JANJI PERIKSA CRUD:', () {
-    // hanya dipanggil utuk test CRUD
-    Future<void> isiLoginUntukCRUD(WidgetTester tester) async {
-      IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-      const durationLogin = Duration(milliseconds: 400);
-
-      app.main();
-      await tester.pumpAndSettle();
-
-      const username = 'a';
-      const password = 'aaaaa';
-
-      expect(find.byType(TextFormField), findsAtLeastNWidgets(2));
-
-      final textField = find.byType(TextFormField);
-      await tester.enterText(textField.at(0), username);
-      await tester.pump(durationLogin);
-
-      await tester.enterText(textField.at(1), password);
-      await tester.pump(durationLogin);
-
-      expect(find.byType(ElevatedButton), findsWidgets);
-      final loginButton = find.byKey(const Key('button_login'));
-
-      await tester.tap(loginButton);
-
-      await tester.pumpAndSettle();
-
-      expect(find.byType(HomeView), findsOneWidget);
-      await tester.pump(durationLogin);
-    }
-
     // TEST CREATE
-
     testWidgets('Create', (WidgetTester tester) async {
       await isiLoginUntukCRUD(tester);
 
@@ -377,9 +377,26 @@ void main() {
           findsOneWidget);
 
       await tester.pump(duration);
+
+      // cek di daftar periksa
+      expect(find.byType(MainHomeView), findsOneWidget);
+
+      expect(find.byKey(const Key('bottom_navbar_daftar_periksa')),
+          findsOneWidget);
+
+      // tap bottom navbar daftar periksa untuk menuju tampilan daftar periksa
+      final navDaftarPeriksa =
+          find.byKey(const Key('bottom_navbar_daftar_periksa'));
+      await tester.tap(navDaftarPeriksa);
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      // read tampilan seluruh daftar periksa
+      expect(find.byType(DaftarPeriksaView), findsOneWidget);
+      await tester.pump(duration);
     });
 
-    // TEST READ
+    // TEST READ (HARUS ADA ATLEAST 1 DATA UNTUK MASUK KE DETAIL)
     testWidgets('Read', (WidgetTester tester) async {
       await isiLoginUntukCRUD(tester);
       expect(find.byType(MainHomeView), findsOneWidget);
@@ -388,12 +405,29 @@ void main() {
           findsOneWidget);
 
       // tap bottom navbar daftar periksa untuk menuju tampilan daftar periksa
-      final navHome = find.byKey(const Key('bottom_navbar_daftar_periksa'));
-      await tester.tap(navHome);
+      final navDaftarPeriksa =
+          find.byKey(const Key('bottom_navbar_daftar_periksa'));
+      await tester.tap(navDaftarPeriksa);
       await tester.pumpAndSettle();
       await tester.pump(duration);
 
+      // read tampilan seluruh daftar periksa
       expect(find.byType(DaftarPeriksaView), findsOneWidget);
+      await tester.pump(duration);
+
+      // cari setidaknya ada 1 data daftar periksa untuk masuk ke detail page
+      expect(find.widgetWithText(ElevatedButton, 'Detail'),
+          findsAtLeastNWidgets(1));
+
+      final btnDetail = find.widgetWithText(ElevatedButton, 'Detail');
+
+      // detail item daftar periksa pertama
+      await tester.tap(btnDetail.at(0));
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      // masuk ke view detail
+      expect(find.byType(DetailJanjiPeriksaView), findsOneWidget);
       await tester.pump(duration);
     });
 
@@ -411,6 +445,80 @@ void main() {
       await tester.pumpAndSettle();
       await tester.pump(duration);
 
+      expect(find.byType(DaftarPeriksaView), findsOneWidget);
+
+      // cari setidaknya ada 1 data daftar periksa, dengan menghitung jml button update
+      expect(find.widgetWithText(ElevatedButton, 'Update'),
+          findsAtLeastNWidgets(1));
+
+      final btnUpdate = find.widgetWithText(ElevatedButton, 'Update');
+
+      // update item daftar periksa pertama
+      await tester.tap(btnUpdate.at(0));
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      // masuk ke view update, expect view create janji periksa
+      // update tetap menggunakan view create janji periksa (sama)
+      expect(find.byType(CreateJanjiPeriksaView), findsOneWidget);
+
+      // modifikasi data yg tertampil
+      // pertama, expect dropdown nama dokter
+      expect(find.byKey(const Key('dropdown_dokter')), findsOneWidget);
+      final dropdown = find.byKey(const Key('dropdown_dokter'));
+      await tester.tap(dropdown);
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      // khusus DropdownMenuEntry perlu pakai .last
+      // source https://stackoverflow.com/questions/69012695/flutter-how-to-select-dropdownbutton-item-in-widget-test
+
+      // ubah dari dr. Willy ke dr. Natasha
+      expect(find.text('dr. Natasha').last, findsOneWidget);
+      final dropdownItem = find.text('dr. Natasha').last;
+      await tester.tap(dropdownItem);
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      // expect textfields
+      expect(find.byType(TextFormField), findsAtLeastNWidgets(2));
+      final textField = find.byType(TextFormField);
+
+      // tap textfield tanggal periksa
+      await tester.tap(textField.at(0));
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      expect(find.text('OK'), findsOneWidget);
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      // entertext textfield keluhan
+      await tester.enterText(textField.at(1), '');
+      await tester.pumpAndSettle();
+      await tester.enterText(
+          textField.at(1), 'radang tenggorokan serta tidak enak badan');
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      // submit
+      await tester.ensureVisible(find.widgetWithText(ElevatedButton, 'Submit'));
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      expect(find.widgetWithText(ElevatedButton, 'Submit'), findsOneWidget);
+      final btnSubmit = find.widgetWithText(ElevatedButton, 'Submit');
+      await tester.tap(btnSubmit);
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      expect(find.byKey(const Key('snackbar_edit_janji_berhasil')),
+          findsOneWidget);
+
+      await tester.pump(duration);
+
+      // setelah update langsung masuk ke daftar periksa
       expect(find.byType(DaftarPeriksaView), findsOneWidget);
       await tester.pump(duration);
     });
@@ -430,7 +538,6 @@ void main() {
       await tester.pump(duration);
 
       expect(find.byType(DaftarPeriksaView), findsOneWidget);
-      await tester.pump(duration);
 
       // cari setidaknya ada 1 data daftar periksa, dengan menghitung jml button delete
       expect(find.widgetWithText(ElevatedButton, 'Delete'),

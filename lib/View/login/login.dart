@@ -171,7 +171,7 @@ class _LoginViewState extends State<LoginView> {
                           //   userFound = null;
                           // }
 
-                          print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                          // print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                           // print(userFound!.username);
 
                           if (userFound!.id != null) {
