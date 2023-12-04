@@ -138,6 +138,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                     padding:
                         const EdgeInsets.only(left: 20, top: 10, right: 20),
                     child: DropdownMenu<String>(
+                      key: const Key('dropdown_dokter'),
                       controller: dokterController,
                       initialSelection: widget.janjiPeriksa != null
                           ? widget.janjiPeriksa!.namaDokter
@@ -280,8 +281,27 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                                 if (widget.janjiPeriksa != null) {
                                   await editJanjiPeriksa(
                                       widget.janjiPeriksa!.id!);
+
+                                  // ignore: use_build_context_synchronously
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      key: Key('snackbar_edit_janji_berhasil'),
+                                      content:
+                                          Text('Berhasil Edit Janji Periksa'),
+                                    ),
+                                  );
                                 } else {
                                   await addJanjiPeriksa();
+
+                                  // ignore: use_build_context_synchronously
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      key:
+                                          Key('snackbar_create_janji_berhasil'),
+                                      content:
+                                          Text('Berhasil Tambah Janji Periksa'),
+                                    ),
+                                  );
                                 }
 
                                 // ignore: use_build_context_synchronously

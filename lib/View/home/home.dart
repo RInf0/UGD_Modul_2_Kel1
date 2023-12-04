@@ -69,16 +69,19 @@ class _HomeViewState extends State<HomeView> {
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.home,
+                key: Key('bottom_navbar_home'),
               ),
               label: 'Home'),
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.list,
+                key: Key('bottom_navbar_daftar_periksa'),
               ),
               label: 'Daftar Periksa'),
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.person,
+                key: Key('bottom_navbar_profile'),
               ),
               label: 'Profile'),
         ],

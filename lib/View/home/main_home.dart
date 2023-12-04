@@ -28,6 +28,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                   height: 6.h,
                   width: 70.w,
                   child: ElevatedButton(
+                    key: const Key('button_buat_janji_periksa'),
                     onPressed: () {
                       Navigator.push(
                         context,
