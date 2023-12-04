@@ -325,11 +325,11 @@ class _UpdateViewState extends State<UpdateView> {
                         FilteringTextInputFormatter.digitsOnly,
                       ],
                       validator: (value) {
-                        final RegExp regex = RegExp(r'^\0?[1-9]\d{1,14}$');
+                        final RegExp regex = RegExp(r'^\0?[0-9]\d{1,14}$');
                         if (value == null || value.isEmpty) {
                           return "Nomor Telepon tidak boleh kosong";
                         }
-                        if (regex.hasMatch(value)) {
+                        if (!regex.hasMatch(value)) {
                           return "Nomor Telepon tidak valid";
                         }
                         return null;

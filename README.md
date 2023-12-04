@@ -2,10 +2,10 @@
 
 ## Anggota Kelompok / Kontributor
 
-- Gregorius Fuchen Taran Boro (NPM 210711074)
-- Aloysius Gonzaga Seto Galih D. (NPM 210711180)
-- Reyhan (NPM 210711212)
-- Agustinus Aditya Putra Pratama (NPM 210711429)
+- **Gre**gorius Fuchen Taran Boro (NPM 210711074)
+- Aloysius Gonzaga **Seto** Galih D. (NPM 210711180)
+- **Reyhan** (NPM 210711212)
+- Agustinus **Adit**ya Putra Pratama (NPM 210711429)
 
 ## Deskripsi Project
 
@@ -47,3 +47,9 @@ Membuat sebuah aplikasi Rumah Sakit sederhana yang berbasis Android. Project ini
 - d Reset Password (Seto)
 - e Update Profile (Reyhan, Seto)
 - f CRUD Transaksi (Adit, Seto)
+
+### UGD MODUL TESTING
+
+- Widget Testing Login (Seto)
+- Widget Testing Register (Gre, Seto)
+- Widget Testing CRUD Janji Periksa (Seto)

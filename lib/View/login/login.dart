@@ -264,6 +264,7 @@ class _LoginViewState extends State<LoginView> {
 
               //* tombol ke halaman register
               TextButton(
+                key: const Key('button_register_here'),
                 style: ButtonStyle(
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                 ),

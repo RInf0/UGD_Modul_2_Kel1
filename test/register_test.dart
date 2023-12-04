@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ugd_modul_2_kel1/View/register/register.dart';
+import 'package:ugd_modul_2_kel1/main.dart' as app;
 
 void main() {
   testWidgets('Register Success', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
     FlutterError.onError = (FlutterErrorDetails details) {
       bool ifIsOverflowError = false;
 
@@ -43,6 +47,8 @@ void main() {
   });
 
   testWidgets('Register Failed', (WidgetTester tester) async {
+    app.main();
+
     FlutterError.onError = (FlutterErrorDetails details) {
       bool ifIsOverflowError = false;
       // Detect overflow error.

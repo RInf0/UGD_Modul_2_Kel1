@@ -232,7 +232,7 @@ class _RegisterViewState extends State<RegisterView> {
                         FilteringTextInputFormatter.digitsOnly,
                       ],
                       validator: (value) {
-                        final RegExp regex = RegExp(r'^\0?[1-9]\d{1,14}$');
+                        final RegExp regex = RegExp(r'^\0?[0-9]\d{1,14}$');
                         if (value == null || value.isEmpty) {
                           return "Nomor Telepon tidak boleh kosong";
                         }
@@ -361,6 +361,8 @@ class _RegisterViewState extends State<RegisterView> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           const SnackBar(
+                                            key: Key(
+                                                'snackbar_register_berhasil'),
                                             content: Text('Register Berhasil'),
                                           ),
                                         );

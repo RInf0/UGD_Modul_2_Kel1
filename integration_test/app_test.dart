@@ -3,13 +3,235 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:ugd_modul_2_kel1/main.dart' as app;
 import 'package:ugd_modul_2_kel1/view/home/home.dart';
+import 'package:ugd_modul_2_kel1/view/login/login.dart';
+import 'package:ugd_modul_2_kel1/view/register/register.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   const duration = Duration(milliseconds: 900);
 
   // INTEGRATION TESTING
-  group('Integration Testing:', () {
+
+  group('Integration Testing Register:', () {
+    IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+    // TEST REGISTER BERHASIL
+    testWidgets('Register Success', (WidgetTester tester) async {
+      FlutterError.onError = (FlutterErrorDetails details) {
+        bool ifIsOverflowError = false;
+
+        // Detect overflow error.
+        var exception = details.exception;
+        if (exception is FlutterError) {
+          ifIsOverflowError = !exception.diagnostics.any((e) =>
+              e.value.toString().startsWith("A RenderFlex overflowed by"));
+        }
+
+        // Ignore if it's an overflow error.
+        if (ifIsOverflowError) {
+          // ignore: avoid_print
+          print('Overflow error.');
+        } else {
+          // Throw other errors.
+          FlutterError.dumpErrorToConsole(details);
+        }
+      };
+
+      IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+      app.main();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(LoginView), findsOneWidget);
+
+      // dari login view, arahkan ke register view
+      final buttonRegisterHere = find.byKey(const Key('button_register_here'));
+      await tester.tap(buttonRegisterHere);
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(RegisterView), findsOneWidget);
+
+      // find 5 textformfield lalu isi masing masingnya
+      expect(find.byType(TextFormField), findsAtLeastNWidgets(5));
+
+      expect(find.byKey(const Key('usernameTest')), findsOneWidget);
+      await tester.enterText(find.byKey(const Key('usernameTest')), 'user1');
+      await tester.pump(duration);
+
+      expect(find.byKey(const Key('emailTest')), findsOneWidget);
+      await tester.enterText(
+          find.byKey(const Key('emailTest')), 'user1@gmail.com');
+      await tester.pump(duration);
+
+      expect(find.byKey(const Key('passwordTest')), findsOneWidget);
+      await tester.enterText(find.byKey(const Key('passwordTest')), '12345');
+      await tester.pump(duration);
+
+      expect(find.byKey(const Key('tglLahirTest')), findsOneWidget);
+      await tester.enterText(
+          find.byKey(const Key('tglLahirTest')), '16/04/2003');
+      await tester.pump(duration);
+
+      expect(find.byKey(const Key('noTelpTest')), findsOneWidget);
+      await tester.enterText(
+          find.byKey(const Key('noTelpTest')), '561327389023');
+      await tester.pump(duration);
+
+      // find and tap radio button jenis kelamin
+      await tester.ensureVisible(find.byKey(const Key('genderMaleTest')));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('genderMaleTest')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('genderMaleTest')));
+      await tester.pumpAndSettle();
+
+      // find and tap checkbox BPJS
+      expect(find.byType(CheckboxListTile), findsAtLeastNWidgets(1));
+      final checkboxListTileHasBPJS = find.byType(CheckboxListTile);
+      await tester.tap(checkboxListTileHasBPJS);
+      await tester.pumpAndSettle();
+
+      // find and tap button register
+      await tester.ensureVisible(find.byKey(const Key('registerClick')));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('registerClick')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('registerClick')));
+      await tester.pumpAndSettle();
+
+      await tester.pump(duration);
+
+      // find and tap yes untuk register
+      expect(find.byKey(const Key('yesButton')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('yesButton')));
+      await tester.pumpAndSettle();
+
+      expect(
+          find.byKey(const Key('snackbar_register_berhasil')), findsOneWidget);
+
+      await tester.pump(duration);
+    });
+
+    // TEST REGISTER GAGAL
+
+    testWidgets('Register Failed', (WidgetTester tester) async {
+      IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+      app.main();
+      await tester.pumpAndSettle();
+
+      FlutterError.onError = (FlutterErrorDetails details) {
+        bool ifIsOverflowError = false;
+        // Detect overflow error.
+        var exception = details.exception;
+        if (exception is FlutterError) {
+          ifIsOverflowError = !exception.diagnostics.any((e) =>
+              e.value.toString().startsWith("A RenderFlex overflowed by"));
+        }
+
+        // Ignore if it's an overflow error.
+        if (ifIsOverflowError) {
+          print('Overflow error.');
+        } else {
+          // Throw other errors.
+          FlutterError.dumpErrorToConsole(details);
+        }
+      };
+
+      await tester.pumpWidget(const MaterialApp(home: RegisterView()));
+      await tester.enterText(find.byKey(const Key('usernameTest')), 'user1');
+      await tester.enterText(find.byKey(const Key('emailTest')),
+          'user1*gmail.com'); // error disini karena harus @
+      await tester.enterText(find.byKey(const Key('passwordTest')), '123456');
+      await tester.enterText(
+          find.byKey(const Key('tglLahirTest')), '16/04/2003');
+      await tester.enterText(
+          find.byKey(const Key('noTelpTest')), '561327389023');
+      await tester.tap(find.byKey(const Key('genderMaleTest')));
+
+      await tester.ensureVisible(find.byKey(const Key('registerClick')));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.tap(find.byKey(const Key('registerClick')));
+
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.tap(find.byKey(const Key('yesButton')));
+
+      await tester.pumpAndSettle();
+    });
+
+    // TEST REGISTER BERHASIL BY SETO
+    // testWidgets('Register Berhasil', (WidgetTester tester) async {
+    //   // data register
+    //   const username = 'helloworld';
+    //   const email = 'helloworld@gmail.com';
+    //   const password = 'helloworld123';
+    //   const tglLahir = '04-11-2007';
+    //   const noTelp = '081283728132';
+    //   const jenisKelamin = 'L';
+    //   const hasBPJS = true;
+
+    //   app.main();
+    //   await tester.pumpAndSettle();
+
+    //   expect(find.byType(LoginView), findsOneWidget);
+
+    //   final buttonRegisterHere = find.byKey(const Key('button_register_here'));
+    //   await tester.tap(buttonRegisterHere);
+
+    //   await tester.pumpAndSettle();
+
+    //   expect(find.byType(RegisterView), findsOneWidget);
+
+    //   expect(find.byType(TextFormField), findsAtLeastNWidgets(5));
+
+    //   final textField = find.byType(TextFormField);
+
+    //   await tester.enterText(textField.at(0), username);
+    //   await tester.pump(duration);
+
+    //   await tester.enterText(textField.at(1), email);
+    //   await tester.pump(duration);
+
+    //   await tester.enterText(textField.at(2), password);
+    //   await tester.pump(duration);
+
+    //   // tgl lahir
+    //   // await tester.enterText(textField.at(3), tglLahir);
+    //   // await tester.pump(duration);
+
+    //   await tester.enterText(textField.at(4), noTelp);
+    //   await tester.pump(duration);
+
+    //   expect(find.byType(RadioListTile), findsAtLeastNWidgets(2));
+    //   final radioListTileJenisKelamin = find.byType(RadioListTile);
+
+    //   if (jenisKelamin == 'L') {
+    //     await tester.tap(radioListTileJenisKelamin.at(0));
+    //   } else {
+    //     await tester.tap(radioListTileJenisKelamin.at(1));
+    //   }
+
+    //   expect(find.byType(CheckboxListTile), findsAtLeastNWidgets(1));
+    //   final checkboxListTileHasBPJS = find.byType(CheckboxListTile);
+
+    //   if (hasBPJS) {
+    //     await tester.tap(checkboxListTileHasBPJS);
+    //   }
+
+    //   expect(find.byKey(const Key('button_register')), findsOneWidget);
+    //   final registerButton = find.byKey(const Key('button_register'));
+
+    //   await tester.tap(registerButton);
+
+    //   await tester.pumpAndSettle();
+
+    //   await tester.pump(duration);
+    // });
+  });
+
+  group('Integration Testing Login:', () {
+    IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
     // TEST LOGIN BERHASIL
     testWidgets('Login Berhasil', (WidgetTester tester) async {
       app.main();
