@@ -44,6 +44,7 @@ Future<void> isiLoginUntukCRUD(WidgetTester tester) async {
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   const duration = Duration(milliseconds: 1000);
+  const durationToPause = Duration(milliseconds: 1500);
 
   // INTEGRATION TESTING
 
@@ -91,7 +92,7 @@ void main() {
       expect(find.byType(TextFormField), findsAtLeastNWidgets(5));
 
       expect(find.byKey(const Key('usernameTest')), findsOneWidget);
-      await tester.enterText(find.byKey(const Key('usernameTest')), 'user1');
+      await tester.enterText(find.byKey(const Key('usernameTest')), 'a');
       await tester.pump(duration);
 
       expect(find.byKey(const Key('emailTest')), findsOneWidget);
@@ -100,12 +101,18 @@ void main() {
       await tester.pump(duration);
 
       expect(find.byKey(const Key('passwordTest')), findsOneWidget);
-      await tester.enterText(find.byKey(const Key('passwordTest')), '12345');
+      await tester.enterText(find.byKey(const Key('passwordTest')), 'aaaaa');
       await tester.pump(duration);
 
+      // tgl lahir
       expect(find.byKey(const Key('tglLahirTest')), findsOneWidget);
-      await tester.enterText(
-          find.byKey(const Key('tglLahirTest')), '16-04-2003');
+      await tester.tap(find.byKey(const Key('tglLahirTest')));
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      expect(find.text('OK'), findsOneWidget);
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
       await tester.pump(duration);
 
       expect(find.byKey(const Key('noTelpTest')), findsOneWidget);
@@ -146,6 +153,8 @@ void main() {
           find.byKey(const Key('snackbar_register_berhasil')), findsOneWidget);
 
       await tester.pump(duration);
+
+      await tester.pump(durationToPause);
     });
 
     // TEST REGISTER GAGAL
@@ -203,9 +212,15 @@ void main() {
       await tester.enterText(find.byKey(const Key('passwordTest')), '123');
       await tester.pump(duration);
 
+      // tgl lahir
       expect(find.byKey(const Key('tglLahirTest')), findsOneWidget);
-      await tester.enterText(
-          find.byKey(const Key('tglLahirTest')), '16-04-2003');
+      await tester.tap(find.byKey(const Key('tglLahirTest')));
+      await tester.pumpAndSettle();
+      await tester.pump(duration);
+
+      expect(find.text('OK'), findsOneWidget);
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
       await tester.pump(duration);
 
       expect(find.byKey(const Key('noTelpTest')), findsOneWidget);
@@ -242,6 +257,8 @@ void main() {
       expect(find.text('Password minimal 5 karakter'), findsOneWidget);
 
       await tester.pump(duration);
+
+      await tester.pump(durationToPause);
     });
   });
 
@@ -274,6 +291,8 @@ void main() {
 
       expect(find.byType(HomeView), findsOneWidget);
       await tester.pump(duration);
+
+      await tester.pump(durationToPause);
     });
 
     // TEST LOGIN GAGAL
@@ -305,6 +324,8 @@ void main() {
         findsOneWidget,
       );
       await tester.pump(duration);
+
+      await tester.pump(durationToPause);
     });
   });
 
@@ -394,6 +415,8 @@ void main() {
       // read tampilan seluruh daftar periksa
       expect(find.byType(DaftarPeriksaView), findsOneWidget);
       await tester.pump(duration);
+
+      await tester.pump(durationToPause);
     });
 
     // TEST READ (HARUS ADA ATLEAST 1 DATA UNTUK MASUK KE DETAIL)
@@ -429,6 +452,8 @@ void main() {
       // masuk ke view detail
       expect(find.byType(DetailJanjiPeriksaView), findsOneWidget);
       await tester.pump(duration);
+
+      await tester.pump(durationToPause);
     });
 
     // TEST UPDATE (HARUS ADA ATLEAST 1 DATA)
@@ -521,6 +546,8 @@ void main() {
       // setelah update langsung masuk ke daftar periksa
       expect(find.byType(DaftarPeriksaView), findsOneWidget);
       await tester.pump(duration);
+
+      await tester.pump(durationToPause);
     });
 
     // TEST DELETE (HARUS ADA ATLEAST 1 DATA)
@@ -553,6 +580,8 @@ void main() {
       expect(find.byKey(const Key('snackbar_delete_janji_periksa_berhasil')),
           findsOneWidget);
       await tester.pump(duration);
+
+      await tester.pump(durationToPause);
     });
   });
 }

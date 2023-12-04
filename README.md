@@ -51,5 +51,5 @@ Membuat sebuah aplikasi Rumah Sakit sederhana yang berbasis Android. Project ini
 ### UGD MODUL TESTING
 
 - Widget Testing Login (Seto)
-- Widget Testing Register (Gre, Seto)
+- Widget Testing Register (Gre, Seto, Reyhan, Adit)
 - Widget Testing CRUD Janji Periksa (Seto)
