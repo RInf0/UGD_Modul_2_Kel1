@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 // import 'package:ugd_modul_2_kel1/database/sql_helper_janji_periksa.dart';
@@ -172,7 +173,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                               label: value,
                             );
                           }).toList(),
-                          width: 370,
+                          width: MediaQuery.of(context).size.width * 0.9,
                         ),
                       ],
                     ),
