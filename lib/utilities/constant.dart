@@ -1,8 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 const cThemeColor = Color.fromARGB(255, 228, 105, 132);
 
 const cAccentColor = Color(0xff0D8F83);
+
+Image imageLogoAtmaHospital({double height = 50}) {
+  return Image.asset(
+    'image/logo/logo-atma-hospital.png',
+    height: height.sp,
+  );
+}
+
+Row textTitleAtmaHospital({double fontSize = 20}) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Text(
+        'ATMA',
+        style: TextStyle(
+          fontSize: fontSize.sp,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      Text(
+        'HOSPITAL',
+        style: TextStyle(
+          fontSize: fontSize.sp,
+          fontWeight: FontWeight.w300,
+          color: cAccentColor,
+        ),
+      )
+    ],
+  );
+}
+
+Text textSloganAtmaHospital({double fontSize = 15}) {
+  return Text(
+    'BETTER HEALTH, BETTER LIFE',
+    style: TextStyle(
+      fontSize: fontSize.sp,
+      fontWeight: FontWeight.w300,
+    ),
+  );
+}
 
 const SizedBox cSizedBox2 = SizedBox(
   height: 20,

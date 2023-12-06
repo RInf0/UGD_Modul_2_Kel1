@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 // import 'package:ugd_modul_2_kel1/document_scanner/cunning_scanner.dart';
 // import 'package:ugd_modul_2_kel1/document_scanner/document_scanner_flutter.dart';
 // import 'package:ugd_modul_2_kel1/document_scanner/edge_detection_scanner.dart';
@@ -103,7 +104,7 @@ class MyAppState extends State<MyApp> {
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.green,
+            seedColor: cAccentColor,
           ),
         ),
         darkTheme: ThemeData(
