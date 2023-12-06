@@ -19,13 +19,14 @@ class GridButton extends StatelessWidget {
           height: 100,
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.grey[100],
+            color: Theme.of(context).colorScheme.onPrimary,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.shade400,
-                blurRadius: 10,
-                spreadRadius: 5,
+                blurRadius: 5,
+                spreadRadius: 0,
+                offset: const Offset(0.0, 3.5),
               ),
             ],
           ),

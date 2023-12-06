@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/view/home/grid.dart';
 import 'package:ugd_modul_2_kel1/view/lokasi_rs/lokasi_rs.dart';
@@ -54,7 +55,14 @@ class _MainHomeViewState extends State<MainHomeView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('lib/icons/logosm.jpg'),
+                // Image.asset('lib/icons/logosm.jpg'),
+                Image.asset(
+                  'image/logo/logo-atma-hospital.png',
+                  height: 25.sp,
+                ),
+                SizedBox(
+                  width: 10.sp,
+                ),
                 Text(
                   'ATMA',
                   style:
@@ -64,14 +72,14 @@ class _MainHomeViewState extends State<MainHomeView> {
                   ' HOSPITAL',
                   style: TextStyle(
                     fontSize: 20.sp,
-                    color: Colors.green,
+                    color: cAccentColor,
                   ),
                 )
               ],
             ),
           ),
 
-          SizedBox(height: 20.sp),
+          SizedBox(height: 15.sp),
 
           //cards
           Container(
@@ -87,11 +95,17 @@ class _MainHomeViewState extends State<MainHomeView> {
               ],
             ),
           ),
-          SizedBox(height: 10.sp),
+          SizedBox(height: 15.sp),
           SmoothPageIndicator(
             controller: _controller,
             count: 4,
-            effect: ColorTransitionEffect(activeDotColor: Colors.green),
+            // effect: ColorTransitionEffect(activeDotColor: Colors.green),
+            effect: ExpandingDotsEffect(
+              activeDotColor: cAccentColor,
+              dotColor: cAccentColor.withOpacity(0.4),
+              dotHeight: 10,
+              dotWidth: 10,
+            ),
           ),
 
           //button

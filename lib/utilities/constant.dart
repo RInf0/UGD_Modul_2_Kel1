@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 const cThemeColor = Color.fromARGB(255, 228, 105, 132);
 
+const cAccentColor = Color(0xff0D8F83);
+
 const SizedBox cSizedBox2 = SizedBox(
   height: 20,
 );
