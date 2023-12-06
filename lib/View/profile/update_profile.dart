@@ -33,6 +33,7 @@ class UpdateView extends StatefulWidget {
 class _UpdateViewState extends State<UpdateView> {
   String _selectedImage = '';
   bool hasProfileImageFromDb = false;
+  bool hasUploadedNewImage = false;
 
   final _formKey = GlobalKey<FormState>();
   TextEditingController usernameController = TextEditingController();
@@ -103,24 +104,24 @@ class _UpdateViewState extends State<UpdateView> {
     // refreshProfileImage();
   }
 
-  Future<void> refreshProfileImage() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    String? savedImagePath = preferences.getString('imageProfilePath');
-    print('===================AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA123');
+  // Future<void> refreshProfileImage() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   String? savedImagePath = preferences.getString('imageProfilePath');
+  //   print('===================AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA123');
 
-    print(hasProfileImageFromDb);
+  //   print(hasProfileImageFromDb);
 
-    if (savedImagePath != '' && savedImagePath!.isNotEmpty) {
-      setState(() {
-        _selectedImage = savedImagePath;
-      });
-    } else {
-      _selectedImage = '';
-    }
-    // jika hasProfileImageFromDb true, _selectedImage akan tetap dari Db (didapat dari fungsi refresh())
+  //   if (savedImagePath != '' && savedImagePath!.isNotEmpty) {
+  //     setState(() {
+  //       _selectedImage = savedImagePath;
+  //     });
+  //   } else {
+  //     _selectedImage = '';
+  //   }
+  //   // jika hasProfileImageFromDb true, _selectedImage akan tetap dari Db (didapat dari fungsi refresh())
 
-    // print('IMAGE222222 SEELEECTEEDDD ' + _selectedImage);
-  }
+  //   // print('IMAGE222222 SEELEECTEEDDD ' + _selectedImage);
+  // }
 
   @override
   void initState() {
@@ -134,8 +135,15 @@ class _UpdateViewState extends State<UpdateView> {
     final returnedImage = await imagePicker.pickImage(source: source);
 
     if (returnedImage != null) {
+      // _selectedImage = returnedImage.path;
+      // // encode dari File ke base64
+      // final imgFile = File(_selectedImage);
+      // final bytes = imgFile.readAsBytesSync();
+      // final base64Img = base64.encode(bytes);
       setState(() {
+        hasUploadedNewImage = true;
         _selectedImage = returnedImage.path;
+        // _selectedImage = base64Img;
       });
       SharedPreferences preferences = await SharedPreferences.getInstance();
       preferences.setString('imageProfilePath', _selectedImage);
@@ -151,8 +159,15 @@ class _UpdateViewState extends State<UpdateView> {
     final returnedImage = await ImagePicker().pickImage(source: source);
 
     if (returnedImage != null) {
+      // _selectedImage = returnedImage.path;
+      // // encode dari File ke base64
+      // final imgFile = File(_selectedImage);
+      // final bytes = imgFile.readAsBytesSync();
+      // final base64Img = base64.encode(bytes);
       setState(() {
+        hasUploadedNewImage = true;
         _selectedImage = returnedImage.path;
+        // _selectedImage = base64Img;
       });
       SharedPreferences preferences = await SharedPreferences.getInstance();
       preferences.setString('profileImagePath', _selectedImage);
@@ -426,10 +441,12 @@ class _UpdateViewState extends State<UpdateView> {
             shape: BoxShape.circle,
             image: DecorationImage(
               fit: BoxFit.cover,
-              image: _selectedImage != ''
+              image: _selectedImage != '' && hasUploadedNewImage
                   ? FileImage(File(_selectedImage))
-                  : const AssetImage('image/random.png')
-                      as ImageProvider<Object>,
+                  : _selectedImage != '' && hasProfileImageFromDb
+                      ? NetworkImage(_selectedImage)
+                      : const AssetImage('image/random.png')
+                          as ImageProvider<Object>,
             ),
           ),
         ),
@@ -501,14 +518,17 @@ class _UpdateViewState extends State<UpdateView> {
     // await SQLHelper.editUser(id, usernameController.text, emailController.text,
     //     tglLahirController.text, noTelpController.text, _selectedImage);
 
-    // encode dari File ke base64
-    final imgFile = File(_selectedImage);
-    final bytes = imgFile.readAsBytesSync();
-    final base64Img = base64.encode(bytes);
-
     // nanti decode ke <ImageProvider> MemoryImage
 
-    print(base64Img);
+    var base64Img = '';
+
+    // jika ada perubahan
+    if (hasUploadedNewImage) {
+      // encode dari File ke base64
+      final imgFile = File(_selectedImage);
+      final bytes = imgFile.readAsBytesSync();
+      base64Img = base64.encode(bytes);
+    }
 
     await UserClient.update(
       User(
@@ -517,7 +537,8 @@ class _UpdateViewState extends State<UpdateView> {
         email: emailController.text,
         tglLahir: tglLahirController.text,
         noTelp: noTelpController.text,
-        profilePhoto: _selectedImage,
+        // profilePhoto: _selectedImage,
+        profilePhoto: base64Img,
       ),
     );
 

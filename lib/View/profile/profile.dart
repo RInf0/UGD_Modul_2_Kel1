@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -80,7 +81,8 @@ class _ProfileState extends State<Profile> {
     return CircleAvatar(
       radius: radius ?? 60.0,
       backgroundImage: profilePic != null
-          ? FileImage(File(profilePic!))
+          // ? MemoryImage(base64Decode(profilePic!))
+          ? NetworkImage(profilePic!)
           : const AssetImage('image/random.png') as ImageProvider<Object>,
     );
   }

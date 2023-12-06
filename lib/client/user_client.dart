@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:ugd_modul_2_kel1/entity/user.dart';
@@ -61,7 +62,29 @@ class UserClient {
         body: user.toRawJson(),
       );
 
+      print(json.decode(response.body)['message']);
+      print(json.decode(response.body)['status']);
+
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      // if (file != null) {
+      //   var request = MultipartRequest('POST', Uri.parse(url + endpoint));
+
+      //   var fileMultipart = MultipartFile.fromBytes(
+      //     'image',
+      //     File(file.path).readAsBytesSync(),
+      //     filename: file.path,
+      //   );
+
+      //   // request.fields['title'] = file.path.toString();
+      //   request.files.add(fileMultipart);
+
+      //   var responseImg = await request.send();
+
+      //   if (responseImg.statusCode != 200) {
+      //     throw Exception(responseImg.reasonPhrase);
+      //   }
+      // }
 
       return response;
     } catch (e) {
