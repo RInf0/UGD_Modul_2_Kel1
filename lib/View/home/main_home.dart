@@ -3,6 +3,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/view/lokasi_rs/lokasi_rs.dart';
+import 'package:ugd_modul_2_kel1/View/pesan_kamar/input_pesan_kamar.dart';
 import 'package:ugd_modul_2_kel1/View/home/card.dart';
 import 'package:ugd_modul_2_kel1/View/home/gridButton.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -35,8 +36,9 @@ class _MainHomeViewState extends State<MainHomeView> {
         break;
       // case 'Cari Dokter':
       //   break;
-      // case 'Pesan Kamar':
-      //   break;
+      case 'Pesan Kamar':
+        destinationWidget = const CreatePesanKamarView();
+        break;
       case 'Lokasi':
         destinationWidget = const GeoLocationPage();
         break;
@@ -129,8 +131,11 @@ class _MainHomeViewState extends State<MainHomeView> {
                     const GridButton(
                         icon: 'lib/icons/doctor.png',
                         textButton: 'Cari Dokter'),
-                    const GridButton(
-                        icon: 'lib/icons/bed.png', textButton: 'Pesan Kamar'),
+                    InkWell(
+                      onTap: () => navigateToPage('Pesan Kamar'),
+                      child: const GridButton(
+                          icon: 'lib/icons/bed.png', textButton: 'Pesan Kamar'),
+                    ),
                   ],
                 ),
               ),

@@ -35,7 +35,8 @@ class _GeoLocationState extends State<GeoLocationPage> {
 
   Future<void> _getAddressLocation() async {
     await placemarkFromCoordinates(
-        _currentLoc!.latitude, _currentLoc!.longitude).then((List<Placemark> placemarks) {
+            _currentLoc!.latitude, _currentLoc!.longitude)
+        .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
         _currentAddress =
@@ -44,7 +45,7 @@ class _GeoLocationState extends State<GeoLocationPage> {
       // Hitung jarak ke lokasi Jl. Babarsari No.43(Rumah Sakit)
       double distanceInMeters = Geolocator.distanceBetween(
           _currentLoc!.latitude, _currentLoc!.longitude, -7.7753, 110.3899);
-      double distanceInKilometers = distanceInMeters / 1000; 
+      double distanceInKilometers = distanceInMeters / 1000;
       setState(() {
         _distanceToLocation = distanceInKilometers;
       });
@@ -57,8 +58,10 @@ class _GeoLocationState extends State<GeoLocationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Jarak Rumah Sakit',
-        style: TextStyle(color: Colors.white),),
+        title: const Text(
+          'Jarak Rumah Sakit',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.green,
       ),
       body: Center(
@@ -100,7 +103,7 @@ class _GeoLocationState extends State<GeoLocationPage> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.green,
+                backgroundColor: Colors.green,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),

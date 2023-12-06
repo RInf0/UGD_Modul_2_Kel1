@@ -131,15 +131,6 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                     height: 45,
                   ),
 
-                  // Title
-                  // const Text(
-                  //   'Buat Jadwal Periksa',
-                  //   style: TextStyle(
-                  //       fontSize: 30,
-                  //       color: Colors.green,
-                  //       fontWeight: FontWeight.w500),
-                  // ),
-
                   // Dropdown Dokter
                   Padding(
                     padding:
@@ -150,7 +141,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                         Text(
                           'Dokter',
                           style: TextStyle(
-                            fontSize: 16.0,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.green,
                           ),
@@ -179,7 +170,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                     ),
                   ),
 
-                  SizedBox(height: 15),
+                  SizedBox(height: 3.h),
 
                   // Tanggal Periksa
                   Padding(
@@ -191,7 +182,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                           Text(
                             'Tanggal Periksa',
                             style: TextStyle(
-                              fontSize: 16.0,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.bold,
                               color: Colors.green,
                             ),
@@ -208,7 +199,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                             },
                             controller: tglPeriksaController,
                             decoration: InputDecoration(
-                              prefixIcon: Icon(
+                              prefixIcon: const Icon(
                                 Icons.calendar_today,
                               ),
                               labelText: "Pilih Tanggal",
@@ -237,7 +228,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                         ]),
                   ),
 
-                  SizedBox(height: 15),
+                  SizedBox(height: 3.h),
 
                   // Keluhan
                   Padding(
@@ -249,7 +240,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                         Text(
                           'Keluhan',
                           style: TextStyle(
-                            fontSize: 16.0,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.green,
                           ),
