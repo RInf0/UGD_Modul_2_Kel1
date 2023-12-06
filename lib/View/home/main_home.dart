@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
-import 'package:ugd_modul_2_kel1/view/home/grid.dart';
 import 'package:ugd_modul_2_kel1/view/lokasi_rs/lokasi_rs.dart';
 import 'package:ugd_modul_2_kel1/View/home/card.dart';
 import 'package:ugd_modul_2_kel1/View/home/gridButton.dart';
@@ -25,14 +24,14 @@ class _MainHomeViewState extends State<MainHomeView> {
 
     switch (pageName) {
       case 'Janji Periksa':
-        destinationWidget = CreateJanjiPeriksaView(janjiPeriksa: null);
+        destinationWidget = const CreateJanjiPeriksaView(janjiPeriksa: null);
         break;
       // case 'Cari Dokter':
       //   break;
       // case 'Pesan Kamar':
       //   break;
       case 'Lokasi':
-        destinationWidget = GeoLocationPage();
+        destinationWidget = const GeoLocationPage();
         break;
       default:
         destinationWidget = Container();
@@ -55,7 +54,6 @@ class _MainHomeViewState extends State<MainHomeView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Image.asset('lib/icons/logosm.jpg'),
                 Image.asset(
                   'image/logo/logo-atma-hospital.png',
                   height: 25.sp,
@@ -82,12 +80,12 @@ class _MainHomeViewState extends State<MainHomeView> {
           SizedBox(height: 15.sp),
 
           //cards
-          Container(
+          SizedBox(
             height: 250,
             child: PageView(
               scrollDirection: Axis.horizontal,
               controller: _controller,
-              children: [
+              children: const [
                 MyCard(color: Colors.green),
                 MyCard(color: Colors.blue),
                 MyCard(color: Colors.purple),
@@ -117,13 +115,13 @@ class _MainHomeViewState extends State<MainHomeView> {
               children: [
                 InkWell(
                   onTap: () => navigateToPage('Janji Periksa'),
-                  child: GridButton(
+                  child: const GridButton(
                       icon: 'lib/icons/schedule.png',
                       textButton: 'Janji Periksa'),
                 ),
-                GridButton(
+                const GridButton(
                     icon: 'lib/icons/doctor.png', textButton: 'Cari Dokter'),
-                GridButton(
+                const GridButton(
                     icon: 'lib/icons/bed.png', textButton: 'Pesan Kamar'),
               ],
             ),
@@ -137,11 +135,12 @@ class _MainHomeViewState extends State<MainHomeView> {
               children: [
                 InkWell(
                   onTap: () => navigateToPage('Lokasi'),
-                  child: GridButton(
+                  child: const GridButton(
                       icon: 'lib/icons/map.png', textButton: 'Lokasi RS'),
                 ),
-                GridButton(icon: 'lib/icons/contact.png', textButton: 'Kontak'),
-                GridButton(
+                const GridButton(
+                    icon: 'lib/icons/contact.png', textButton: 'Kontak'),
+                const GridButton(
                     icon: 'lib/icons/group.png', textButton: 'Tentang Kami'),
               ],
             ),
