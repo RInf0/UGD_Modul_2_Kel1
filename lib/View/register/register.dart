@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugd_modul_2_kel1/client/auth_client.dart';
 import 'package:ugd_modul_2_kel1/entity/user.dart';
+import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 import 'package:ugd_modul_2_kel1/view/login/login.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 
@@ -66,17 +69,20 @@ class _RegisterViewState extends State<RegisterView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(
-                    height: 45,
+                  SizedBox(
+                    height: 3.h,
                   ),
 
-                  // Title
-                  const Text(
-                    'Register',
-                    style: TextStyle(
-                        fontSize: 35,
-                        color: Colors.green,
-                        fontWeight: FontWeight.w500),
+                  // logo
+                  // imageLogoAtmaHospital(),
+                  textTitleAtmaHospital(fontSize: 25),
+                  SizedBox(
+                    height: 0.1.h,
+                  ),
+                  textSloganAtmaHospital(),
+
+                  SizedBox(
+                    height: 2.h,
                   ),
 
                   // Username
@@ -97,6 +103,13 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                       controller: usernameController,
                       decoration: const InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        filled: true,
+                        fillColor: Color(0xffEAEAEA),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
                         labelText: "Username",
                         prefixIcon: Icon(Icons.person),
                       ),
@@ -106,7 +119,7 @@ class _RegisterViewState extends State<RegisterView> {
                   // Email
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 20, top: 10, right: 20),
+                        const EdgeInsets.only(left: 20, top: 15, right: 20),
                     child: TextFormField(
                       key: const Key('emailTest'),
                       validator: (value) {
@@ -123,6 +136,13 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                       controller: emailController,
                       decoration: const InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        filled: true,
+                        fillColor: Color(0xffEAEAEA),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
                         labelText: "Email",
                         prefixIcon: Icon(Icons.email),
                       ),
@@ -138,7 +158,7 @@ class _RegisterViewState extends State<RegisterView> {
                   // Password
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 20, top: 10, right: 20),
+                        const EdgeInsets.only(left: 20, top: 15, right: 20),
                     child: TextFormField(
                       key: const Key('passwordTest'),
                       validator: (value) {
@@ -153,6 +173,13 @@ class _RegisterViewState extends State<RegisterView> {
                       obscureText: passwordInvisible,
                       controller: passwordController,
                       decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        filled: true,
+                        fillColor: const Color(0xffEAEAEA),
+                        border: const OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
                         labelText: "Password",
                         prefixIcon: const Icon(Icons.lock),
                         suffixIcon: IconButton(
@@ -174,12 +201,12 @@ class _RegisterViewState extends State<RegisterView> {
                   // Tanggal Lahir
                   Padding(
                       padding:
-                          const EdgeInsets.only(left: 20, top: 10, right: 20),
+                          const EdgeInsets.only(left: 20, top: 15, right: 20),
                       child: TextFormField(
                         key: const Key('tglLahirTest'),
                         // hide keyboard ketika input date ditap
                         keyboardType: TextInputType.none,
-                        // readOnly: true,
+                        readOnly: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Tanggal Lahir tidak boleh kosong";
@@ -188,6 +215,13 @@ class _RegisterViewState extends State<RegisterView> {
                         },
                         controller: tglLahirController,
                         decoration: const InputDecoration(
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          filled: true,
+                          fillColor: Color(0xffEAEAEA),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
                           prefixIcon: Icon(Icons.calendar_today),
                           labelText: "Tanggal Lahir",
                         ),
@@ -253,7 +287,7 @@ class _RegisterViewState extends State<RegisterView> {
                   // Nomor Telepon
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 20, top: 10, right: 20),
+                        const EdgeInsets.only(left: 20, top: 15, right: 20),
                     child: TextFormField(
                       key: const Key('noTelpTest'),
                       keyboardType: TextInputType.number,
@@ -272,6 +306,13 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                       controller: noTelpController,
                       decoration: const InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        filled: true,
+                        fillColor: Color(0xffEAEAEA),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
                         labelText: "No. Telepon",
                         prefixIcon: Icon(Icons.phone_android),
                       ),
@@ -344,8 +385,17 @@ class _RegisterViewState extends State<RegisterView> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: SizedBox(
+                      height: 30.sp,
                       width: double.infinity,
                       child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(255, 18, 18, 18),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                        ),
                         key: const Key('registerClick'),
                         onPressed: () {
                           // munculkan text validasi/error handling merah ketika radio button jenis kelamin kosong
@@ -357,6 +407,8 @@ class _RegisterViewState extends State<RegisterView> {
                               // lalu simpan jenis kelamin
                             }
                           });
+
+                          bool success = false;
 
                           // validasi form
                           if (_formKey.currentState!.validate() &&
@@ -387,15 +439,34 @@ class _RegisterViewState extends State<RegisterView> {
                                       key: const Key('yesButton'),
                                       child: const Text('Ya'),
                                       onPressed: () async {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            key: Key(
-                                                'snackbar_register_berhasil'),
-                                            content: Text('Register Berhasil'),
-                                          ),
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return const Center(
+                                              child: SpinKitThreeBounce(
+                                                color: Colors.white,
+                                              ),
+                                            );
+                                          },
                                         );
+
+                                        await Future.delayed(
+                                            const Duration(seconds: 2));
+
                                         await addUser();
+
+                                        if (mounted) {
+                                          Navigator.pop(context);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              key: Key(
+                                                  'snackbar_register_berhasil'),
+                                              content:
+                                                  Text('Register Berhasil'),
+                                            ),
+                                          );
+                                        }
 
                                         //*Push data jika memilih 'Ya'
                                         // ignore: use_build_context_synchronously
@@ -416,8 +487,44 @@ class _RegisterViewState extends State<RegisterView> {
                     ),
                   ),
 
-                  const SizedBox(
-                    height: 25,
+                  SizedBox(
+                    height: 2.h,
+                  ),
+
+                  //* tombol ke halaman login
+                  TextButton(
+                    key: const Key('button_login_here'),
+                    style: ButtonStyle(
+                      overlayColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                    ),
+                    onPressed: () {
+                      // Map<String, dynamic> formData = {};
+                      // formData['username'] = usernameController.text;
+                      // formData['password'] = usernameController.text;
+                      Navigator.pop(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Sudah punya akun? ',
+                            style: TextStyle(color: Colors.grey.shade500),
+                          ),
+                          const Text(
+                            'Login',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 3.h,
                   ),
                 ],
               ),

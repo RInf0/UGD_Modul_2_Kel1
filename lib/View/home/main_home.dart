@@ -16,7 +16,7 @@ class MainHomeView extends StatefulWidget {
 
 class _MainHomeViewState extends State<MainHomeView> {
   //pageController
-  final _controller = PageController();
+  final _controller = PageController(initialPage: 1000);
 
   final listPages = const [
     MyCard(color: Colors.green),
