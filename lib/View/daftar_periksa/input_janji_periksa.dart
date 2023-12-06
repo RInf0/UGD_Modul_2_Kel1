@@ -111,7 +111,13 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
     }
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text(
+          'Tambah Janji Periksa',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.green,
+      ),
       body: SafeArea(
         child: ListView(
           children: [
@@ -125,95 +131,149 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                   ),
 
                   // Title
-                  const Text(
-                    'Buat Jadwal Periksa',
-                    style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.green,
-                        fontWeight: FontWeight.w500),
-                  ),
+                  // const Text(
+                  //   'Buat Jadwal Periksa',
+                  //   style: TextStyle(
+                  //       fontSize: 30,
+                  //       color: Colors.green,
+                  //       fontWeight: FontWeight.w500),
+                  // ),
 
                   // Dropdown Dokter
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 20, top: 10, right: 20),
-                    child: DropdownMenu<String>(
-                      key: const Key('dropdown_dokter'),
-                      controller: dokterController,
-                      initialSelection: widget.janjiPeriksa != null
-                          ? widget.janjiPeriksa!.namaDokter
-                          : listDokter.first,
-                      onSelected: (String? value) {
-                        // This is called when the user selects an item.
-                        setState(() {
-                          dropdownValue = value!;
-                        });
-                      },
-                      dropdownMenuEntries: listDokter
-                          .map<DropdownMenuEntry<String>>((String value) {
-                        return DropdownMenuEntry<String>(
-                          value: value,
-                          label: value,
-                        );
-                      }).toList(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Dokter',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
+                        ),
+                        DropdownMenu<String>(
+                          key: const Key('dropdown_dokter'),
+                          controller: dokterController,
+                          initialSelection: widget.janjiPeriksa != null
+                              ? widget.janjiPeriksa!.namaDokter
+                              : listDokter.first,
+                          onSelected: (String? value) {
+                            setState(() {
+                              dropdownValue = value!;
+                            });
+                          },
+                          dropdownMenuEntries: listDokter
+                              .map<DropdownMenuEntry<String>>((String value) {
+                            return DropdownMenuEntry<String>(
+                              value: value,
+                              label: value,
+                            );
+                          }).toList(),
+                          width: 370,
+                        ),
+                      ],
                     ),
                   ),
+
+                  SizedBox(height: 15),
 
                   // Tanggal Periksa
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 20, top: 10, right: 20),
-                    child: TextFormField(
-                      // hide keyboard ketika input date ditap
-                      keyboardType: TextInputType.none,
-                      readOnly: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Tanggal Periksa tidak boleh kosong";
-                        }
-                        return null;
-                      },
-                      controller: tglPeriksaController,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.calendar_today),
-                        labelText: "Tanggal Periksa",
-                      ),
-                      onTap: () async {
-                        DateTime? pickeddate = await showDatePicker(
-                            context: context,
-                            initialDate: widget.janjiPeriksa != null
-                                ? DateFormat('dd-MM-yyyy')
-                                    .parse(widget.janjiPeriksa!.tglPeriksa)
-                                : DateTime.now(),
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime(2025));
-                        if (pickeddate != null) {
-                          tglPeriksaController.text =
-                              DateFormat('dd-MM-yyyy').format(pickeddate);
-                        }
-                      },
-                    ),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Tanggal Periksa',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                          ),
+                          TextFormField(
+                            // hide keyboard ketika input date ditap
+                            keyboardType: TextInputType.none,
+                            readOnly: true,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Tanggal Periksa tidak boleh kosong";
+                              }
+                              return null;
+                            },
+                            controller: tglPeriksaController,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.calendar_today,
+                              ),
+                              labelText: "Pilih Tanggal",
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                            onTap: () async {
+                              DateTime? pickeddate = await showDatePicker(
+                                context: context,
+                                initialDate: widget.janjiPeriksa != null
+                                    ? DateFormat('dd-MM-yyyy')
+                                        .parse(widget.janjiPeriksa!.tglPeriksa)
+                                    : DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2025),
+                              );
+                              if (pickeddate != null) {
+                                tglPeriksaController.text =
+                                    DateFormat('dd-MM-yyyy').format(pickeddate);
+                              }
+                            },
+                          ),
+                        ]),
                   ),
+
+                  SizedBox(height: 15),
 
                   // Keluhan
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 20, top: 10, right: 20),
-                    child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Keluhan tidak boleh kosong';
-                        }
-                        if (value.toLowerCase() == 'anjing') {
-                          return 'Tidak boleh menggunakan kata kasar';
-                        }
-                        return null;
-                      },
-                      controller: keluhanController,
-                      decoration: const InputDecoration(
-                        labelText: "Keluhan",
-                        prefixIcon: Icon(Icons.notes),
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Keluhan',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
+                        ),
+                        TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Keluhan tidak boleh kosong';
+                            }
+                            if (value.toLowerCase() == 'anjing') {
+                              return 'Tidak boleh menggunakan kata kasar';
+                            }
+                            return null;
+                          },
+                          controller: keluhanController,
+                          maxLines: 5,
+                          decoration: InputDecoration(
+                            // labelText: "Keluhan",
+                            // prefixIcon: Icon(Icons.notes),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
 
