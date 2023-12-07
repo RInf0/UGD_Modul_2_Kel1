@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd_modul_2_kel1/document_scanner/edge_detection_scanner.dart';
 import 'package:ugd_modul_2_kel1/client/janji_periksa_client.dart';
 import 'package:ugd_modul_2_kel1/entity/janji_periksa.dart';
+import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 
 class CreateJanjiPeriksaView extends StatefulWidget {
   const CreateJanjiPeriksaView({super.key, this.janjiPeriksa});
@@ -38,6 +39,8 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
 
   int? userId;
 
+  String appBarTitle = 'Tambah Janji Periksa';
+
   void refresh() async {
     // final data = await SQLHelper.getUser();
     final prefs = await SharedPreferences.getInstance();
@@ -52,6 +55,17 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
     // setState(() {
     //   userProfile = userData;
     // });
+
+    if (widget.janjiPeriksa != null) {
+      setState(() {
+        appBarTitle = 'Edit Janji Periksa';
+      });
+      tglPeriksaController.text = widget.janjiPeriksa!.tglPeriksa;
+      keluhanController.text = widget.janjiPeriksa!.keluhan;
+      if (widget.janjiPeriksa!.dokumen != null) {
+        hasImageDokumen = true;
+      }
+    }
   }
 
   @override
@@ -103,21 +117,13 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.janjiPeriksa != null) {
-      tglPeriksaController.text = widget.janjiPeriksa!.tglPeriksa;
-      keluhanController.text = widget.janjiPeriksa!.keluhan;
-      if (widget.janjiPeriksa!.dokumen != null) {
-        hasImageDokumen = true;
-      }
-    }
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Tambah Janji Periksa',
-          style: TextStyle(color: Colors.white),
+        title: Text(
+          appBarTitle,
+          style: const TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: cAccentColor,
       ),
       body: SafeArea(
         child: ListView(
