@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:edge_detection/edge_detection.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -142,8 +143,13 @@ class EdgeDetectionScannerState extends State<EdgeDetectionScanner> {
         children: [
           Center(
             child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+              ),
               onPressed: getImageFromCamera,
-              child: const Text('Scan Dokumen'),
+              child: const FaIcon(FontAwesomeIcons.camera),
             ),
           ),
           const SizedBox(height: 20),

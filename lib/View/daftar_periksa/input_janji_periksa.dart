@@ -149,7 +149,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                           style: TextStyle(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
-                            color: Colors.green,
+                            color: cAccentColor,
                           ),
                         ),
                         DropdownMenu<String>(
@@ -190,7 +190,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                             style: TextStyle(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.bold,
-                              color: Colors.green,
+                              color: cAccentColor,
                             ),
                           ),
                           TextFormField(
@@ -248,7 +248,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                           style: TextStyle(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
-                            color: Colors.green,
+                            color: cAccentColor,
                           ),
                         ),
                         TextFormField(
@@ -280,13 +280,30 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                   ),
 
                   // tambah dokumen pelengkap
-                  const Row(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Foto Dokumen Pelengkap, Surat Rujukan, dll. (Opsional)',
+                        'Foto Dokumen Pelengkap',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: cAccentColor,
+                        ),
+                      ),
+                      Text(
+                        'Surat Rujukan, dll. (Opsional)',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                          color: cAccentColor,
+                        ),
                       ),
                     ],
+                  ),
+
+                  SizedBox(
+                    height: 1.h,
                   ),
 
                   if (hasImageDokumen)
@@ -314,23 +331,32 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // Button Cancel
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: SizedBox(
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Cancel'),
-                          ),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 5),
+                      //   child: SizedBox(
+                      //     child: ElevatedButton(
+                      //       onPressed: () async {
+                      //         Navigator.pop(context);
+                      //       },
+                      //       child: const Text('Cancel'),
+                      //     ),
+                      //   ),
+                      // ),
 
                       // Button Submit
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: SizedBox(
+                          height: 29.sp,
+                          width: 40.w,
                           child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: cAccentColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                            ),
                             onPressed: () async {
                               // validasi form
                               if (_formKey.currentState!.validate()) {
@@ -366,7 +392,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                                 Navigator.pop(context);
                               }
                             },
-                            child: const Text('Submit'),
+                            child: const Text('Tambah'),
                           ),
                         ),
                       ),
