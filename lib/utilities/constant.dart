@@ -73,7 +73,7 @@ const cTextStyle2 = TextStyle(
 
 const cTextStyle3 = TextStyle(
   // fontFamily: 'Source Sans Pro',
-  fontSize: 15,
+  fontSize: 18,
   fontWeight: FontWeight.bold,
   letterSpacing: 1.6,
 );

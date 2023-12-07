@@ -14,7 +14,7 @@ class PesanKamarClient {
 
   static Future<List<PesanKamar>> fetchAll(int idUser) async {
     try {
-      var response = await get(Uri.http(url, ''));
+      var response = await get(Uri.http(url, '$endpoint/index/$idUser'));
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
@@ -77,5 +77,5 @@ class PesanKamarClient {
     } catch (e) {
       return Future.error(e.toString());
     }
-  } 
+  }
 }

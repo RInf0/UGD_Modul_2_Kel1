@@ -14,7 +14,7 @@ class JanjiPeriksaClient {
 
   static Future<List<JanjiPeriksa>> fetchAll(int idUser) async {
     try {
-      var response = await get(Uri.http(url, 'api/index/$idUser'));
+      var response = await get(Uri.http(url, 'api/janjiperiksa/index/$idUser'));
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 

@@ -81,7 +81,7 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  ' Daftar Jadwal Periksa',
+                  'Daftar Jadwal Periksa',
                   style: TextStyle(
                     fontSize: 20.sp,
                     color: Colors.white,
@@ -115,7 +115,7 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  ' Daftar Jadwal Periksa',
+                  'Daftar Jadwal Periksa',
                   style: TextStyle(
                     fontSize: 20.sp,
                     color: Colors.white,
@@ -145,7 +145,7 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                ' Daftar Jadwal Periksa',
+                'Daftar Jadwal Periksa',
                 style: TextStyle(
                   fontSize: 20.sp,
                   color: Colors.white,

@@ -38,6 +38,13 @@ class _CreatePesanKamarViewState extends State<CreatePesanKamarView> {
     final prefs = await SharedPreferences.getInstance();
     final storedId = prefs.getInt('id');
     userId = storedId;
+
+    // set initial date
+    if (widget.pesanKamar != null) {
+      setState(() {
+        tglPesanController.text = widget.pesanKamar!.tglPesan;
+      });
+    }
   }
 
   @override
@@ -58,8 +65,25 @@ class _CreatePesanKamarViewState extends State<CreatePesanKamarView> {
         tglPesan: tglPesanController.text));
   }
 
+  Future<void> editPesanKamar(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedId = prefs.getInt('id');
+
+    final dataPesanKamar = PesanKamar(
+      id: id,
+      idUser: storedId,
+      kelas: kelasController.text,
+      spesialisasi: spesialisasiController.text,
+      usia: usiaController.text,
+      tglPesan: tglPesanController.text,
+    );
+
+    await PesanKamarClient.update(dataPesanKamar);
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(widget.pesanKamar!.tglPesan);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -287,31 +311,33 @@ class _CreatePesanKamarViewState extends State<CreatePesanKamarView> {
                               if (_formKey.currentState!.validate()) {
                                 // refresh();
 
-                                // if (widget.pesanKamar != null) {
-                                //   await editJanjiPeriksa(
-                                //       widget.janjiPeriksa!.id!);
+                                if (widget.pesanKamar != null) {
+                                  // masuk edit
+                                  await editPesanKamar(widget.pesanKamar!.id!);
 
-                                //   // ignore: use_build_context_synchronously
-                                //   ScaffoldMessenger.of(context).showSnackBar(
-                                //     const SnackBar(
-                                //       key: Key('snackbar_edit_janji_berhasil'),
-                                //       content:
-                                //           Text('Berhasil Edit Janji Periksa'),
-                                //     ),
-                                //   );
-                                // } else {
-                                await addPesanKamar();
+                                  // ignore: use_build_context_synchronously
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      key: Key(
+                                          'snackbar_edit_pesan_kamar_berhasil'),
+                                      content:
+                                          Text('Berhasil Edit Pesanan Kamar'),
+                                    ),
+                                  );
+                                } else {
+                                  // masuk ke create
+                                  await addPesanKamar();
 
-                                // ignore: use_build_context_synchronously
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    key: Key(
-                                        'snackbar_create_pesan_kamar_berhasil'),
-                                    content:
-                                        Text('Berhasil Tambah Pesan Kamar'),
-                                  ),
-                                );
-                                // }
+                                  // ignore: use_build_context_synchronously
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      key: Key(
+                                          'snackbar_create_pesan_kamar_berhasil'),
+                                      content:
+                                          Text('Berhasil Tambah Pesanan Kamar'),
+                                    ),
+                                  );
+                                }
 
                                 // ignore: use_build_context_synchronously
                                 Navigator.pop(context);

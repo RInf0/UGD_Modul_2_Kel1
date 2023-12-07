@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ugd_modul_2_kel1/View/pesan_kamar/daftar_pesan_kamar.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/daftar_periksa.dart';
 import 'package:ugd_modul_2_kel1/view/home/main_home.dart';
 import 'package:ugd_modul_2_kel1/view/profile/profile.dart';
@@ -47,7 +48,7 @@ class _HomeViewState extends State<HomeView> {
     //* index 1
     DaftarPeriksaView(),
     //* index 2
-    DaftarPeriksaView(),
+    DaftarPesanKamarView(),
     //* index 3
     Profile(),
   ];
