@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd_modul_2_kel1/client/janji_periksa_client.dart';
 import 'package:ugd_modul_2_kel1/client/user_client.dart';
 import 'package:ugd_modul_2_kel1/entity/user.dart';
+import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/detail_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
@@ -66,18 +70,92 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
   @override
   Widget build(BuildContext context) {
     if (isLoadingData) {
-      return const Center(
-        child: CircularProgressIndicator(),
+      return Scaffold(
+        backgroundColor: const Color.fromARGB(23, 205, 205, 205),
+        appBar: AppBar(
+          backgroundColor: cAccentColor,
+          automaticallyImplyLeading: false,
+          title: Padding(
+            padding: const EdgeInsets.symmetric(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  ' Daftar Jadwal Periksa',
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        body: const SafeArea(
+          child: Center(
+            child: SpinKitThreeBounce(
+              size: 40,
+              color: cAccentColor,
+            ),
+          ),
+        ),
       );
     }
 
     if (listJanjiPeriksa.isEmpty) {
-      return const Center(
-        child: Text('Janji Periksa Masih Kosong!'),
+      return Scaffold(
+        backgroundColor: const Color.fromARGB(23, 205, 205, 205),
+        appBar: AppBar(
+          backgroundColor: cAccentColor,
+          automaticallyImplyLeading: false,
+          title: Padding(
+            padding: const EdgeInsets.symmetric(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  ' Daftar Jadwal Periksa',
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        body: const SafeArea(
+          child: Center(
+            child: Text('Janji Periksa Masih Kosong!'),
+          ),
+        ),
       );
     }
 
     return Scaffold(
+      backgroundColor: const Color.fromARGB(23, 205, 205, 205),
+      appBar: AppBar(
+        backgroundColor: cAccentColor,
+        automaticallyImplyLeading: false,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                ' Daftar Jadwal Periksa',
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
       body: SafeArea(
         child: ListView.builder(
           itemCount: listJanjiPeriksa.length,
@@ -85,24 +163,60 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
+                clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.green.shade300,
-                    width: 3,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
+                  // border: Border.all(
+                  //   color: Colors.green.shade300,
+                  //   width: 3,
+                  // ),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade400,
+                      blurRadius: 4,
+                      spreadRadius: 0,
+                      offset: const Offset(0.0, 3),
+                    )
+                  ],
                 ),
                 child: Column(
                   children: [
+                    Container(
+                      padding:
+                          const EdgeInsets.only(left: 15, top: 15, bottom: 15),
+                      decoration: const BoxDecoration(
+                          color: Color.fromARGB(255, 243, 243, 243)),
+                      child: Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                listJanjiPeriksa[index].tglPeriksa,
+                                style: cTextStyle3,
+                              ),
+                              Text('Antrian ke-${index + 1}'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                     Row(
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(10),
-                          child: SizedBox(
-                            width: 120,
-                            height: 120,
-                            child: Image.asset(
-                              'image/${listJanjiPeriksa[index].namaDokter.toLowerCase()}.jpg',
+                          child: Container(
+                            clipBehavior: Clip.antiAlias,
+                            decoration: const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15))),
+                            child: SizedBox(
+                              width: 120,
+                              height: 120,
+                              child: Image.asset(
+                                'image/${listJanjiPeriksa[index].namaDokter.toLowerCase()}.jpg',
+                              ),
                             ),
                           ),
                         ),
@@ -113,9 +227,13 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(listJanjiPeriksa[index].idPasien.toString()),
-                              Text(listJanjiPeriksa[index].tglPeriksa),
-                              Text(listJanjiPeriksa[index].namaDokter),
+                              Text(
+                                listJanjiPeriksa[index].namaDokter,
+                                style: cTextStyle2,
+                              ),
+                              Text('Klinik A'),
+                              Text('ID Periksa: A${(index + 1) + 502931}'),
+                              Text('Jadwal: 14.00 - 14.30'),
                               Text(listJanjiPeriksa[index].keluhan),
                             ],
                           ),
@@ -128,6 +246,10 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: cAccentColor,
+                              foregroundColor: Colors.white,
+                            ),
                             onPressed: () async {
                               Navigator.push(
                                 context,
@@ -154,6 +276,10 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                             width: 10,
                           ),
                           ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: cAccentColor,
+                              backgroundColor: Colors.white,
+                            ),
                             onPressed: () async {
                               Navigator.push(
                                 context,
@@ -166,12 +292,16 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                                 (_) => refresh(),
                               );
                             },
-                            child: const Text('Update'),
+                            child: const Icon(FontAwesomeIcons.penToSquare),
                           ),
                           const SizedBox(
                             width: 10,
                           ),
                           ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.redAccent,
+                              backgroundColor: Colors.white,
+                            ),
                             onPressed: () async {
                               await deleteJanjiPeriksa(
                                   listJanjiPeriksa[index].id!);
@@ -186,7 +316,7 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                                 ),
                               );
                             },
-                            child: const Text('Delete'),
+                            child: Icon(FontAwesomeIcons.trashCan),
                           ),
                         ],
                       ),

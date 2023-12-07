@@ -75,7 +75,7 @@ const cTextStyle3 = TextStyle(
   // fontFamily: 'Source Sans Pro',
   fontSize: 15,
   fontWeight: FontWeight.bold,
-  letterSpacing: 2.5,
+  letterSpacing: 1.6,
 );
 
 const cTextStyle4 = TextStyle(

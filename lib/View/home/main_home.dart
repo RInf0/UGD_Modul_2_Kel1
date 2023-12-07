@@ -78,7 +78,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                           fontSize: 20.sp, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      ' HOSPITAL',
+                      'HOSPITAL',
                       style: TextStyle(
                         fontSize: 20.sp,
                         color: cAccentColor,
