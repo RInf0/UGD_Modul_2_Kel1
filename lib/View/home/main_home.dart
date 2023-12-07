@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugd_modul_2_kel1/View/dokter/daftar_dokter.dart';
 import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/view/lokasi_rs/lokasi_rs.dart';
@@ -34,8 +35,9 @@ class _MainHomeViewState extends State<MainHomeView> {
       case 'Janji Periksa':
         destinationWidget = const CreateJanjiPeriksaView(janjiPeriksa: null);
         break;
-      // case 'Cari Dokter':
-      //   break;
+      case 'Cari Dokter':
+        destinationWidget = const DaftarDokterView();
+        break;
       case 'Pesan Kamar':
         destinationWidget = const CreatePesanKamarView();
         break;
@@ -128,9 +130,14 @@ class _MainHomeViewState extends State<MainHomeView> {
                           icon: 'lib/icons/schedule.png',
                           textButton: 'Janji Periksa'),
                     ),
-                    const GridButton(
-                        icon: 'lib/icons/doctor.png',
-                        textButton: 'Cari Dokter'),
+                    InkWell(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      onTap: () => navigateToPage('Cari Dokter'),
+                      child: const GridButton(
+                          icon: 'lib/icons/doctor.png',
+                          textButton: 'Cari Dokter'),
+                    ),
                     InkWell(
                       onTap: () => navigateToPage('Pesan Kamar'),
                       child: const GridButton(
