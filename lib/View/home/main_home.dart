@@ -21,10 +21,10 @@ class _MainHomeViewState extends State<MainHomeView> {
   final _controller = PageController(initialPage: 1000);
 
   final listPages = const [
-    MyCard(color: Colors.green),
-    MyCard(color: Colors.blue),
-    MyCard(color: Colors.purple),
-    MyCard(color: Colors.yellow),
+    MyCard(color: Colors.green, imagePath: 'image/card1.jpeg'),
+    MyCard(color: Colors.blue, imagePath: 'image/card2.jpg'),
+    MyCard(color: Colors.purple, imagePath: 'image/card3.jpg'),
+    MyCard(color: Colors.yellow, imagePath: 'image/card4.jpg'),
   ];
 
   //fungsi buat pindah page
