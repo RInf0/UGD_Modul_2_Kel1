@@ -84,6 +84,12 @@ const cTextStyle2Lite = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+const cTextStyle2LiteNormal = TextStyle(
+  // fontFamily: 'Source Sans Pro',
+  fontSize: 16,
+  fontWeight: FontWeight.normal,
+);
+
 const cTextStyleNormal = TextStyle(
   // fontFamily: 'Source Sans Pro',
   fontSize: 15,
