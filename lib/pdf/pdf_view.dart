@@ -11,6 +11,7 @@ import 'package:ugd_modul_2_kel1/entity/user.dart';
 // import 'package:ugd_modul_2_kel1/pdf/invoice/model/custom_row_invoice.dart';
 import 'package:ugd_modul_2_kel1/pdf/preview_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 import 'package:uuid/uuid.dart';
 
 String randomUuid() {
@@ -200,7 +201,7 @@ Future<void> createPdf(
     },
     footer: (pw.Context context) {
       return pw.Container(
-        color: PdfColor.fromHex('#2bed31'),
+        color: PdfColor.fromHex('#0D8F83'),
         child: footerPdf(formattedDate),
       );
     },
@@ -241,22 +242,43 @@ pw.Header headerPDF() {
       decoration: pw.BoxDecoration(
         shape: pw.BoxShape.rectangle,
         gradient: pw.LinearGradient(
-          colors: [PdfColor.fromHex('#2bed31'), PdfColor.fromHex('#9dfaa1')],
+          colors: [PdfColor.fromHex('#fefefe'), PdfColor.fromHex('#eaeaea')],
           begin: pw.Alignment.topLeft,
           end: pw.Alignment.bottomRight,
         ),
       ),
       child: pw.Center(
         child: pw.Padding(
-          padding: const pw.EdgeInsets.all(10),
-          child: pw.Text(
-            'Atma Hospital',
-            style: pw.TextStyle(
-              fontWeight: pw.FontWeight.bold,
-              fontSize: 20.sp,
-            ),
-          ),
-        ),
+            padding: const pw.EdgeInsets.all(20),
+            child: pw.Column(children: [
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.center,
+                children: [
+                  pw.Text(
+                    'ATMA',
+                    style: pw.TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: pw.FontWeight.normal,
+                    ),
+                  ),
+                  pw.Text(
+                    'HOSPITAL',
+                    style: pw.TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: pw.FontWeight.bold,
+                      color: PdfColor.fromHex('#0D8F83'),
+                    ),
+                  )
+                ],
+              ),
+              pw.Text(
+                'BETTER HEALTH, BETTER LIFE',
+                style: pw.TextStyle(
+                  fontSize: 13.sp,
+                  fontWeight: pw.FontWeight.normal,
+                ),
+              )
+            ])),
       ));
 }
 
@@ -578,4 +600,7 @@ pw.Container barcodeGaris(int id) {
 
 pw.Center footerPdf(String formattedDate) => pw.Center(
     child: pw.Text('Created At $formattedDate',
-        style: pw.TextStyle(fontSize: 14.sp, color: PdfColors.black)));
+        style: pw.TextStyle(
+          fontSize: 14.sp,
+          color: PdfColor.fromHex('#FFFFFF'),
+        )));

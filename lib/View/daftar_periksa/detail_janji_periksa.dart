@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -166,7 +167,7 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
                           width: 120,
                           // height: 120,
                           child: Image.asset(
-                            'image/${janjiPeriksa!.namaDokter.toLowerCase()}.jpg',
+                            'image/dokter/${Random().nextInt(3)}.jpg',
                           ),
                         ),
                       ),
