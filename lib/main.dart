@@ -111,7 +111,7 @@ class MyAppState extends State<MyApp> {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
             brightness: Brightness.dark,
-            seedColor: Colors.green.shade800,
+            seedColor: cAccentColor,
           ),
         ),
         themeMode: _themeMode,

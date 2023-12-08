@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugd_modul_2_kel1/View/dokter/daftar_dokter.dart';
+import 'package:ugd_modul_2_kel1/View/kontak/kontak.dart';
+import 'package:ugd_modul_2_kel1/View/tentang_kami/tentang_kami.dart';
 import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/view/lokasi_rs/lokasi_rs.dart';
@@ -43,6 +45,12 @@ class _MainHomeViewState extends State<MainHomeView> {
         break;
       case 'Lokasi':
         destinationWidget = const GeoLocationPage();
+        break;
+      case 'Kontak':
+        destinationWidget = const KontakView();
+        break;
+      case 'Tentang Kami':
+        destinationWidget = const TentangKamiView();
         break;
       default:
         destinationWidget = Container();
@@ -125,6 +133,8 @@ class _MainHomeViewState extends State<MainHomeView> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     InkWell(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
                       onTap: () => navigateToPage('Janji Periksa'),
                       child: const GridButton(
                           icon: 'lib/icons/schedule.png',
@@ -139,6 +149,8 @@ class _MainHomeViewState extends State<MainHomeView> {
                           textButton: 'Cari Dokter'),
                     ),
                     InkWell(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
                       onTap: () => navigateToPage('Pesan Kamar'),
                       child: const GridButton(
                           icon: 'lib/icons/bed.png', textButton: 'Pesan Kamar'),
@@ -154,15 +166,27 @@ class _MainHomeViewState extends State<MainHomeView> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     InkWell(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
                       onTap: () => navigateToPage('Lokasi'),
                       child: const GridButton(
                           icon: 'lib/icons/map.png', textButton: 'Lokasi RS'),
                     ),
-                    const GridButton(
-                        icon: 'lib/icons/contact.png', textButton: 'Kontak'),
-                    const GridButton(
-                        icon: 'lib/icons/group.png',
-                        textButton: 'Tentang Kami'),
+                    InkWell(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      onTap: () => navigateToPage('Kontak'),
+                      child: const GridButton(
+                          icon: 'lib/icons/contact.png', textButton: 'Kontak'),
+                    ),
+                    InkWell(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      onTap: () => navigateToPage('Tentang Kami'),
+                      child: const GridButton(
+                          icon: 'lib/icons/group.png',
+                          textButton: 'Tentang Kami'),
+                    ),
                   ],
                 ),
               ),
