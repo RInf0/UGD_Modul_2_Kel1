@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd_modul_2_kel1/View/dokter/input_dokter.dart';
+import 'package:ugd_modul_2_kel1/View/dokter/profil_dokter.dart';
 import 'package:ugd_modul_2_kel1/client/dokter_client.dart';
 import 'package:ugd_modul_2_kel1/client/user_client.dart';
 import 'package:ugd_modul_2_kel1/entity/dokter.dart';
@@ -319,25 +320,16 @@ class _DaftarDokterViewState extends State<DaftarDokterView> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15))),
                               onPressed: () async {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (_) =>
-                                //     DetailDokterView(
-                                //       DokterPassed: JanjiPeriksa(
-                                //         id: listJanjiPeriksa[index].id,
-                                //         namaDokter:
-                                //             listJanjiPeriksa[index].namaDokter,
-                                //         tglPeriksa:
-                                //             listJanjiPeriksa[index].tglPeriksa,
-                                //         keluhan: listJanjiPeriksa[index].keluhan,
-                                //       ),
-                                //       userPassed: userProfile,
-                                //     ),
-                                //   ),
-                                // ).then(
-                                //   (_) => refresh(),
-                                // );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProfilDokterView(
+                                      dokter: listDokter[index],
+                                    ),
+                                  ),
+                                ).then(
+                                  (_) => refresh(),
+                                );
                               },
                               child: const Text('Lihat Profil'),
                             ),
