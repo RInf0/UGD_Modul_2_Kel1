@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ugd_modul_2_kel1/View/dokter/input_dokter.dart';
 import 'package:ugd_modul_2_kel1/client/dokter_client.dart';
 import 'package:ugd_modul_2_kel1/client/user_client.dart';
 import 'package:ugd_modul_2_kel1/entity/dokter.dart';
@@ -10,7 +11,9 @@ import 'package:ugd_modul_2_kel1/entity/user.dart';
 import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 
 class DaftarDokterView extends StatefulWidget {
-  const DaftarDokterView({super.key});
+  const DaftarDokterView({super.key, this.isUserAdmin = false});
+
+  final bool isUserAdmin;
 
   @override
   State<DaftarDokterView> createState() => _DaftarDokterViewState();
@@ -40,8 +43,6 @@ class _DaftarDokterViewState extends State<DaftarDokterView> {
       userProfile = userData;
     });
 
-    int idPasien = storedId!;
-
     // final dataDokter = await SQLHelperDokter.getDokterById(idPasien);
     final dataDokter = await DokterClient.fetchAll();
 
@@ -62,6 +63,7 @@ class _DaftarDokterViewState extends State<DaftarDokterView> {
   @override
   void initState() {
     refresh();
+    isAdmin = widget.isUserAdmin;
     super.initState();
   }
 
@@ -74,16 +76,16 @@ class _DaftarDokterViewState extends State<DaftarDokterView> {
             backgroundColor: Colors.white,
           ),
           onPressed: () async {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (_) => CreateJanjiPeriksaView(
-            //       janjiPeriksa: listDokter[index],
-            //     ),
-            //   ),
-            // ).then(
-            //   (_) => refresh(),
-            // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => InputDokterView(
+                  dokter: dokter,
+                ),
+              ),
+            ).then(
+              (_) => refresh(),
+            );
           },
           child: const Icon(FontAwesomeIcons.penToSquare),
         ),
@@ -175,6 +177,19 @@ class _DaftarDokterViewState extends State<DaftarDokterView> {
     }
 
     return Scaffold(
+      floatingActionButton: !isAdmin
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const InputDokterView()),
+                ).then(
+                  (_) => refresh(),
+                );
+              },
+              child: const FaIcon(FontAwesomeIcons.plus),
+            ),
       appBar: AppBar(
         backgroundColor: cAccentColor,
         title: Padding(
@@ -301,39 +316,41 @@ class _DaftarDokterViewState extends State<DaftarDokterView> {
                           SizedBox(
                             width: 3.w,
                           ),
-                          SizedBox(
-                            height: 28.sp,
-                            width: 35.w,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: cAccentColor,
-                                  foregroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15))),
-                              onPressed: () async {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (_) =>
-                                //     DetailDokterView(
-                                //       DokterPassed: JanjiPeriksa(
-                                //         id: listJanjiPeriksa[index].id,
-                                //         namaDokter:
-                                //             listJanjiPeriksa[index].namaDokter,
-                                //         tglPeriksa:
-                                //             listJanjiPeriksa[index].tglPeriksa,
-                                //         keluhan: listJanjiPeriksa[index].keluhan,
-                                //       ),
-                                //       userPassed: userProfile,
-                                //     ),
-                                //   ),
-                                // ).then(
-                                //   (_) => refresh(),
-                                // );
-                              },
-                              child: const Text('Buat Janji'),
+                          if (!isAdmin)
+                            SizedBox(
+                              height: 28.sp,
+                              width: 35.w,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: cAccentColor,
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15))),
+                                onPressed: () async {
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (_) =>
+                                  //     DetailDokterView(
+                                  //       DokterPassed: JanjiPeriksa(
+                                  //         id: listJanjiPeriksa[index].id,
+                                  //         namaDokter:
+                                  //             listJanjiPeriksa[index].namaDokter,
+                                  //         tglPeriksa:
+                                  //             listJanjiPeriksa[index].tglPeriksa,
+                                  //         keluhan: listJanjiPeriksa[index].keluhan,
+                                  //       ),
+                                  //       userPassed: userProfile,
+                                  //     ),
+                                  //   ),
+                                  // ).then(
+                                  //   (_) => refresh(),
+                                  // );
+                                },
+                                child: const Text('Buat Janji'),
+                              ),
                             ),
-                          ),
                           if (isAdmin) buttonAdmin(listDokter[index])
                         ],
                       ),

@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugd_modul_2_kel1/View/dokter/daftar_dokter.dart';
 import 'package:ugd_modul_2_kel1/View/login/reset_password.dart';
 import 'package:ugd_modul_2_kel1/client/auth_client.dart';
 import 'package:ugd_modul_2_kel1/entity/user.dart';
@@ -264,12 +267,20 @@ class _LoginViewState extends State<LoginView> {
                               );
 
                               // ignore: use_build_context_synchronously
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const HomeView()));
+                              if (userFound!.username! == 'admin') {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const DaftarDokterView(
+                                              isUserAdmin: true,
+                                            )));
+                              } else {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const HomeView()));
+                              }
                             } else {
-                              // ignore: use_build_context_synchronously
                               showDialog(
                                 context: context,
                                 builder: (_) => AlertDialog(
