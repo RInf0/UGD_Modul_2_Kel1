@@ -2,13 +2,17 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugd_modul_2_kel1/View/home/home.dart';
+import 'package:ugd_modul_2_kel1/View/login/reset_password.dart';
 import 'package:ugd_modul_2_kel1/View/profile/update_profile.dart';
 import 'package:ugd_modul_2_kel1/client/user_client.dart';
 // import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd_modul_2_kel1/main.dart';
 import 'package:ugd_modul_2_kel1/utilities/constant.dart';
+import 'package:ugd_modul_2_kel1/view/login/login.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -137,7 +141,7 @@ class _ProfileState extends State<Profile> {
                 color: Colors.transparent,
                 child: InkWell(
                   child: ListTile(
-                    leading: const Icon(Icons.circle),
+                    leading: const FaIcon(FontAwesomeIcons.solidUser),
                     trailing: const Icon(Icons.chevron_right),
                     title: const Text('Edit Profile'),
                     onTap: () async {
@@ -167,11 +171,15 @@ class _ProfileState extends State<Profile> {
                 color: Colors.transparent,
                 child: InkWell(
                   child: ListTile(
-                    leading: const Icon(Icons.circle),
+                    leading: const FaIcon(FontAwesomeIcons.unlock),
                     trailing: const Icon(Icons.chevron_right),
                     title: const Text('Ganti Password'),
                     onTap: () {
-                      print('object');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ResetPasswordView(),
+                          ));
                     },
                   ),
                 ),
@@ -189,7 +197,7 @@ class _ProfileState extends State<Profile> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Text(
-                    'Pengaturan',
+                    'Keluar',
                     style: cTextStyle2,
                     textAlign: TextAlign.right,
                   ),
@@ -205,11 +213,20 @@ class _ProfileState extends State<Profile> {
                 color: Colors.transparent,
                 child: InkWell(
                   child: ListTile(
-                    leading: const Icon(Icons.circle),
+                    iconColor: const Color.fromARGB(255, 196, 5, 5),
+                    titleTextStyle: TextStyle(
+                        color: const Color.fromARGB(255, 196, 5, 5),
+                        fontSize: 16.sp),
+                    leading:
+                        const FaIcon(FontAwesomeIcons.arrowRightFromBracket),
                     trailing: const Icon(Icons.chevron_right),
-                    title: const Text('Ganti Tema'),
+                    title: const Text('Log Out'),
                     onTap: () {
-                      print('object');
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) => LoginView(),
+                          ),
+                          (route) => false);
                     },
                   ),
                 ),
@@ -219,12 +236,12 @@ class _ProfileState extends State<Profile> {
             cSizedBox2,
           ],
         ),
-        Container(
-          height: 10,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade300,
-          ),
-        ),
+        // Container(
+        //   height: 10,
+        //   decoration: BoxDecoration(
+        //     color: Colors.grey.shade300,
+        //   ),
+        // ),
         cSizedBox2,
         cSizedBox2,
         cSizedBox2,
@@ -239,7 +256,7 @@ class _ProfileState extends State<Profile> {
 
     return Container(
       constraints:
-          BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+          BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.72),
       width: double.infinity,
       clipBehavior: Clip.none,
       decoration: BoxDecoration(
