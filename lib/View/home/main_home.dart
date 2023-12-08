@@ -190,6 +190,9 @@ class _MainHomeViewState extends State<MainHomeView> {
                   ],
                 ),
               ),
+              SizedBox(
+                height: 4.h,
+              ),
             ]),
           ],
         ),

@@ -255,8 +255,7 @@ class _ProfileState extends State<Profile> {
     print(myAppKey.currentState!.getIsDarkTheme());
 
     return Container(
-      constraints:
-          BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.72),
+      constraints: BoxConstraints(minHeight: 85.h),
       width: double.infinity,
       clipBehavior: Clip.none,
       decoration: BoxDecoration(
@@ -284,15 +283,15 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    const bgCoverHeight = 120.0;
+    var bgCoverHeight = 20.h - 70;
     const borderRadius = 25.0;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: cAccentColor,
       body: SafeArea(
         child: ListView(
           children: [
-            const SizedBox(height: bgCoverHeight),
+            SizedBox(height: bgCoverHeight),
             buildProfileContent(borderRadiusTop: borderRadius),
           ],
         ),

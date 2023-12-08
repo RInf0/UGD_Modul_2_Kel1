@@ -198,7 +198,8 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                                 listJanjiPeriksa[index].tglPeriksa,
                                 style: cTextStyle3,
                               ),
-                              Text('Antrian ke-${index + 1}'),
+                              Text(
+                                  'Antrian ke-${listJanjiPeriksa[index].id! + 3}'),
                             ],
                           ),
                         ],
@@ -234,8 +235,9 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                                 listJanjiPeriksa[index].namaDokter,
                                 style: cTextStyle2,
                               ),
-                              Text('Klinik A'),
-                              Text('ID Periksa: A${(index + 1) + 502931}'),
+                              Text('Gedung AH3 - Umum'),
+                              Text(
+                                  'ID Periksa: A-${(listJanjiPeriksa[index].id!)}'),
                               Text('Jadwal: 14.00 - 14.30'),
                               Text(listJanjiPeriksa[index].keluhan),
                             ],

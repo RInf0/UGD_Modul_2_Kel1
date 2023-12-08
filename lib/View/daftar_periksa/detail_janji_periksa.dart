@@ -153,7 +153,7 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: SizedBox(
-                          width: 180,
+                          width: 200,
                           // height: 120,
                           child: Image.asset(
                             // 'image/dokter/${Random().nextInt(3)}.jpg',
@@ -165,54 +165,110 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
                   ),
 
                   SizedBox(
-                    height: 3.h,
+                    height: 2.h,
                   ),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Dokter Pemeriksa : ${janjiPeriksa!.namaDokter}',
-                            ),
-                            // Text(janjiPeriksa!.idPasien.toString()),
-                            Text(
-                              'Tanggal Periksa : ${janjiPeriksa!.tglPeriksa}',
-                            ),
-                            const Text('Keluhan : '),
-                            Text(janjiPeriksa!.keluhan)
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-
-                  GestureDetector(
-                    onTap: () {
-                      String textUntukDibaca = """ 
-                      Berikut adalah detail janji periksamu,
-                      Kamu periksa di tanggal ${janjiPeriksa!.tglPeriksa},
-                      Dokter pemeriksamu adalah ${janjiPeriksa!.namaDokter},
-                      Keluhanmu adalah ${janjiPeriksa!.keluhan},
-                      Jangan lupa untuk membawa dokumen yang diperlukan.
-                      Terima kasih, semoga lekas sembuh.
-                      """;
-                      textToSpeech(textUntukDibaca);
-                    },
-                    child: Container(
-                      // height: 50,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.green,
-                      ),
-                      child: Icon(
-                        Icons.volume_up,
-                        color: Colors.white,
-                        size: 40,
-                      ),
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 240, 240, 240),
+                      borderRadius: BorderRadius.circular(12),
                     ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  String textUntukDibaca = """ 
+                                    Berikut adalah detail janji periksamu,
+                                    Kamu periksa di tanggal ${janjiPeriksa!.tglPeriksa},
+                                    Dokter pemeriksamu adalah ${janjiPeriksa!.namaDokter},
+                                    Keluhanmu adalah ${janjiPeriksa!.keluhan},
+                                    Jangan lupa untuk membawa dokumen yang diperlukan.
+                                    Terima kasih, semoga lekas sembuh.
+                                    """;
+                                  textToSpeech(textUntukDibaca);
+                                },
+                                child: Container(
+                                  // height: 50,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.green,
+                                  ),
+                                  child: const Icon(
+                                    Icons.volume_up,
+                                    color: Colors.white,
+                                    size: 40,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              const Text(
+                                'Nama Dokter:',
+                                style: cTextStyleNormal,
+                              ),
+                              Text(
+                                janjiPeriksa!.namaDokter,
+                                style: cTextStyle2Lite,
+                              ),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              const Text(
+                                'Nama Pasien:',
+                                style: cTextStyleNormal,
+                              ),
+                              Text(
+                                widget.userPassed!.username!,
+                                style: cTextStyle2Lite,
+                              ),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              const Text(
+                                'Tanggal Periksa:',
+                                style: cTextStyleNormal,
+                              ),
+                              Text(
+                                janjiPeriksa!.tglPeriksa,
+                                style: cTextStyle2Lite,
+                              ),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              const Text(
+                                'No. Antrian:',
+                                style: cTextStyleNormal,
+                              ),
+                              Text(
+                                '${janjiPeriksa!.id! + 3}',
+                                style: cTextStyle2Lite,
+                              ),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              const Text(
+                                'Keluhan :',
+                                style: cTextStyleNormal,
+                              ),
+                              Text(
+                                janjiPeriksa!.keluhan,
+                                style: cTextStyle2Lite,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 2.h,
                   ),
 
                   // FOTO DOKUMEN YG DIUNGGAH
