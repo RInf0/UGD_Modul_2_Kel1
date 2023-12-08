@@ -217,7 +217,8 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                               width: 120,
                               height: 120,
                               child: Image.asset(
-                                'image/dokter/${Random().nextInt(3)}.jpg',
+                                // 'image/dokter/${Random().nextInt(3)}.jpg',
+                                'image/dokter/${listJanjiPeriksa[index].idDokter! % 5}.jpg',
                               ),
                             ),
                           ),

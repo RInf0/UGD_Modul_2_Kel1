@@ -156,7 +156,8 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
                           width: 180,
                           // height: 120,
                           child: Image.asset(
-                            'image/dokter/${Random().nextInt(3)}.jpg',
+                            // 'image/dokter/${Random().nextInt(3)}.jpg',
+                            'image/dokter/${janjiPeriksa!.idDokter! % 5}.jpg',
                           ),
                         ),
                       ),

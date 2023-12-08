@@ -138,7 +138,7 @@ class _DaftarDokterViewState extends State<DaftarDokterView> {
           title: Padding(
             padding: const EdgeInsets.symmetric(),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
                   'Daftar Dokter',
@@ -183,7 +183,7 @@ class _DaftarDokterViewState extends State<DaftarDokterView> {
           title: Padding(
             padding: const EdgeInsets.symmetric(),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
                   'Daftar Dokter',
@@ -224,7 +224,7 @@ class _DaftarDokterViewState extends State<DaftarDokterView> {
         title: Padding(
           padding: const EdgeInsets.symmetric(),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
                 'Daftar Dokter',
@@ -239,148 +239,154 @@ class _DaftarDokterViewState extends State<DaftarDokterView> {
         ),
       ),
       body: SafeArea(
-        child: ListView.builder(
-          itemCount: listDokter.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Container(
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  // border: Border.all(
-                  //   color: Colors.green.shade300,
-                  //   width: 3,
-                  // ),
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade400,
-                      blurRadius: 4,
-                      spreadRadius: 0,
-                      offset: const Offset(0.0, 3),
-                    )
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Container(
-                            clipBehavior: Clip.antiAlias,
-                            decoration: const BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                            child: SizedBox(
-                              width: 120,
-                              height: 120,
-                              child: Image.asset(
-                                // 'image/${listDokter[index].nama!.toLowerCase()}.jpg',
-                                'image/dokter/${Random().nextInt(3)}.jpg',
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                listDokter[index].nama!,
-                                style: cTextStyle2,
-                              ),
-                              Text(
-                                listDokter[index].job!,
-                              ),
-                              Text(
-                                listDokter[index].noTelp!,
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 18.0, top: 5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 15),
+          child: ListView.builder(
+            itemCount: listDokter.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Padding(
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, bottom: 15.0),
+                child: Container(
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    // border: Border.all(
+                    //   color: Colors.green.shade300,
+                    //   width: 3,
+                    // ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade400,
+                        blurRadius: 4,
+                        spreadRadius: 0,
+                        offset: const Offset(0.0, 3),
+                      )
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
                         children: [
-                          SizedBox(
-                            height: 28.sp,
-                            width: 35.w,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  foregroundColor: cAccentColor,
-                                  backgroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15))),
-                              onPressed: () async {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ProfilDokterView(
-                                      dokter: listDokter[index],
-                                    ),
-                                  ),
-                                ).then(
-                                  (_) => refresh(),
-                                );
-                              },
-                              child: const Text('Lihat Profil'),
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Container(
+                              clipBehavior: Clip.antiAlias,
+                              decoration: const BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
+                              child: SizedBox(
+                                width: 120,
+                                height: 120,
+                                child: Image.asset(
+                                  // 'image/${listDokter[index].nama!.toLowerCase()}.jpg',
+                                  // 'image/dokter/${Random().nextInt(3)}.jpg',
+                                  'image/dokter/${listDokter[index].id! % 5}.jpg',
+                                ),
+                              ),
                             ),
                           ),
-                          SizedBox(
-                            width: 3.w,
+                          const SizedBox(
+                            width: 10,
                           ),
-                          if (!isAdmin)
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  listDokter[index].nama!,
+                                  style: cTextStyle2,
+                                ),
+                                Text(
+                                  listDokter[index].job!,
+                                ),
+                                Text(
+                                  listDokter[index].noTelp!,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 18.0, top: 5.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
                             SizedBox(
                               height: 28.sp,
                               width: 35.w,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    backgroundColor: cAccentColor,
-                                    foregroundColor: Colors.white,
+                                    foregroundColor: cAccentColor,
+                                    backgroundColor: Colors.white,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(15))),
                                 onPressed: () async {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (_) =>
-                                  //     DetailDokterView(
-                                  //       DokterPassed: JanjiPeriksa(
-                                  //         id: listJanjiPeriksa[index].id,
-                                  //         namaDokter:
-                                  //             listJanjiPeriksa[index].namaDokter,
-                                  //         tglPeriksa:
-                                  //             listJanjiPeriksa[index].tglPeriksa,
-                                  //         keluhan: listJanjiPeriksa[index].keluhan,
-                                  //       ),
-                                  //       userPassed: userProfile,
-                                  //     ),
-                                  //   ),
-                                  // ).then(
-                                  //   (_) => refresh(),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProfilDokterView(
+                                        dokter: listDokter[index],
+                                      ),
+                                    ),
+                                  ).then(
+                                    (_) => refresh(),
+                                  );
                                 },
-                                child: const Text('Buat Janji'),
+                                child: const Text('Lihat Profil'),
                               ),
                             ),
-                          if (isAdmin) buttonAdmin(listDokter[index])
-                        ],
-                      ),
-                    )
-                  ],
+                            SizedBox(
+                              width: 3.w,
+                            ),
+                            if (!isAdmin)
+                              SizedBox(
+                                height: 28.sp,
+                                width: 35.w,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: cAccentColor,
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15))),
+                                  onPressed: () async {
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (_) =>
+                                    //     DetailDokterView(
+                                    //       DokterPassed: JanjiPeriksa(
+                                    //         id: listJanjiPeriksa[index].id,
+                                    //         namaDokter:
+                                    //             listJanjiPeriksa[index].namaDokter,
+                                    //         tglPeriksa:
+                                    //             listJanjiPeriksa[index].tglPeriksa,
+                                    //         keluhan: listJanjiPeriksa[index].keluhan,
+                                    //       ),
+                                    //       userPassed: userProfile,
+                                    //     ),
+                                    //   ),
+                                    // ).then(
+                                    //   (_) => refresh(),
+                                    // );
+                                  },
+                                  child: const Text('Buat Janji'),
+                                ),
+                              ),
+                            if (isAdmin) buttonAdmin(listDokter[index])
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

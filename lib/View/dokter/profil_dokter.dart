@@ -206,7 +206,8 @@ class _ProfilDokterViewState extends State<ProfilDokterView> {
                       CircleAvatar(
                         radius: 75,
                         backgroundImage: AssetImage(
-                          'image/dokter/${Random().nextInt(3)}.jpg',
+                          // 'image/dokter/${Random().nextInt(3)}.jpg',
+                          'image/dokter/${dokter.id! % 5}.jpg',
                         ),
                       ),
                     ],

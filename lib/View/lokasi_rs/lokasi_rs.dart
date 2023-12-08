@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 
 class GeoLocationPage extends StatefulWidget {
   const GeoLocationPage({Key? key}) : super(key: key);
@@ -16,8 +18,10 @@ class _GeoLocationState extends State<GeoLocationPage> {
   late LocationPermission permission;
 
   final List<LatLng> _hospitalLocations = [
-    const LatLng(-7.776669081142168, 110.37664490640475), // Rumah Sakit Panti Rapih
-    const LatLng(-7.768017006162372, 110.3730437530755), // Rumah Sakit Dr. Sardjito
+    const LatLng(
+        -7.776669081142168, 110.37664490640475), // Rumah Sakit Panti Rapih
+    const LatLng(
+        -7.768017006162372, 110.3730437530755), // Rumah Sakit Dr. Sardjito
     const LatLng(-7.77079110728325, 110.41583261074847), // Rumah Sakit Sadewa
   ];
 
@@ -43,7 +47,8 @@ class _GeoLocationState extends State<GeoLocationPage> {
 
   Future<void> _getAddressLocation() async {
     await placemarkFromCoordinates(
-      _currentLoc!.latitude, _currentLoc!.longitude).then((List<Placemark> placemarks) {
+            _currentLoc!.latitude, _currentLoc!.longitude)
+        .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
         _currentAddress =
@@ -85,7 +90,7 @@ class _GeoLocationState extends State<GeoLocationPage> {
           'Jarak Rumah Sakit',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: cAccentColor,
       ),
       body: Center(
         child: Column(
@@ -131,28 +136,32 @@ class _GeoLocationState extends State<GeoLocationPage> {
             const SizedBox(
               height: 30,
             ),
-            ElevatedButton(
-              onPressed: () async {
-                _currentLoc = await _getCurrentLocation();
-                if (_currentLoc != null) {
-                  await _getAddressLocation();
-                  print(_currentLoc);
-                  print(_currentAddress);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+            SizedBox(
+              height: 30.sp,
+              child: ElevatedButton(
+                onPressed: () async {
+                  _currentLoc = await _getCurrentLocation();
+                  if (_currentLoc != null) {
+                    await _getAddressLocation();
+                    print(_currentLoc);
+                    print(_currentAddress);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: cAccentColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
                 ),
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Icon(Icons.location_pin),
-                  SizedBox(width: 8),
-                  Text('Jarak Saya ke Rumah Sakit'),
-                ],
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Icon(Icons.location_pin),
+                    SizedBox(width: 8),
+                    Text('Jarak Saya ke Rumah Sakit'),
+                  ],
+                ),
               ),
             )
           ],
