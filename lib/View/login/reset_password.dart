@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugd_modul_2_kel1/client/auth_client.dart';
 import 'package:ugd_modul_2_kel1/entity/user.dart';
+import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 //* Sesuai dengan nama project, awalnya akan error pada home, register, dan form component karena belum ada dibuat
 import 'package:ugd_modul_2_kel1/view/home/home.dart';
 import 'package:ugd_modul_2_kel1/view/register/register.dart';
@@ -40,242 +42,183 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
     //* widget mengacu pada instance/objek ResetPasswordView
     // Map? dataForm = widget.data;
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: cAccentColor,
+      ),
       body: SafeArea(
         child: Form(
           key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Title
-              const Text(
-                'Forgot Password',
-                style: TextStyle(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 8.h,
+                ),
+                // Title
+                const Text(
+                  'Ganti Password',
+                  style: TextStyle(
                     fontSize: 35,
-                    color: Colors.green,
-                    fontWeight: FontWeight.w500),
-              ),
-
-              //* Username
-              Padding(
-                padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
-                child: TextFormField(
-                  autofocus: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Username tidak boleh kosong";
-                    }
-                    return null;
-                  },
-                  controller: usernameController,
-                  decoration: const InputDecoration(
-                    labelText: "Username",
-                    prefixIcon: Icon(Icons.person),
+                    color: cAccentColor,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-              ),
 
-              //* Password
-              Padding(
-                padding: const EdgeInsets.only(left: 20, top: 10, right: 20),
-                child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Password tidak boleh kosong";
-                    }
-                    return null;
-                  },
-                  obscureText: passwordInvisible,
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                    labelText: "Password",
-                    prefixIcon: const Icon(Icons.lock),
-                    suffixIcon: IconButton(
-                      icon: Icon(passwordInvisible
-                          ? Icons.visibility_off
-                          : Icons.visibility),
-                      onPressed: () {
-                        setState(
-                          () {
-                            passwordInvisible = !passwordInvisible;
-                          },
-                        );
-                      },
+                SizedBox(
+                  height: 3.h,
+                ),
+
+                //* Username
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
+                  child: TextFormField(
+                    autofocus: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Username tidak boleh kosong";
+                      }
+                      return null;
+                    },
+                    controller: usernameController,
+                    decoration: const InputDecoration(
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      filled: true,
+                      fillColor: Color(0xffEAEAEA),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                      labelText: "Username",
+                      prefixIcon: Icon(Icons.person),
                     ),
                   ),
                 ),
-              ),
 
-              // untuk memberi space antara input dengan button login
-              const SizedBox(
-                height: 30.0,
-              ),
-
-              //* Baris yang berisi tombol login
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                      //* Fungsi yang dijalankan saat tombol ditekan
-                      onPressed: () async {
-                        //* Cek statenya sudah valid atau belum valid
-                        if (_formKey.currentState!.validate()) {
-                          //* Jika sudah valid, cek username dan password yang diinputkan pada form telah sesuai dengan data yang dibawah
-                          //* dari halaman register atau belum
-
-                          // API
-
-                          // refresh();
-
-                          try {
-                            await AuthClient.resetPassword(User(
-                              username: usernameController.text,
-                              password: passwordController.text,
-                            ));
-                            // ignore: use_build_context_synchronously
-                            showSnackBar(context, 'Password berhasil direset',
-                                Colors.green);
-                            // ignore: use_build_context_synchronously
-                            Navigator.pop(context);
-                          } catch (e) {
-                            // ignore: use_build_context_synchronously
-                            showSnackBar(context, e.toString(), Colors.red);
-                            // ignore: use_build_context_synchronously
-                            // Navigator.pop(context);
-                          }
-
-                          // User data = await AuthClient.login(User(
-                          //   username: usernameController.text,
-                          //   password: passwordController.text,
-                          // ));
-
-                          // if (userFound is User) {
-                          // } else {
-                          //   userFound = null;
-                          // }
-
-                          // print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                          // // print(userFound!.username);
-
-                          // if (userFound!.id != null) {
-                          //   final prefs = await SharedPreferences.getInstance();
-                          //   prefs.setString(
-                          //     'username',
-                          //     userFound!.username!,
-                          //   );
-                          //   prefs.setInt(
-                          //     'id',
-                          //     userFound!.id!,
-                          //   );
-
-                          //   // ignore: use_build_context_synchronously
-                          //   Navigator.pop(context);
-                          // } else {
-                          //   // ignore: use_build_context_synchronously
-                          //   showDialog(
-                          //     context: context,
-                          //     builder: (_) => AlertDialog(
-                          //       title:
-                          //           const Text('Username atau password salah!'),
-                          //       //* isi alert dialog
-                          //       actions: <Widget>[
-                          //         TextButton(
-                          //           //* pushRegister(context) fungsi pada baris 118-124 untuk meminimalkan nested code
-                          //           onPressed: () => pushRegister(context),
-                          //           child: const Text('Register'),
-                          //         ),
-                          //         TextButton(
-                          //           onPressed: () => Navigator.pop(context),
-                          //           child: const Text('Ok'),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   );
-                          // }
-
-                          // CODE LAMA PAKAI SQFLITE
-
-                          // final data = await SQLHelper.getUser();
-                          // listUser = data;
-
-                          // Map<String, dynamic>? userLoggedIn;
-
-                          // for (Map<String, dynamic> user in listUser) {
-                          //   if (user['username'] == usernameController.text &&
-                          //       user['password'] == passwordController.text) {
-                          //     userLoggedIn = user;
-                          //   }
-                          // }
-                          // if (userLoggedIn != null) {
-                          //   final prefs = await SharedPreferences.getInstance();
-                          //   prefs.setString(
-                          //       'username', userLoggedIn['username']);
-                          //   // ignore: use_build_context_synchronously
-                          //   Navigator.push(
-                          //       context,
-                          //       MaterialPageRoute(
-                          //           builder: (_) => const HomeView()));
-                          // } else {
-                          //   showDialog(
-                          //     context: context,
-                          //     builder: (_) => AlertDialog(
-                          //       title:
-                          //           const Text('Username atau password salah!'),
-                          //       //* isi alert dialog
-                          //       actions: <Widget>[
-                          //         TextButton(
-                          //           //* pushRegister(context) fungsi pada baris 118-124 untuk meminimalkan nested code
-                          //           onPressed: () => pushRegister(context),
-                          //           child: const Text('Register'),
-                          //         ),
-                          //         TextButton(
-                          //           onPressed: () => Navigator.pop(context),
-                          //           child: const Text('Ok'),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   );
-                          // }
-                        }
-                      },
-                      child: const Text('Reset Password')),
-                ),
-              ),
-
-              //* tombol ke halaman login
-              TextButton(
-                style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                ),
-                onPressed: () {
-                  Map<String, dynamic> formData = {};
-                  formData['username'] = usernameController.text;
-                  formData['password'] = usernameController.text;
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Batal',
-                        style: TextStyle(color: Colors.grey.shade600),
+                //* Password
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, top: 15, right: 20),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Password tidak boleh kosong";
+                      }
+                      return null;
+                    },
+                    obscureText: passwordInvisible,
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      filled: true,
+                      fillColor: const Color(0xffEAEAEA),
+                      border: const OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                      labelText: "Password Baru",
+                      prefixIcon: const Icon(Icons.lock),
+                      suffixIcon: IconButton(
+                        icon: Icon(passwordInvisible
+                            ? Icons.visibility_off
+                            : Icons.visibility),
+                        onPressed: () {
+                          setState(
+                            () {
+                              passwordInvisible = !passwordInvisible;
+                            },
+                          );
+                        },
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
 
-              const SizedBox(
-                height: 20,
-              ),
+                // untuk memberi space antara input dengan button login
+                SizedBox(
+                  height: 7.h,
+                ),
 
-              const SizedBox(
-                height: 20,
-              ),
-            ],
+                //* Baris yang berisi tombol reset
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: SizedBox(
+                    height: 30.sp,
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(255, 18, 18, 18),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                        ),
+                        //* Fungsi yang dijalankan saat tombol ditekan
+                        onPressed: () async {
+                          //* Cek statenya sudah valid atau belum valid
+                          if (_formKey.currentState!.validate()) {
+                            //* Jika sudah valid, cek username dan password yang diinputkan pada form telah sesuai dengan data yang dibawah
+                            //* dari halaman register atau belum
+
+                            // API
+
+                            // refresh();
+
+                            try {
+                              await AuthClient.resetPassword(User(
+                                username: usernameController.text,
+                                password: passwordController.text,
+                              ));
+                              // ignore: use_build_context_synchronously
+                              showSnackBar(context, 'Password berhasil direset',
+                                  Colors.green);
+                              // ignore: use_build_context_synchronously
+                              Navigator.pop(context);
+                            } catch (e) {
+                              // ignore: use_build_context_synchronously
+                              showSnackBar(context, e.toString(), Colors.red);
+                              // ignore: use_build_context_synchronously
+                              // Navigator.pop(context);
+                            }
+                          }
+                        },
+                        child: const Text('Ganti Password')),
+                  ),
+                ),
+
+                //* tombol ke halaman login
+                TextButton(
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  ),
+                  onPressed: () {
+                    Map<String, dynamic> formData = {};
+                    formData['username'] = usernameController.text;
+                    formData['password'] = usernameController.text;
+                    Navigator.pop(context);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Batal',
+                          style: TextStyle(color: Colors.grey.shade600),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
           ),
         ),
       ),

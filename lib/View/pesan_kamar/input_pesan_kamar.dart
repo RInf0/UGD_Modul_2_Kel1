@@ -359,7 +359,9 @@ class _CreatePesanKamarViewState extends State<CreatePesanKamarView> {
                                 Navigator.pop(context);
                               }
                             },
-                            child: const Text('Tambah'),
+                            child: widget.pesanKamar == null
+                                ? const Text('Tambah')
+                                : const Text('Edit'),
                           ),
                         ),
                       ),

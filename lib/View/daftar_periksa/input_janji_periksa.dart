@@ -436,7 +436,9 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                                       Navigator.pop(context);
                                     }
                                   },
-                                  child: const Text('Tambah'),
+                                  child: widget.janjiPeriksa == null
+                                      ? const Text('Tambah')
+                                      : const Text('Edit'),
                                 ),
                               ),
                             ),
