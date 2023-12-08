@@ -65,10 +65,29 @@ const cTextStyle1 = TextStyle(
   letterSpacing: 1.5,
 );
 
+const cTextStyle12 = TextStyle(
+  // fontFamily: 'Anton',
+  fontSize: 25,
+  fontWeight: FontWeight.bold,
+  letterSpacing: 1.5,
+);
+
 const cTextStyle2 = TextStyle(
   // fontFamily: 'Source Sans Pro',
   fontSize: 20,
   fontWeight: FontWeight.bold,
+);
+
+const cTextStyle2Lite = TextStyle(
+  // fontFamily: 'Source Sans Pro',
+  fontSize: 18,
+  fontWeight: FontWeight.bold,
+);
+
+const cTextStyleNormal = TextStyle(
+  // fontFamily: 'Source Sans Pro',
+  fontSize: 15,
+  fontWeight: FontWeight.normal,
 );
 
 const cTextStyle3 = TextStyle(
@@ -91,4 +110,11 @@ const cTextStyle5 = TextStyle(
   color: Colors.white,
   fontWeight: FontWeight.bold,
   letterSpacing: 2.5,
+);
+
+const cTextStyle6 = TextStyle(
+  // fontFamily: 'Source Sans Pro',
+  fontSize: 16,
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
 );
