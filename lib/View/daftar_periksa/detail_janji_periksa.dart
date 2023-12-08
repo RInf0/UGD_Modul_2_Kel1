@@ -4,11 +4,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:ugd_modul_2_kel1/client/janji_periksa_client.dart';
-import 'package:ugd_modul_2_kel1/database/sql_helper_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/entity/janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/entity/user.dart';
 import 'package:ugd_modul_2_kel1/pdf/pdf_view.dart';
-import 'package:ugd_modul_2_kel1/view/daftar_periksa/input_janji_periksa.dart';
+import 'package:ugd_modul_2_kel1/utilities/constant.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class DetailJanjiPeriksaView extends StatefulWidget {
@@ -37,18 +36,11 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
   }
 
   Future<void> deleteJanjiPeriksa(int id) async {
-    // await SQLHelperJanjiPeriksa.deleteJanjiPeriksa(id);
     await JanjiPeriksaClient.destroy(id);
     refresh();
   }
 
   void refresh() async {
-    // update data janji periksa menjadi yang terbaru
-    // final list = await SQLHelperJanjiPeriksa.getJanjiPeriksa();
-    // final dataJP = list
-    //     .where((janjiPeriksa) => janjiPeriksa['id'] == this.janjiPeriksa!.id)
-    //     .toList();
-
     final dataJP = await JanjiPeriksaClient.find(widget.janjiPeriksaPassed!.id);
 
     // await Future.delayed(const Duration(milliseconds: 500));
@@ -67,8 +59,9 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
 
   Container buttonCreatePDF(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-      width: 80.w,
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+      width: 100.w,
+      height: 6.h,
       child: ElevatedButton(
         onPressed: () {
           if (janjiPeriksa == null) {
@@ -97,14 +90,17 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
           }
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.greenAccent,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          backgroundColor: cAccentColor,
+          foregroundColor: Colors.white,
           textStyle: TextStyle(
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.normal,
             fontSize: 18.sp,
             // height = 15.sp;
           ),
         ),
-        child: const Text('Create PDF'),
+        child: const Text('Cetak PDF'),
       ),
     );
   }
@@ -123,15 +119,75 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detail Janji Periksa'),
+        backgroundColor: cAccentColor,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                'Detail Periksa',
+                style: TextStyle(
+                  fontSize: 19.sp,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              )
+            ],
+          ),
+        ),
       ),
       body: SafeArea(
         child: ListView(
           children: [
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: SizedBox(
+                          width: 180,
+                          // height: 120,
+                          child: Image.asset(
+                            'image/dokter/${Random().nextInt(3)}.jpg',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(
+                    height: 3.h,
+                  ),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Dokter Pemeriksa : ${janjiPeriksa!.namaDokter}',
+                            ),
+                            // Text(janjiPeriksa!.idPasien.toString()),
+                            Text(
+                              'Tanggal Periksa : ${janjiPeriksa!.tglPeriksa}',
+                            ),
+                            const Text('Keluhan : '),
+                            Text(janjiPeriksa!.keluhan)
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+
                   GestureDetector(
                     onTap: () {
                       String textUntukDibaca = """ 
@@ -145,47 +201,17 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
                       textToSpeech(textUntukDibaca);
                     },
                     child: Container(
-                      width: 50,
                       // height: 50,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.green,
                       ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.volume_up,
-                          color: Colors.white,
-                        ),
+                      child: Icon(
+                        Icons.volume_up,
+                        color: Colors.white,
+                        size: 40,
                       ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: SizedBox(
-                          width: 120,
-                          // height: 120,
-                          child: Image.asset(
-                            'image/dokter/${Random().nextInt(3)}.jpg',
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(janjiPeriksa!.idPasien.toString()),
-                            Text(janjiPeriksa!.tglPeriksa),
-                            Text(janjiPeriksa!.namaDokter),
-                            Text(janjiPeriksa!.keluhan),
-                          ],
-                        ),
-                      )
-                    ],
                   ),
 
                   // FOTO DOKUMEN YG DIUNGGAH
@@ -197,69 +223,10 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text('Foto Dokumen:'),
-                          Image.memory(
-                              // Uri.parse(janjiPeriksa!.dokumen!)
-                              //       .data!
-                              //       .contentAsBytes()
-
-                              base64.decode(janjiPeriksa!.dokumen!)
-
-                              // base64Decode(
-                              //   janjiPeriksa!.dokumen!
-                              //       .replaceAll(RegExp(r'\s'), ''),
-                              // ),
-
-                              // const Base64Decoder().convert(
-                              //   janjiPeriksa!.dokumen!
-                              //       .replaceAll(RegExp(r'\s'), ''),
-                              // ),
-                              ),
+                          Image.memory(base64.decode(janjiPeriksa!.dokumen!)),
                         ],
                       ),
                     ),
-
-                  // BUTTONS
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () async {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => CreateJanjiPeriksaView(
-                                  janjiPeriksa: JanjiPeriksa(
-                                    id: janjiPeriksa!.id,
-                                    idPasien: janjiPeriksa!.idPasien,
-                                    namaDokter: janjiPeriksa!.namaDokter,
-                                    tglPeriksa: janjiPeriksa!.tglPeriksa,
-                                    keluhan: janjiPeriksa!.keluhan,
-                                    // dokumen: janjiPeriksa!.dokumen,
-                                  ),
-                                ),
-                              ),
-                            ).then(
-                              (_) => refresh(),
-                            );
-                          },
-                          child: const Text('Update'),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            await deleteJanjiPeriksa(janjiPeriksa!.id!);
-                            if (!context.mounted) return;
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Delete'),
-                        ),
-                      ],
-                    ),
-                  ),
 
                   buttonCreatePDF(context)
                 ],
