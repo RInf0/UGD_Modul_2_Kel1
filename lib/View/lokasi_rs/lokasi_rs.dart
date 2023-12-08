@@ -17,12 +17,12 @@ class _GeoLocationState extends State<GeoLocationPage> {
 
   final List<LatLng> _hospitalLocations = [
     const LatLng(-7.776669081142168, 110.37664490640475), // Rumah Sakit Panti Rapih
-    const LatLng(-7.768017006162372, 110.3730437530755), // Rumah Sakit Dr.Sardjito
+    const LatLng(-7.768017006162372, 110.3730437530755), // Rumah Sakit Dr. Sardjito
     const LatLng(-7.77079110728325, 110.41583261074847), // Rumah Sakit Sadewa
   ];
 
   String _currentAddress = "";
-  final Map<String, double> _distanceToHospitals = {};
+  Map<String, double> _distanceToHospitals = {};
   String _nearestHospital = "";
 
   Future<Position?> _getCurrentLocation() async {
@@ -43,8 +43,7 @@ class _GeoLocationState extends State<GeoLocationPage> {
 
   Future<void> _getAddressLocation() async {
     await placemarkFromCoordinates(
-            _currentLoc!.latitude, _currentLoc!.longitude)
-        .then((List<Placemark> placemarks) {
+      _currentLoc!.latitude, _currentLoc!.longitude).then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
         _currentAddress =
@@ -53,24 +52,26 @@ class _GeoLocationState extends State<GeoLocationPage> {
 
       _distanceToHospitals.clear();
       double minDistance = double.infinity;
-      for (LatLng hospitalLocation in _hospitalLocations) {
+      for (int i = 0; i < _hospitalLocations.length; i++) {
         double distanceInMeters = Geolocator.distanceBetween(
-            _currentLoc!.latitude,
-            _currentLoc!.longitude,
-            hospitalLocation.latitude,
-            hospitalLocation.longitude);
+          _currentLoc!.latitude,
+          _currentLoc!.longitude,
+          _hospitalLocations[i].latitude,
+          _hospitalLocations[i].longitude,
+        );
 
-        _distanceToHospitals[
-                "Rumah Sakit ${_hospitalLocations.indexOf(hospitalLocation) + 1}"] =
-            distanceInMeters /
-                1000; // Simpan jarak ke rumah sakit dalam kilometer
+        _distanceToHospitals["Rumah Sakit ${i + 1}"] = distanceInMeters / 1000;
 
         if (distanceInMeters < minDistance) {
           minDistance = distanceInMeters;
-          _nearestHospital =
-              'Rumah Sakit ${_hospitalLocations.indexOf(hospitalLocation) + 1}';
+          _nearestHospital = 'Rumah Sakit ${i + 1}';
         }
       }
+
+      double distanceInKilometers = minDistance / 1000;
+      setState(() {
+        _distanceToHospitals["Terdekat"] = distanceInKilometers;
+      });
     }).catchError((e) {
       print("Error : $e");
     });
