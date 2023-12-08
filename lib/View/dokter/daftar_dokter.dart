@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -117,6 +119,19 @@ class _DaftarDokterViewState extends State<DaftarDokterView> {
   Widget build(BuildContext context) {
     if (isLoadingData) {
       return Scaffold(
+        floatingActionButton: !isAdmin
+            ? null
+            : FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const InputDokterView()),
+                  ).then(
+                    (_) => refresh(),
+                  );
+                },
+                child: const FaIcon(FontAwesomeIcons.plus),
+              ),
         appBar: AppBar(
           backgroundColor: cAccentColor,
           title: Padding(
@@ -149,6 +164,19 @@ class _DaftarDokterViewState extends State<DaftarDokterView> {
 
     if (listDokter.isEmpty) {
       return Scaffold(
+        floatingActionButton: !isAdmin
+            ? null
+            : FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const InputDokterView()),
+                  ).then(
+                    (_) => refresh(),
+                  );
+                },
+                child: const FaIcon(FontAwesomeIcons.plus),
+              ),
         appBar: AppBar(
           backgroundColor: cAccentColor,
           title: Padding(
@@ -248,7 +276,8 @@ class _DaftarDokterViewState extends State<DaftarDokterView> {
                               width: 120,
                               height: 120,
                               child: Image.asset(
-                                'image/${listDokter[index].nama!.toLowerCase()}.jpg',
+                                // 'image/${listDokter[index].nama!.toLowerCase()}.jpg',
+                                'image/dokter/${Random().nextInt(3)}.jpg',
                               ),
                             ),
                           ),

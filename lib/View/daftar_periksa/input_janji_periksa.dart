@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ugd_modul_2_kel1/client/dokter_client.dart';
 // import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 // import 'package:ugd_modul_2_kel1/database/sql_helper_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/document_scanner/edge_detection_scanner.dart';
@@ -55,6 +56,8 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
     // setState(() {
     //   userProfile = userData;
     // });
+
+    final dataDokter = await DokterClient.fetchAll();
 
     if (widget.janjiPeriksa != null) {
       setState(() {

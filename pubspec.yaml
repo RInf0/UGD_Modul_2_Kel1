@@ -47,5 +47,6 @@ flutter:
   assets:
     - image/
     - image/icon/
+    - image/dokter/
     - image/logo/
     - lib/icons/
