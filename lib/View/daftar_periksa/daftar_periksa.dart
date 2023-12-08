@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -215,7 +217,7 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                               width: 120,
                               height: 120,
                               child: Image.asset(
-                                'image/${listJanjiPeriksa[index].namaDokter.toLowerCase()}.jpg',
+                                'image/dokter/${Random().nextInt(3)}.jpg',
                               ),
                             ),
                           ),

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd_modul_2_kel1/client/dokter_client.dart';
+import 'package:ugd_modul_2_kel1/entity/dokter.dart';
 // import 'package:ugd_modul_2_kel1/database/sql_helper.dart';
 // import 'package:ugd_modul_2_kel1/database/sql_helper_janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/document_scanner/edge_detection_scanner.dart';
@@ -33,7 +34,8 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
   bool hasImageDokumen = false;
 
   // data dropdown
-  final List<String> listDokter = ['dr. Natasha', 'dr. Willy', 'dr. John Doe'];
+  // final List<String> listDokter = ['dr. Natasha', 'dr. Willy', 'dr. John Doe'];
+  List<Dokter> listDokter = [];
   String? dropdownValue;
 
   List<Map<String, dynamic>> userProfile = [];
@@ -41,6 +43,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
   int? userId;
 
   String appBarTitle = 'Tambah Janji Periksa';
+  int? selectedDokterId;
 
   void refresh() async {
     // final data = await SQLHelper.getUser();
@@ -58,6 +61,10 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
     // });
 
     final dataDokter = await DokterClient.fetchAll();
+
+    setState(() {
+      listDokter = dataDokter;
+    });
 
     if (widget.janjiPeriksa != null) {
       setState(() {
@@ -89,6 +96,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
 
     await JanjiPeriksaClient.create(JanjiPeriksa(
       idPasien: storedId,
+      idDokter: selectedDokterId,
       namaDokter: dokterController.text,
       tglPeriksa: tglPeriksaController.text,
       keluhan: keluhanController.text,
@@ -109,6 +117,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
     final dataJanjiPeriksa = JanjiPeriksa(
       id: id,
       idPasien: storedId,
+      idDokter: selectedDokterId,
       namaDokter: dokterController.text,
       tglPeriksa: tglPeriksaController.text,
       keluhan: keluhanController.text,
@@ -155,22 +164,22 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                             color: cAccentColor,
                           ),
                         ),
-                        DropdownMenu<String>(
+                        DropdownMenu<int>(
                           key: const Key('dropdown_dokter'),
                           controller: dokterController,
                           initialSelection: widget.janjiPeriksa != null
-                              ? widget.janjiPeriksa!.namaDokter
-                              : listDokter.first,
-                          onSelected: (String? value) {
+                              ? widget.janjiPeriksa!.idDokter ?? 0
+                              : null,
+                          onSelected: (int? value) {
                             setState(() {
-                              dropdownValue = value!;
+                              selectedDokterId = value;
                             });
                           },
                           dropdownMenuEntries: listDokter
-                              .map<DropdownMenuEntry<String>>((String value) {
-                            return DropdownMenuEntry<String>(
-                              value: value,
-                              label: value,
+                              .map<DropdownMenuEntry<int>>((Dokter dokter) {
+                            return DropdownMenuEntry<int>(
+                              value: dokter.id ?? 0,
+                              label: dokter.nama ?? '',
                             );
                           }).toList(),
                           width: MediaQuery.of(context).size.width * 0.9,

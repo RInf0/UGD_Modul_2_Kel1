@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class GeoLocationPage extends StatefulWidget {
-  const GeoLocationPage({super.key});
+  const GeoLocationPage({Key? key}) : super(key: key);
 
   @override
   State<GeoLocationPage> createState() => _GeoLocationState();
@@ -14,8 +15,15 @@ class _GeoLocationState extends State<GeoLocationPage> {
   late bool servicePermission = false;
   late LocationPermission permission;
 
+  final List<LatLng> _hospitalLocations = [
+    const LatLng(-7.776669081142168, 110.37664490640475), // Rumah Sakit Panti Rapih
+    const LatLng(-7.768017006162372, 110.3730437530755), // Rumah Sakit Dr.Sardjito
+    const LatLng(-7.77079110728325, 110.41583261074847), // Rumah Sakit Sadewa
+  ];
+
   String _currentAddress = "";
-  double _distanceToLocation = 0.0; // Menyimpan jarak ke lokasi
+  final Map<String, double> _distanceToHospitals = {};
+  String _nearestHospital = "";
 
   Future<Position?> _getCurrentLocation() async {
     servicePermission = await Geolocator.isLocationServiceEnabled();
@@ -42,13 +50,27 @@ class _GeoLocationState extends State<GeoLocationPage> {
         _currentAddress =
             '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
       });
-      // Hitung jarak ke lokasi Jl. Babarsari No.43(Rumah Sakit)
-      double distanceInMeters = Geolocator.distanceBetween(
-          _currentLoc!.latitude, _currentLoc!.longitude, -7.7753, 110.3899);
-      double distanceInKilometers = distanceInMeters / 1000;
-      setState(() {
-        _distanceToLocation = distanceInKilometers;
-      });
+
+      _distanceToHospitals.clear();
+      double minDistance = double.infinity;
+      for (LatLng hospitalLocation in _hospitalLocations) {
+        double distanceInMeters = Geolocator.distanceBetween(
+            _currentLoc!.latitude,
+            _currentLoc!.longitude,
+            hospitalLocation.latitude,
+            hospitalLocation.longitude);
+
+        _distanceToHospitals[
+                "Rumah Sakit ${_hospitalLocations.indexOf(hospitalLocation) + 1}"] =
+            distanceInMeters /
+                1000; // Simpan jarak ke rumah sakit dalam kilometer
+
+        if (distanceInMeters < minDistance) {
+          minDistance = distanceInMeters;
+          _nearestHospital =
+              'Rumah Sakit ${_hospitalLocations.indexOf(hospitalLocation) + 1}';
+        }
+      }
     }).catchError((e) {
       print("Error : $e");
     });
@@ -89,7 +111,22 @@ class _GeoLocationState extends State<GeoLocationPage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text("$_distanceToLocation kilometer"),
+            Column(
+              children: _distanceToHospitals.entries.map((entry) {
+                return Text("${entry.key}: ${entry.value} kilometer");
+              }).toList(),
+            ),
+            const SizedBox(
+              height: 6,
+            ),
+            const Text(
+              "Rumah Sakit Terdekat:",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(_nearestHospital),
             const SizedBox(
               height: 30,
             ),
