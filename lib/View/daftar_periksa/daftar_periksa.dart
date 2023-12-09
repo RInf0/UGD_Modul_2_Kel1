@@ -260,14 +260,7 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => DetailJanjiPeriksaView(
-                                    janjiPeriksaPassed: JanjiPeriksa(
-                                      id: listJanjiPeriksa[index].id,
-                                      namaDokter:
-                                          listJanjiPeriksa[index].namaDokter,
-                                      tglPeriksa:
-                                          listJanjiPeriksa[index].tglPeriksa,
-                                      keluhan: listJanjiPeriksa[index].keluhan,
-                                    ),
+                                    janjiPeriksaPassed: listJanjiPeriksa[index],
                                     userPassed: userProfile,
                                   ),
                                 ),

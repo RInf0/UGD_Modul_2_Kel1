@@ -353,10 +353,11 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                             child: Column(
                               children: [
                                 const Text('Dokumen Sebelumnya:'),
-                                Image.memory(
-                                  const Base64Decoder()
-                                      .convert(widget.janjiPeriksa!.dokumen!),
-                                ),
+                                Image.network(widget.janjiPeriksa!.dokumen!),
+                                // Image.memory(
+                                //   const Base64Decoder()
+                                //       .convert(widget.janjiPeriksa!.dokumen!),
+                                // ),
                               ],
                             ),
                           ),

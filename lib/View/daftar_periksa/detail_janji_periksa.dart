@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:ugd_modul_2_kel1/client/janji_periksa_client.dart';
 import 'package:ugd_modul_2_kel1/entity/janji_periksa.dart';
@@ -43,7 +44,7 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
   void refresh() async {
     final dataJP = await JanjiPeriksaClient.find(widget.janjiPeriksaPassed!.id);
 
-    // await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 300));
 
     setState(() {
       janjiPeriksa = dataJP;
@@ -107,16 +108,6 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
 
   @override
   Widget build(BuildContext context) {
-    if (janjiPeriksa == null) {
-      return const Scaffold(
-        body: SafeArea(
-          child: Center(
-              // child: CircularProgressIndicator(),
-              ),
-        ),
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: cAccentColor,
@@ -138,51 +129,57 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
         ),
       ),
       body: SafeArea(
-        child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
+        child: janjiPeriksa == null
+            ? const Center(
+                child: SpinKitThreeBounce(
+                size: 40,
+                color: cAccentColor,
+              ))
+            : ListView(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: SizedBox(
-                          width: 200,
-                          // height: 120,
-                          child: Image.asset(
-                            // 'image/dokter/${Random().nextInt(3)}.jpg',
-                            'image/dokter/${janjiPeriksa!.idDokter! % 5}.jpg',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(
-                    height: 2.h,
-                  ),
-
-                  Container(
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 240, 240, 240),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
                       children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: SizedBox(
+                                width: 200,
+                                // height: 120,
+                                child: Image.asset(
+                                  // 'image/dokter/${Random().nextInt(3)}.jpg',
+                                  'image/dokter/${janjiPeriksa!.idDokter! % 5}.jpg',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(
+                          height: 2.h,
+                        ),
+
+                        Container(
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 240, 240, 240),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
                             children: [
-                              GestureDetector(
-                                onTap: () {
-                                  String textUntukDibaca = """ 
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        String textUntukDibaca = """ 
                                     Berikut adalah detail janji periksamu,
                                     Kamu periksa di tanggal ${janjiPeriksa!.tglPeriksa},
                                     Dokter pemeriksamu adalah ${janjiPeriksa!.namaDokter},
@@ -190,107 +187,108 @@ class _DetailJanjiPeriksaViewState extends State<DetailJanjiPeriksaView> {
                                     Jangan lupa untuk membawa dokumen yang diperlukan.
                                     Terima kasih, semoga lekas sembuh.
                                     """;
-                                  textToSpeech(textUntukDibaca);
-                                },
-                                child: Container(
-                                  // height: 50,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.green,
-                                  ),
-                                  child: const Icon(
-                                    Icons.volume_up,
-                                    color: Colors.white,
-                                    size: 40,
-                                  ),
+                                        textToSpeech(textUntukDibaca);
+                                      },
+                                      child: Container(
+                                        // height: 50,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.green,
+                                        ),
+                                        child: const Icon(
+                                          Icons.volume_up,
+                                          color: Colors.white,
+                                          size: 40,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 2.h,
+                                    ),
+                                    const Text(
+                                      'Nama Dokter:',
+                                      style: cTextStyleNormal,
+                                    ),
+                                    Text(
+                                      janjiPeriksa!.namaDokter,
+                                      style: cTextStyle2Lite,
+                                    ),
+                                    SizedBox(
+                                      height: 2.h,
+                                    ),
+                                    const Text(
+                                      'Nama Pasien:',
+                                      style: cTextStyleNormal,
+                                    ),
+                                    Text(
+                                      widget.userPassed!.username!,
+                                      style: cTextStyle2Lite,
+                                    ),
+                                    SizedBox(
+                                      height: 2.h,
+                                    ),
+                                    const Text(
+                                      'Tanggal Periksa:',
+                                      style: cTextStyleNormal,
+                                    ),
+                                    Text(
+                                      janjiPeriksa!.tglPeriksa,
+                                      style: cTextStyle2Lite,
+                                    ),
+                                    SizedBox(
+                                      height: 2.h,
+                                    ),
+                                    const Text(
+                                      'No. Antrian:',
+                                      style: cTextStyleNormal,
+                                    ),
+                                    Text(
+                                      '${janjiPeriksa!.id! + 3}',
+                                      style: cTextStyle2Lite,
+                                    ),
+                                    SizedBox(
+                                      height: 2.h,
+                                    ),
+                                    const Text(
+                                      'Keluhan :',
+                                      style: cTextStyleNormal,
+                                    ),
+                                    Text(
+                                      janjiPeriksa!.keluhan,
+                                      style: cTextStyle2Lite,
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              SizedBox(
-                                height: 2.h,
-                              ),
-                              const Text(
-                                'Nama Dokter:',
-                                style: cTextStyleNormal,
-                              ),
-                              Text(
-                                janjiPeriksa!.namaDokter,
-                                style: cTextStyle2Lite,
-                              ),
-                              SizedBox(
-                                height: 2.h,
-                              ),
-                              const Text(
-                                'Nama Pasien:',
-                                style: cTextStyleNormal,
-                              ),
-                              Text(
-                                widget.userPassed!.username!,
-                                style: cTextStyle2Lite,
-                              ),
-                              SizedBox(
-                                height: 2.h,
-                              ),
-                              const Text(
-                                'Tanggal Periksa:',
-                                style: cTextStyleNormal,
-                              ),
-                              Text(
-                                janjiPeriksa!.tglPeriksa,
-                                style: cTextStyle2Lite,
-                              ),
-                              SizedBox(
-                                height: 2.h,
-                              ),
-                              const Text(
-                                'No. Antrian:',
-                                style: cTextStyleNormal,
-                              ),
-                              Text(
-                                '${janjiPeriksa!.id! + 3}',
-                                style: cTextStyle2Lite,
-                              ),
-                              SizedBox(
-                                height: 2.h,
-                              ),
-                              const Text(
-                                'Keluhan :',
-                                style: cTextStyleNormal,
-                              ),
-                              Text(
-                                janjiPeriksa!.keluhan,
-                                style: cTextStyle2Lite,
-                              ),
+                              )
                             ],
                           ),
-                        )
+                        ),
+
+                        SizedBox(
+                          height: 2.h,
+                        ),
+
+                        // FOTO DOKUMEN YG DIUNGGAH
+                        if (janjiPeriksa!.dokumen != null)
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            // child: _uploadedFileImage,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text('Foto Dokumen:'),
+                                // Image.memory(base64.decode(janjiPeriksa!.dokumen!)),
+                                Image.network(janjiPeriksa!.dokumen!),
+                              ],
+                            ),
+                          ),
+
+                        buttonCreatePDF(context)
                       ],
                     ),
                   ),
-
-                  SizedBox(
-                    height: 2.h,
-                  ),
-
-                  // FOTO DOKUMEN YG DIUNGGAH
-                  if (janjiPeriksa!.dokumen != null)
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      // child: _uploadedFileImage,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('Foto Dokumen:'),
-                          Image.memory(base64.decode(janjiPeriksa!.dokumen!)),
-                        ],
-                      ),
-                    ),
-
-                  buttonCreatePDF(context)
                 ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }

@@ -6,6 +6,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:printing/printing.dart';
 import 'package:ugd_modul_2_kel1/entity/janji_periksa.dart';
 import 'package:ugd_modul_2_kel1/entity/user.dart';
 // import 'package:ugd_modul_2_kel1/pdf/invoice/model/custom_row_invoice.dart';
@@ -61,6 +62,13 @@ Future<void> createPdf(
   // ];
 
   // pw.Widget table = itemColumn(elements);
+
+  pw.ImageProvider? netImage;
+  if (janjiPeriksa.dokumen != null) {
+    netImage = await networkImage(janjiPeriksa.dokumen!);
+  }
+
+  // final netImage = await networkImage(janjiPeriksa.dokumen!);
 
   doc.addPage(pw.MultiPage(
     pageTheme: pdfTheme,
@@ -188,10 +196,17 @@ Future<void> createPdf(
                     ),
 
                     // image from input
-                    imageFromInput(
-                      pdfImageProvider,
-                      const Base64Decoder().convert(janjiPeriksa.dokumen!),
+                    pw.Center(
+                      child: pw.SizedBox(
+                        width: 280,
+                        child: pw.Image(netImage!),
+                      ),
                     ),
+
+                    // imageFromInput(
+                    //   pdfImageProvider,
+                    //   const Base64Decoder().convert(janjiPeriksa.dokumen!),
+                    // ),
                   ],
                 ),
 
