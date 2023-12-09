@@ -133,6 +133,7 @@ class _MainHomeViewState extends State<MainHomeView> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     InkWell(
+                      key: const Key('button_buat_janji_periksa'),
                       highlightColor: Colors.transparent,
                       splashColor: Colors.transparent,
                       onTap: () => navigateToPage('Janji Periksa'),

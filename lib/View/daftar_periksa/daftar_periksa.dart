@@ -281,6 +281,7 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                             width: 10,
                           ),
                           ElevatedButton(
+                            key: const Key('btnEdit'),
                             style: ElevatedButton.styleFrom(
                               foregroundColor: cAccentColor,
                               backgroundColor: Colors.white,
@@ -303,6 +304,7 @@ class _DaftarPeriksaViewState extends State<DaftarPeriksaView> {
                             width: 10,
                           ),
                           ElevatedButton(
+                            key: const Key('btnDelete'),
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.redAccent,
                               backgroundColor: Colors.white,

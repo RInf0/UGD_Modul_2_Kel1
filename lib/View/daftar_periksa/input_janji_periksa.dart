@@ -391,6 +391,7 @@ class _CreateJanjiPeriksaViewState extends State<CreateJanjiPeriksaView> {
                                 height: 29.sp,
                                 width: 40.w,
                                 child: ElevatedButton(
+                                  key: const Key('btnSubmit'),
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
                                     backgroundColor: cAccentColor,

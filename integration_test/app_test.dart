@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:ugd_modul_2_kel1/client/user_client.dart';
 import 'package:ugd_modul_2_kel1/main.dart' as app;
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/daftar_periksa.dart';
 import 'package:ugd_modul_2_kel1/view/daftar_periksa/detail_janji_periksa.dart';
@@ -18,7 +19,7 @@ Future<void> isiLoginUntukCRUD(WidgetTester tester) async {
   app.main();
   await tester.pumpAndSettle();
 
-  const username = 'a';
+  const username = 'abcde';
   const password = 'aaaaa';
 
   expect(find.byType(TextFormField), findsAtLeastNWidgets(2));
@@ -41,7 +42,10 @@ Future<void> isiLoginUntukCRUD(WidgetTester tester) async {
   await tester.pump(durationLogin);
 }
 
-void main() {
+//
+// RUN INTEGRATION TESTING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+void main() async {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   const duration = Duration(milliseconds: 1000);
   const durationToPause = Duration(milliseconds: 1500);
@@ -53,6 +57,20 @@ void main() {
 
     // TEST REGISTER BERHASIL
     testWidgets('Register Success', (WidgetTester tester) async {
+      // pastikan menghapus dulu data user jika sudah ada data user yang usernamenya
+      // sama dengan yang akan ditest
+      // (karena username harus unik, tidak bisa register jika sudah ada)
+      final dataUser = await UserClient.fetchAll();
+
+      for (int i = 0; i < dataUser.length; i++) {
+        print(dataUser[i].username);
+        if (dataUser[i].username == 'abcde' ||
+            dataUser[i].email == 'user1abc@gmail.com') {
+          print('Found');
+          await UserClient.destroy(dataUser[i].id);
+        }
+      }
+
       FlutterError.onError = (FlutterErrorDetails details) {
         bool ifIsOverflowError = false;
 
@@ -92,12 +110,12 @@ void main() {
       expect(find.byType(TextFormField), findsAtLeastNWidgets(5));
 
       expect(find.byKey(const Key('usernameTest')), findsOneWidget);
-      await tester.enterText(find.byKey(const Key('usernameTest')), 'a');
+      await tester.enterText(find.byKey(const Key('usernameTest')), 'abcde');
       await tester.pump(duration);
 
       expect(find.byKey(const Key('emailTest')), findsOneWidget);
       await tester.enterText(
-          find.byKey(const Key('emailTest')), 'user1@gmail.com');
+          find.byKey(const Key('emailTest')), 'user1abc@gmail.com');
       await tester.pump(duration);
 
       expect(find.byKey(const Key('passwordTest')), findsOneWidget);
@@ -270,7 +288,7 @@ void main() {
       app.main();
       await tester.pumpAndSettle();
 
-      const username = 'a';
+      const username = 'abcde';
       const password = 'aaaaa';
 
       expect(find.byType(TextFormField), findsAtLeastNWidgets(2));
@@ -384,12 +402,12 @@ void main() {
       await tester.pump(duration);
 
       // submit
-      await tester.ensureVisible(find.widgetWithText(ElevatedButton, 'Submit'));
+      await tester.ensureVisible(find.byKey(const Key('btnSubmit')));
       await tester.pumpAndSettle();
       await tester.pump(duration);
 
-      expect(find.widgetWithText(ElevatedButton, 'Submit'), findsOneWidget);
-      final btnSubmit = find.widgetWithText(ElevatedButton, 'Submit');
+      expect(find.byKey(const Key('btnSubmit')), findsOneWidget);
+      final btnSubmit = find.byKey(const Key('btnSubmit'));
       await tester.tap(btnSubmit);
       await tester.pumpAndSettle();
       await tester.pump(duration);
@@ -473,10 +491,10 @@ void main() {
       expect(find.byType(DaftarPeriksaView), findsOneWidget);
 
       // cari setidaknya ada 1 data daftar periksa, dengan menghitung jml button update
-      expect(find.widgetWithText(ElevatedButton, 'Update'),
-          findsAtLeastNWidgets(1));
+      // expect(find.widgetWithText(ElevatedButton, 'Update'),
+      //     findsAtLeastNWidgets(1));
 
-      final btnUpdate = find.widgetWithText(ElevatedButton, 'Update');
+      final btnUpdate = find.byKey(const Key('btnEdit'));
 
       // update item daftar periksa pertama
       await tester.tap(btnUpdate.at(0));
@@ -528,12 +546,12 @@ void main() {
       await tester.pump(duration);
 
       // submit
-      await tester.ensureVisible(find.widgetWithText(ElevatedButton, 'Submit'));
+      await tester.ensureVisible(find.byKey(const Key('btnSubmit')));
       await tester.pumpAndSettle();
       await tester.pump(duration);
 
-      expect(find.widgetWithText(ElevatedButton, 'Submit'), findsOneWidget);
-      final btnSubmit = find.widgetWithText(ElevatedButton, 'Submit');
+      expect(find.byKey(const Key('btnSubmit')), findsOneWidget);
+      final btnSubmit = find.byKey(const Key('btnSubmit'));
       await tester.tap(btnSubmit);
       await tester.pumpAndSettle();
       await tester.pump(duration);
@@ -567,10 +585,10 @@ void main() {
       expect(find.byType(DaftarPeriksaView), findsOneWidget);
 
       // cari setidaknya ada 1 data daftar periksa, dengan menghitung jml button delete
-      expect(find.widgetWithText(ElevatedButton, 'Delete'),
-          findsAtLeastNWidgets(1));
+      // expect(find.widgetWithText(ElevatedButton, 'Delete'),
+      //     findsAtLeastNWidgets(1));
 
-      final btnDelete = find.widgetWithText(ElevatedButton, 'Delete');
+      final btnDelete = find.byKey(const Key('btnDelete'));
 
       // delete item daftar periksa pertama
       await tester.tap(btnDelete.at(0));
@@ -585,117 +603,3 @@ void main() {
     });
   });
 }
-
-// CODE LAMA
-// testWidgets('Register Failed', (WidgetTester tester) async {
-//   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-//   app.main();
-//   await tester.pumpAndSettle();
-
-//   FlutterError.onError = (FlutterErrorDetails details) {
-//     bool ifIsOverflowError = false;
-//     // Detect overflow error.
-//     var exception = details.exception;
-//     if (exception is FlutterError) {
-//       ifIsOverflowError = !exception.diagnostics.any((e) =>
-//           e.value.toString().startsWith("A RenderFlex overflowed by"));
-//     }
-
-//     // Ignore if it's an overflow error.
-//     if (ifIsOverflowError) {
-//       print('Overflow error.');
-//     } else {
-//       // Throw other errors.
-//       FlutterError.dumpErrorToConsole(details);
-//     }
-//   };
-
-//   await tester.pumpWidget(const MaterialApp(home: RegisterView()));
-//   await tester.enterText(find.byKey(const Key('usernameTest')), 'user1');
-//   await tester.enterText(find.byKey(const Key('emailTest')),
-//       'user1*gmail.com'); // error disini karena harus @
-//   await tester.enterText(find.byKey(const Key('passwordTest')), '123456');
-//   await tester.enterText(
-//       find.byKey(const Key('tglLahirTest')), '16/04/2003');
-//   await tester.enterText(
-//       find.byKey(const Key('noTelpTest')), '561327389023');
-//   await tester.tap(find.byKey(const Key('genderMaleTest')));
-
-//   await tester.ensureVisible(find.byKey(const Key('registerClick')));
-//   await tester.pumpAndSettle(const Duration(seconds: 1));
-//   await tester.tap(find.byKey(const Key('registerClick')));
-
-//   await tester.pumpAndSettle(const Duration(seconds: 1));
-//   await tester.tap(find.byKey(const Key('yesButton')));
-
-//   await tester.pumpAndSettle();
-// });
-
-// TEST REGISTER BERHASIL BY SETO
-// testWidgets('Register Berhasil', (WidgetTester tester) async {
-//   // data register
-//   const username = 'helloworld';
-//   const email = 'helloworld@gmail.com';
-//   const password = 'helloworld123';
-//   const tglLahir = '04-11-2007';
-//   const noTelp = '081283728132';
-//   const jenisKelamin = 'L';
-//   const hasBPJS = true;
-
-//   app.main();
-//   await tester.pumpAndSettle();
-
-//   expect(find.byType(LoginView), findsOneWidget);
-
-//   final buttonRegisterHere = find.byKey(const Key('button_register_here'));
-//   await tester.tap(buttonRegisterHere);
-
-//   await tester.pumpAndSettle();
-
-//   expect(find.byType(RegisterView), findsOneWidget);
-
-//   expect(find.byType(TextFormField), findsAtLeastNWidgets(5));
-
-//   final textField = find.byType(TextFormField);
-
-//   await tester.enterText(textField.at(0), username);
-//   await tester.pump(duration);
-
-//   await tester.enterText(textField.at(1), email);
-//   await tester.pump(duration);
-
-//   await tester.enterText(textField.at(2), password);
-//   await tester.pump(duration);
-
-//   // tgl lahir
-//   // await tester.enterText(textField.at(3), tglLahir);
-//   // await tester.pump(duration);
-
-//   await tester.enterText(textField.at(4), noTelp);
-//   await tester.pump(duration);
-
-//   expect(find.byType(RadioListTile), findsAtLeastNWidgets(2));
-//   final radioListTileJenisKelamin = find.byType(RadioListTile);
-
-//   if (jenisKelamin == 'L') {
-//     await tester.tap(radioListTileJenisKelamin.at(0));
-//   } else {
-//     await tester.tap(radioListTileJenisKelamin.at(1));
-//   }
-
-//   expect(find.byType(CheckboxListTile), findsAtLeastNWidgets(1));
-//   final checkboxListTileHasBPJS = find.byType(CheckboxListTile);
-
-//   if (hasBPJS) {
-//     await tester.tap(checkboxListTileHasBPJS);
-//   }
-
-//   expect(find.byKey(const Key('button_register')), findsOneWidget);
-//   final registerButton = find.byKey(const Key('button_register'));
-
-//   await tester.tap(registerButton);
-
-//   await tester.pumpAndSettle();
-
-//   await tester.pump(duration);
-// });
