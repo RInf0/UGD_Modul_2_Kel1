@@ -25,7 +25,7 @@ Membuat sebuah aplikasi Rumah Sakit sederhana yang berbasis Android. Project ini
 
 ### UGD MODUL HARDWARE
 
-- Hardware camera untuk update foto profil di profile page, serta pilih dari gallery (Reyhan)
+- Hardware camera untuk update foto profil di profile page, serta pilih dari gallery (Reyhan,Gre)
 - Hardware camera untuk tambah dan update dokumen janji periksa, dapat pilih foto dari gallery, serta crop foto dokumen (Seto)
 - Hardware speaker untuk fungsi text-to-speech yang menjelaskan detail janji periksa user (Seto)
 - Hardware GPS untuk track jarak rumah sakit dengan lokasi user saat itu (Adit)
